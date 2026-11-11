@@ -7,14 +7,7 @@
 <style>
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-:root{
-  --font-ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
-  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-  --bg:#ffffff;--bar:#eeeeee;--panel:#ffffff;--panel2:#f1f3f6;--field:#ffffff;--line:#b9bfc7;
-  --fg:#111111;--muted:#5a6068;--accent:#2e6da4;--accent-fg:#ffffff;--accent-soft:#dcebf8;--accent-ink:#1b4a76;
-  --ok:#1e7a2e;--warn:#9a5b00;--bad:#c0281f;--violet:#7b4fc2;
-  color-scheme:light;
-}
+:root{--font-ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;--bg:#ffffff;--bar:#eeeeee;--panel:#ffffff;--panel2:#f1f3f6;--field:#ffffff;--line:#b9bfc7;--fg:#111111;--muted:#5a6068;--accent:#2e6da4;--accent-fg:#ffffff;--accent-soft:#dcebf8;--accent-ink:#1b4a76;--ok:#1e7a2e;--warn:#9a5b00;--bad:#c0281f;--violet:#7b4fc2;color-scheme:light}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--font-ui)}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -22,49 +15,41 @@ button,input,select,textarea{font:inherit;color:inherit}
 #app{height:100%;display:flex;flex-direction:column;min-height:0}
 .band{background:var(--bar);border-bottom:1px solid var(--line);flex:none}
 .row{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;padding-block:7px}
-.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;letter-spacing:.01em}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px}
 .brand small{font-weight:400;color:var(--muted);font-size:13px}
 .files{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .btn{font-weight:500;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:var(--panel);border-radius:7px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn.pri{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-.btn.sm{padding:3px 8px;font-size:12px}
-:is(button,input,select,textarea,summary):focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.btn:hover{border-color:var(--accent)}.btn.pri{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}.btn.sm{padding:3px 8px;font-size:12px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;background:var(--panel);max-width:100%;overflow-x:auto}
-.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;font-size:13px;cursor:pointer;white-space:nowrap}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
 .work{flex:1;min-height:0;display:flex;gap:10px;padding-block:10px}
-#stage{flex:1;min-width:0;position:relative;border:1px solid var(--line);border-radius:10px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+#stage{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
 #hint{flex:none;padding:6px 12px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);background:var(--bar)}
 #scroller{flex:1;min-height:0;overflow:auto}
-.phead{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex:none}
-.phead b{font-size:15px}
-.phead .sub{color:var(--muted);font-size:12.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tabs{display:flex;gap:2px;padding:6px 8px 0;border-bottom:1px solid var(--line);overflow-x:auto;flex:none}
+#ws{padding:16px max(16px,env(safe-area-inset-left,0px)) 30px;max-width:980px}
+#ws h2{font-size:24px;margin:0 0 8px}
+#ws h3{font-size:16.5px;margin:24px 0 6px}
+#ws p,#ws li{font-size:14.5px;line-height:1.55}
+#ws .small{font-size:12.5px}
+.phead{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.phead b{font-size:15px}.phead .sub{color:var(--muted);font-size:12.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabs{display:flex;gap:2px;padding:6px 8px 0;border-bottom:1px solid var(--line);overflow-x:auto}
 .tabs button{border:0;border-bottom:2px solid transparent;background:transparent;padding:6px 10px;font-weight:500;font-size:13px;cursor:pointer;white-space:nowrap;color:var(--muted)}
 .tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
 .pbody{overflow:auto;padding:12px;flex:1;min-height:0}
 .fld{display:flex;flex-direction:column;gap:3px;margin-bottom:9px;font-size:12.5px;color:var(--muted)}
 input[type=text],input[type=number],textarea,select{width:100%;background:var(--field);border:1px solid var(--line);border-radius:6px;padding:5px 8px;color:var(--fg)}
 input[type=range]{width:100%;padding:0;accent-color:var(--accent)}
-.mono{font-family:var(--font-mono);font-size:12.5px}
-.small{font-size:12px;color:var(--muted);margin:0 0 9px}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;z-index:60;max-width:90vw}
-#dlg{position:fixed;inset:0;background:rgba(10,16,22,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
-.dlgbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(640px,100%);max-height:88%;display:flex;flex-direction:column}
-.dlgbox header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
-.dlgbox header b{font-size:16px}
-.dlgbox .dbody{padding:14px 16px;overflow:auto}
-.dlgbox h3{margin:14px 0 4px;font-size:14px}.dlgbox p,.dlgbox li{margin:4px 0;font-size:13.5px}
+textarea.csv{width:100%;font-family:var(--font-mono);font-size:12.5px;min-height:180px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
 #act{flex:none;width:clamp(280px,24vw,340px);display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--panel);min-height:0;max-height:100%}
 #act .pbody{font-size:13.5px}
 .goal{background:var(--accent-soft);color:var(--accent-ink);border-radius:8px;padding:8px 10px;margin:0 0 10px}
 .steps{margin:0 0 10px;padding-left:20px}.steps li{margin-bottom:9px}
 .defi{border:1px dashed var(--accent);border-radius:8px;padding:8px 10px;margin:0 0 12px}.defi p{margin:6px 0}
 .defi summary{cursor:pointer;font-weight:500;color:var(--accent-ink)}
-fieldset.q{border:1px solid var(--line);border-radius:8px;padding:8px 10px 6px;margin:0 0 10px;min-width:0}
+fieldset.q{border:1px solid var(--line);border-radius:8px;padding:8px 10px 6px;margin:0 0 10px}
 fieldset.q legend{font-weight:600;padding:0 4px;max-width:100%}
 .opt{display:flex;gap:8px;align-items:flex-start;padding:4px 6px;border-radius:6px;cursor:pointer}
 .opt input{margin-top:3px;width:auto;flex:none}
@@ -82,7 +67,7 @@ fieldset.q legend{font-weight:600;padding:0 4px;max-width:100%}
 .ctoc-sel{display:none;margin:8px max(16px,env(safe-area-inset-left,0px)) 0;width:auto}
 .cbody{flex:1;min-width:0;overflow:auto;max-width:860px;padding-right:6px}
 .ckick{color:var(--muted);font-size:12.5px;margin:0}
-.cbody h2{font-size:26px;margin:2px 0 12px;text-wrap:balance}
+.cbody h2{font-size:26px;margin:2px 0 12px}
 .cbody h3{font-size:16.5px;margin:22px 0 6px}
 .cbody p,.cbody li{font-size:14.5px;line-height:1.6}
 .cbody ul,.cbody ol{padding-left:22px}.cbody li{margin-bottom:4px}
@@ -95,14 +80,8 @@ fieldset.q legend{font-weight:600;padding:0 4px;max-width:100%}
 pre.code{font:12.5px/1.55 var(--font-mono);margin:8px 0;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:pre}
 .gloss{display:grid;grid-template-columns:max-content 1fr;gap:5px 18px;font-size:14px}.gloss dt{font-weight:600}.gloss dd{margin:0}
 .cpn{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:24px 0 32px}
-#ws{padding:16px max(16px,env(safe-area-inset-left,0px)) 30px;max-width:980px}
-#ws h2{font-size:24px;margin:0 0 8px;text-wrap:balance}
-#ws h3{font-size:16.5px;margin:24px 0 6px}
-#ws p,#ws li{font-size:14.5px;line-height:1.55}
-#ws .small{font-size:12.5px}
 .opts{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 10px}.opts .fld{margin:0}
-.opts input[type=range]{width:200px;max-width:100%}
-.opts select{width:auto}
+.opts input[type=range]{width:180px;max-width:100%}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .chip{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:4px 11px;font-size:13px;cursor:pointer}
 .chip:hover{border-color:var(--accent)}.chip.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
@@ -113,32 +92,24 @@ pre.code{font:12.5px/1.55 var(--font-mono);margin:8px 0;background:var(--panel2)
 .verdict.yes{background:rgba(30,122,46,.15);border-color:var(--ok)}.verdict.no{background:rgba(192,40,31,.13);border-color:var(--bad)}.verdict.warn{background:rgba(154,91,0,.13);border-color:var(--warn)}
 .dwrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:8px 0;max-height:340px}
 .dt{border-collapse:collapse;width:100%;font-size:13.5px}
-.dt th,.dt td{padding:5px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.dt th,.dt td{padding:5px 10px;border-bottom:1px solid var(--line);text-align:left}
 .dt thead th{background:var(--panel2);font-weight:600;position:sticky;top:0}
 .dt td.m{font-family:var(--font-mono);font-size:12.5px}
-.dt tr:last-child td{border-bottom:0}
 .plot{width:100%;height:auto;display:block;background:#fff;border-radius:8px}
 .plot-wrap{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;margin:8px 0}
 .plot-legend{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:4px 0 2px}
 .plot-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
-textarea.csv{width:100%;font-family:var(--font-mono);font-size:12.5px;min-height:180px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
-@media (max-width:820px){
-  .ctoc{display:none}.ctoc-sel{display:block}.cwrap{padding-top:8px}.cbody{padding-right:0}.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}
-  #act{position:fixed;left:0;right:0;bottom:0;width:auto;height:70%;max-height:none;border-radius:14px 14px 0 0;z-index:35;box-shadow:0 -8px 30px rgba(0,0,0,.28);padding-bottom:env(safe-area-inset-bottom,0px)}
-  .work{flex-direction:column;gap:8px}
-}
-@media (prefers-reduced-motion:no-preference){.btn{transition:border-color .12s,background .12s}}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0}
+.col2 pre.code{margin:0}
+@media (max-width:760px){.col2{grid-template-columns:1fr}}
+@media (max-width:820px){.ctoc{display:none}.ctoc-sel{display:block}.cwrap{padding-top:8px}.cbody{padding-right:0}.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}#act{position:fixed;left:0;right:0;bottom:0;width:auto;height:70%;max-height:none;border-radius:14px 14px 0 0;z-index:35;box-shadow:0 -8px 30px rgba(0,0,0,.28)}.work{flex-direction:column;gap:8px}}
 </style></head><body>
 <div id="app">
   <header class="band"><div class="inner row">
-    <div class="brand"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 20 L8 12 L13 16 L18 6 L23 10" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="18" cy="6" r="2.5" fill="var(--bad)"/></svg><span>Traitement de données <small>SII · CPGE 1<sup>re</sup> année</small></span></div>
-    <div class="files">
-      <button class="btn" id="bAct" type="button" aria-pressed="false">Activité</button>
-      <button class="btn" id="bCourse" type="button" aria-pressed="false">Cours</button>
-      <button class="btn" id="bHelp" type="button">Aide</button>
-    </div>
+    <div class="brand"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M3 20 L8 12 L13 16 L18 6 L23 10" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="round"/><circle cx="18" cy="6" r="2.5" fill="var(--bad)"/></svg><span>Traitement de données <small>SII · CPGE 1<sup>re</sup> année</small></span></div>
+    <div class="files"><button class="btn" id="bAct" aria-pressed="false">Activité</button><button class="btn" id="bCourse" aria-pressed="false">Cours</button></div>
   </div></header>
-  <div class="band" id="modes"><div class="inner row"><div class="seg" id="wsSeg" role="tablist" aria-label="Ateliers"></div></div></div>
+  <div class="band" id="modes"><div class="inner row"><div class="seg" id="wsSeg" role="tablist"></div></div></div>
   <main class="inner work" id="work">
     <section id="stage"><div id="hint"></div><div id="scroller"><div id="ws"></div></div></section>
     <aside id="act" hidden aria-label="Activité"></aside>
@@ -146,194 +117,49 @@ textarea.csv{width:100%;font-family:var(--font-mono);font-size:12.5px;min-height
   <section id="course" hidden aria-label="Cours"></section>
 </div>
 <div id="dlg" hidden></div>
-<div id="toast" hidden></div>
-
 <script>
 'use strict';
-const $ = (s, r) => (r || document).querySelector(s);
-function h(tag, attrs, ...kids) {
-  const el = document.createElement(tag);
-  if (attrs) for (const [k, v] of Object.entries(attrs)) {
-    if (v === false || v == null) continue;
-    if (k === 'class') el.className = v;
-    else if (k === 'html') el.innerHTML = v;
-    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
-    else if (v === true) el.setAttribute(k, '');
-    else el.setAttribute(k, v);
-  }
-  for (const k of kids.flat()) if (k != null && k !== false) el.append(k.nodeType ? k : document.createTextNode(k));
-  return el;
-}
-const NS = 'http://www.w3.org/2000/svg';
-function sv(tag, attrs, ...kids) {
-  const el = document.createElementNS(NS, tag);
-  if (attrs) for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
-  for (const k of kids.flat()) if (k != null) el.append(k);
-  return el;
-}
-function isSmall() { try { return window.matchMedia('(max-width:820px)').matches; } catch (e) { return false; } }
-const KEYS = { act: 'sii-num-data-v1' };
-function lsGet(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
-function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-const WORKSHOPS = [];
-
-/* ---------- utilitaires ---------- */
-const fmt = (v, d) => isFinite(v) ? (+v).toFixed(d == null ? 3 : d).replace('.', ',') : '—';
-const SUPD = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','+':'⁺'};
-function sup(n) { return String(n).split('').map(c => SUPD[c] || c).join(''); }
-function niceStep(range, target) {
-  const raw = range / target;
-  const exp = Math.floor(Math.log10(raw));
-  const base = Math.pow(10, exp);
-  const m = raw / base;
-  if (m < 1.5) return base;
-  if (m < 3.5) return 2 * base;
-  if (m < 7.5) return 5 * base;
-  return 10 * base;
-}
-function plot(W, H, xr, yr) {
-  const ml = 52, mr = 16, mt = 14, mb = 32;
-  const iw = W - ml - mr, ih = H - mt - mb;
-  const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, class: 'plot' });
-  svg.style.width = '100%'; svg.style.height = 'auto'; svg.style.display = 'block';
-  const toX = x => ml + (x - xr[0]) / (xr[1] - xr[0]) * iw;
-  const toY = y => mt + (yr[1] - y) / (yr[1] - yr[0]) * ih;
-  const g0 = sv('g'); svg.append(g0);
-  const xs = niceStep(xr[1] - xr[0], 6), ys = niceStep(yr[1] - yr[0], 5);
-  for (let x = Math.ceil(xr[0] / xs) * xs; x <= xr[1] + 1e-9; x += xs)
-    g0.append(sv('line', { x1: toX(x), y1: mt, x2: toX(x), y2: mt + ih, stroke: '#e8ebef', 'stroke-width': 1 }));
-  for (let y = Math.ceil(yr[0] / ys) * ys; y <= yr[1] + 1e-9; y += ys)
-    g0.append(sv('line', { x1: ml, y1: toY(y), x2: ml + iw, y2: toY(y), stroke: '#e8ebef', 'stroke-width': 1 }));
-  if (xr[0] <= 0 && xr[1] >= 0) g0.append(sv('line', { x1: toX(0), y1: mt, x2: toX(0), y2: mt + ih, stroke: '#5a6068', 'stroke-width': 1 }));
-  if (yr[0] <= 0 && yr[1] >= 0) g0.append(sv('line', { x1: ml, y1: toY(0), x2: ml + iw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
-  for (let x = Math.ceil(xr[0] / xs) * xs; x <= xr[1] + 1e-9; x += xs) {
-    if (Math.abs(x) < xs * 0.01) continue;
-    g0.append(sv('text', { x: toX(x), y: mt + ih + 15, 'text-anchor': 'middle', 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, String(+x.toFixed(2)).replace('.', ',')));
-  }
-  for (let y = Math.ceil(yr[0] / ys) * ys; y <= yr[1] + 1e-9; y += ys) {
-    if (Math.abs(y) < ys * 0.01) continue;
-    g0.append(sv('text', { x: ml - 5, y: toY(y) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, String(+y.toFixed(2)).replace('.', ',')));
-  }
-  g0.append(sv('text', { x: ml + iw, y: mt + ih + 28, 'text-anchor': 'end', 'font-size': 11, fill: '#5a6068' }, 'x'));
-  g0.append(sv('text', { x: ml - 30, y: mt + 10, 'font-size': 11, fill: '#5a6068' }, 'y'));
-  const pg = sv('g'); svg.append(pg);
-  return {
-    svg, toX, toY, g: pg, mt, mb, ml, mr, iw, ih, xr, yr,
-    band(x1, x2, color) {
-      let px1 = Math.max(ml, Math.min(ml + iw, toX(x1)));
-      let px2 = Math.max(ml, Math.min(ml + iw, toX(x2)));
-      if (px2 < px1) [px1, px2] = [px2, px1];
-      if (px2 - px1 < 0.5) return;
-      pg.append(sv('rect', { x: px1, y: mt, width: px2 - px1, height: ih, fill: color || 'rgba(46,109,164,0.10)' }));
-    },
-    curve(f, color, width) {
-      let d = '', started = false;
-      const N = 240;
-      for (let i = 0; i <= N; i++) {
-        const x = xr[0] + (xr[1] - xr[0]) * i / N;
-        let y = f(x);
-        if (!isFinite(y)) { started = false; continue; }
-        if (y < yr[0]) y = yr[0]; if (y > yr[1]) y = yr[1];
-        d += (started ? 'L' : 'M') + toX(x).toFixed(2) + ' ' + toY(y).toFixed(2) + ' ';
-        started = true;
-      }
-      pg.append(sv('path', { d, fill: 'none', stroke: color || '#2e6da4', 'stroke-width': width || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
-    },
-    polyline(pts, color, width, dash) {
-      const d = pts.filter(p => p).map((p, i) => (i ? 'L' : 'M') + toX(p[0]).toFixed(2) + ' ' + toY(p[1]).toFixed(2)).join(' ');
-      pg.append(sv('path', { d, fill: 'none', stroke: color || '#1e7a2e', 'stroke-width': width || 2, 'stroke-dasharray': dash || '' }));
-    },
-    point(x, y, color, r) {
-      pg.append(sv('circle', { cx: toX(x), cy: toY(y), r: r || 4.5, fill: color || '#c0281f', stroke: '#fff', 'stroke-width': 1.5 }));
-    },
-    vline(x, color, dash) {
-      pg.append(sv('line', { x1: toX(x), y1: mt, x2: toX(x), y2: mt + ih, stroke: color || '#c0281f', 'stroke-width': 1.5, 'stroke-dasharray': dash || '4 3' }));
-    },
-    hline(y, color, dash, width) {
-      pg.append(sv('line', { x1: ml, y1: toY(y), x2: ml + iw, y2: toY(y), stroke: color || '#9a5b00', 'stroke-width': width || 1.5, 'stroke-dasharray': dash || '4 3' }));
-    },
-    rect(x0, x1, y0, y1, color) {
-      const px0 = Math.max(ml, Math.min(ml + iw, toX(x0)));
-      const px1 = Math.max(ml, Math.min(ml + iw, toX(x1)));
-      const py0 = Math.max(mt, Math.min(mt + ih, toY(y1)));
-      const py1 = Math.max(mt, Math.min(mt + ih, toY(y0)));
-      if (px1 - px0 < 0.3) return;
-      pg.append(sv('rect', { x: px0, y: py0, width: px1 - px0, height: py1 - py0, fill: color || 'rgba(46,109,164,0.25)', stroke: 'rgba(46,109,164,0.6)', 'stroke-width': 0.6 }));
-    }
+const $=(s,r)=>(r||document).querySelector(s);
+function h(tag,attrs,...kids){const el=document.createElement(tag);if(attrs)for(const[k,v]of Object.entries(attrs)){if(v===false||v==null)continue;if(k==='class')el.className=v;else if(k==='html')el.innerHTML=v;else if(k.startsWith('on'))el.addEventListener(k.slice(2),v);else if(v===true)el.setAttribute(k,'');else el.setAttribute(k,v);}for(const k of kids.flat())if(k!=null&&k!==false)el.append(k.nodeType?k:document.createTextNode(k));return el;}
+const NS='http://www.w3.org/2000/svg';
+function sv(tag,attrs,...kids){const el=document.createElementNS(NS,tag);if(attrs)for(const[k,v]of Object.entries(attrs))el.setAttribute(k,v);for(const k of kids.flat())if(k!=null)el.append(k);return el;}
+function isSmall(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+const KEYS={act:'sii-num-data-v2'};
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+const WORKSHOPS=[];
+const fmt=(v,d)=>isFinite(v)?(+v).toFixed(d==null?3:d).replace('.',','):'—';
+function niceStep(r,t){const raw=r/t;const exp=Math.floor(Math.log10(raw));const base=Math.pow(10,exp);const m=raw/base;if(m<1.5)return base;if(m<3.5)return 2*base;if(m<7.5)return 5*base;return 10*base;}
+function plot(W,H,xr,yr){
+  const ml=52,mr=16,mt=14,mb=32,iw=W-ml-mr,ih=H-mt-mb;
+  const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,class:'plot'});
+  svg.style.width='100%';svg.style.height='auto';svg.style.display='block';
+  const toX=x=>ml+(x-xr[0])/(xr[1]-xr[0])*iw,toY=y=>mt+(yr[1]-y)/(yr[1]-yr[0])*ih;
+  const g0=sv('g');svg.append(g0);
+  const xs=niceStep(xr[1]-xr[0],6),ys=niceStep(yr[1]-yr[0],5);
+  for(let x=Math.ceil(xr[0]/xs)*xs;x<=xr[1]+1e-9;x+=xs)g0.append(sv('line',{x1:toX(x),y1:mt,x2:toX(x),y2:mt+ih,stroke:'#e8ebef'}));
+  for(let y=Math.ceil(yr[0]/ys)*ys;y<=yr[1]+1e-9;y+=ys)g0.append(sv('line',{x1:ml,y1:toY(y),x2:ml+iw,y2:toY(y),stroke:'#e8ebef'}));
+  if(xr[0]<=0&&xr[1]>=0)g0.append(sv('line',{x1:toX(0),y1:mt,x2:toX(0),y2:mt+ih,stroke:'#5a6068'}));
+  if(yr[0]<=0&&yr[1]>=0)g0.append(sv('line',{x1:ml,y1:toY(0),x2:ml+iw,y2:toY(0),stroke:'#5a6068'}));
+  for(let x=Math.ceil(xr[0]/xs)*xs;x<=xr[1]+1e-9;x+=xs){if(Math.abs(x)<xs*0.01)continue;g0.append(sv('text',{x:toX(x),y:mt+ih+15,'text-anchor':'middle','font-size':11,fill:'#5a6068','font-family':'IBM Plex Mono, monospace'},String(+x.toFixed(2)).replace('.',',')));}
+  for(let y=Math.ceil(yr[0]/ys)*ys;y<=yr[1]+1e-9;y+=ys){if(Math.abs(y)<ys*0.01)continue;g0.append(sv('text',{x:ml-5,y:toY(y)+4,'text-anchor':'end','font-size':11,fill:'#5a6068','font-family':'IBM Plex Mono, monospace'},String(+y.toFixed(2)).replace('.',',')));}
+  const pg=sv('g');svg.append(pg);
+  return{svg,toX,toY,g:pg,mt,mb,ml,mr,iw,ih,xr,yr,
+    polyline(pts,color,width,dash){const d=pts.filter(p=>p).map((p,i)=>(i?'L':'M')+toX(p[0]).toFixed(2)+' '+toY(p[1]).toFixed(2)).join(' ');pg.append(sv('path',{d,fill:'none',stroke:color||'#1e7a2e','stroke-width':width||2,'stroke-dasharray':dash||''}));},
+    point(x,y,color,r){pg.append(sv('circle',{cx:toX(x),cy:toY(y),r:r||4.5,fill:color||'#c0281f',stroke:'#fff','stroke-width':1.5}));},
+    hline(y,color,dash,width){pg.append(sv('line',{x1:ml,y1:toY(y),x2:ml+iw,y2:toY(y),stroke:color||'#9a5b00','stroke-width':width||1.5,'stroke-dasharray':dash||'4 3'}));},
+    rect(x0,x1,y0,y1,color){const px0=Math.max(ml,Math.min(ml+iw,toX(x0))),px1=Math.max(ml,Math.min(ml+iw,toX(x1))),py0=Math.max(mt,Math.min(mt+ih,toY(y1))),py1=Math.max(mt,Math.min(mt+ih,toY(y0)));if(px1-px0<0.3)return;pg.append(sv('rect',{x:px0,y:py0,width:px1-px0,height:py1-py0,fill:color||'rgba(46,109,164,0.18)'}));},
+    seg(x1,y1,x2,y2,color,width,dash){pg.append(sv('line',{x1:toX(x1),y1:toY(y1),x2:toX(x2),y2:toY(y2),stroke:color||'#7b4fc2','stroke-width':width||2,'stroke-dasharray':dash||''}));}
   };
 }
-function stats(list) { return h('div', { class: 'gstats' }, list.map(k => h('div', { class: 'stat' }, h('span', null, k[0]), h('b', null, k[1])))); }
-function chipsRow(items, cur, cb, label) {
-  return h('div', { class: 'chips', role: 'group', 'aria-label': label || '' }, items.map(it => h('button', { type: 'button', class: 'chip' + (cur === it[0] ? ' on' : ''), 'aria-pressed': cur === it[0] ? 'true' : 'false', onclick: () => cb(it[0]) }, it[1])));
-}
-function codeBlock(src) { return '<h3>Code Python</h3><pre class="code">' + src + '</pre>'; }
+function stats(list){return h('div',{class:'gstats'},list.map(k=>h('div',{class:'stat'},h('span',{html:k[0]}),h('b',null,k[1]))));}
+function chipsRow(items,cur,cb){return h('div',{class:'chips'},items.map(it=>h('button',{type:'button',class:'chip'+(cur===it[0]?' on':''),onclick:()=>cb(it[0])},it[1])));}
+function codeBlock(src){return '<h3>Code Python</h3><pre class="code">'+src+'</pre>';}
+const mean=xs=>xs.reduce((a,b)=>a+b,0)/xs.length;
+const variance=xs=>{const m=mean(xs);return xs.reduce((a,b)=>a+(b-m)**2,0)/xs.length;};
+const stddev=xs=>Math.sqrt(variance(xs));
 
-/* ---------- statistiques de base ---------- */
-function mean(xs) { return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN; }
-function variance(xs) { const m = mean(xs); return xs.length ? xs.reduce((a, b) => a + (b - m) ** 2, 0) / xs.length : NaN; }
-function stddev(xs) { return Math.sqrt(variance(xs)); }
-function varianceEchantillon(xs) { if (xs.length < 2) return NaN; const m = mean(xs); return xs.reduce((a, b) => a + (b - m) ** 2, 0) / (xs.length - 1); }
-
-/* ---------- génération de signaux ---------- */
-function gaussRand() {
-  let u = 0, v = 0;
-  while (u === 0) u = Math.random();
-  while (v === 0) v = Math.random();
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-}
-function genNoisySignal(npoints, Te, f1, f2, amp2, noise) {
-  const xs = [];
-  for (let n = 0; n < npoints; n++) {
-    const t = n * Te;
-    const s = Math.sin(2 * Math.PI * f1 * t) + amp2 * Math.sin(2 * Math.PI * f2 * t);
-    xs.push(s + noise * gaussRand());
-  }
-  return xs;
-}
-function genTrendNoisy(npoints, Te, noise) {
-  const xs = [];
-  for (let n = 0; n < npoints; n++) {
-    const t = n * Te;
-    const trend = 10 + 5 * Math.sin(2 * Math.PI * t / 5);
-    xs.push(trend + noise * gaussRand());
-  }
-  return xs;
-}
-
-/* ---------- filtres ---------- */
-function movingAverage(xs, N) {
-  const out = [];
-  for (let n = 0; n < xs.length; n++) {
-    if (n < N - 1) { out.push(null); continue; }
-    let s = 0;
-    for (let k = 0; k < N; k++) s += xs[n - k];
-    out.push(s / N);
-  }
-  return out;
-}
-function filterPB1(xs, Te, fc) {
-  const tau = 1 / (2 * Math.PI * fc);
-  const alpha = Math.exp(-Te / tau);
-  const ys = [xs[0]];
-  for (let n = 1; n < xs.length; n++) ys.push(alpha * ys[n - 1] + (1 - alpha) * xs[n]);
-  return ys;
-}
-function filterPB2(xs, Te, fc, zeta) {
-  const wn = 2 * Math.PI * fc;
-  const a0 = 4 / (Te * Te) + 4 * zeta * wn / Te + wn * wn;
-  const a1 = -8 / (Te * Te) + 2 * wn * wn;
-  const a2 = 4 / (Te * Te) - 4 * zeta * wn / Te + wn * wn;
-  const b0 = wn * wn, b1 = 2 * wn * wn, b2 = wn * wn;
-  const n = xs.length;
-  const y = new Array(n);
-  y[0] = xs[0]; if (n > 1) y[1] = xs[1];
-  for (let k = 2; k < n; k++) {
-    y[k] = (b0 * xs[k] + b1 * xs[k - 1] + b2 * xs[k - 2] - a1 * y[k - 1] - a2 * y[k - 2]) / a0;
-  }
-  return y;
-}
-
-/* ================= Atelier 1 : fichier CSV ================= */
+/* ============ Atelier 1 : CSV amélioré ============ */
 const CSV_DEFAULT = `temps;temperature;pression
 0;20.0;1.0130
 0.5;20.3;1.0131
@@ -345,82 +171,57 @@ const CSV_DEFAULT = `temps;temperature;pression
 3.5;22.8;1.0135
 4;23.0;1.0134
 4.5;23.2;1.0136
-5;23.3;1.0135
-5.5;23.4;1.0137
-6;23.5;1.0136
-6.5;23.55;1.0138
-7;23.6;1.0137
-7.5;23.62;1.0139
-8;23.65;1.0138
-8.5;23.66;1.0139
-9;23.68;1.0140
-9.5;23.69;1.0140
-10;23.70;1.0141`;
+5;23.3;1.0135`;
 const F1 = { col: 1 };
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
   if (lines.length < 2) return { error: 'Pas assez de lignes.' };
   let sep = ';';
-  if (!lines[0].includes(';')) {
-    if (lines[0].includes(',')) sep = ',';
-    else if (lines[0].includes('\t')) sep = '\t';
-    else return { error: 'Séparateur non reconnu (; , ou tab).' };
-  }
+  if (!lines[0].includes(';')) { if (lines[0].includes(',')) sep = ','; else if (lines[0].includes('\t')) sep = '\t'; else return { error: 'Séparateur inconnu.' }; }
   const header = lines[0].split(sep).map(s => s.trim());
-  const rows = [];
-  let malformed = 0;
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(sep).map(s => s.trim());
-    if (cells.length !== header.length) { malformed++; continue; }
-    rows.push(cells);
-  }
+  const rows = []; let malformed = 0;
+  for (let i = 1; i < lines.length; i++) { const cells = lines[i].split(sep).map(s => s.trim()); if (cells.length !== header.length) { malformed++; continue; } rows.push(cells); }
   return { header, rows, sep, malformed };
 }
 function numericCol(header, rows, colName) {
-  const idx = header.indexOf(colName);
-  if (idx < 0) return [];
+  const idx = header.indexOf(colName); if (idx < 0) return [];
   const out = [];
-  for (const r of rows) {
-    const v = parseFloat(r[idx].replace(',', '.'));
-    if (isFinite(v)) out.push({ t: parseFloat(r[0].replace(',', '.')) || 0, y: v });
-  }
+  for (const r of rows) { const v = parseFloat(r[idx].replace(',', '.')); if (isFinite(v)) out.push({ t: parseFloat(r[0].replace(',', '.')) || 0, y: v }); }
   return out;
 }
-const CODE_F1 = `import csv
+const CODE_F1 = `import numpy as np
 
-def lire_csv(chemin, sep=';'):
-    """Lit un fichier CSV et renvoie (entêtes, lignes)."""
-    with open(chemin, newline='', encoding='utf-8') as f:
-        lignes = list(csv.reader(f, delimiter=sep))
-    entetes = lignes[0]
-    donnees = lignes[1:]
-    return entetes, donnees
+# Ouverture sécurisée du fichier
+with open("mesures.csv", "r", encoding="utf-8") as fichier:
+    for _ in range(1):
+        fichier.readline()           # ignorer l'en-tête
+    temps, tension = [], []
+    for ligne in fichier:
+        ligne = ligne.replace(",", ".").strip()
+        colonnes = ligne.split(";")
+        temps.append(float(colonnes[0]))
+        tension.append(float(colonnes[1]))
 
-
-def extraire_colonne(entetes, donnees, nom):
-    """Renvoie la colonne 'nom' sous forme de liste de float."""
-    i = entetes.index(nom)
-    valeurs = []
-    for ligne in donnees:
-        if len(ligne) == len(entetes) and ligne[i]:
-            valeurs.append(float(ligne[i].replace(',', '.')))
-    return valeurs
-
-
-# Exemple d'utilisation
-entetes, donnees = lire_csv('mesures.csv')
-temperatures = extraire_colonne(entetes, donnees, 'temperature')
-print('n =', len(temperatures), 'moyenne =', sum(temperatures)/len(temperatures))`;
+# Conversion numpy pour le traitement
+t = np.array(temps)
+U = np.array(tension)
+U_moy = np.mean(U)`;
 function mountF1(root) {
   root.innerHTML = '<h2>Fichiers de données (CSV)</h2>' +
-    '<p>Un fichier CSV (<i>comma-separated values</i>) est un fichier texte où chaque ligne est un enregistrement et où les colonnes sont séparées par un caractère (souvent <code>;</code> en France, parfois <code>,</code> ou une tabulation). La première ligne contient généralement les entêtes. Modifiez le texte ci-dessous, puis observez comment le programme l\'interprète.</p>' +
-    '<div class="fld"><span>Contenu du fichier (modifiable)</span><textarea class="csv" id="f1-csv" spellcheck="false" aria-label="Contenu CSV"></textarea></div>' +
-    '<div class="files" style="margin:8px 0"><button class="btn" id="f1-reset" type="button">Restaurer l\'exemple</button></div>' +
-    '<div class="verdict" id="f1-info" aria-live="polite"></div>' +
-    '<div class="fld"><span>Colonne à étudier</span><select id="f1-col" aria-label="Colonne"></select></div>' +
+    '<p>Un fichier CSV est un fichier texte : une ligne par enregistrement, des colonnes séparées par un caractère (<code>;</code> en France, <code>,</code> ou tab ailleurs). La première ligne contient les entêtes.</p>' +
+    '<h3>Lecture sécurisée avec <code>with open</code></h3>' +
+    '<p>Le bloc <code>with</code> est un <b>gestionnaire de contexte</b> : il ouvre le fichier, exécute le code, puis <b>ferme automatiquement</b> le fichier à la sortie du bloc — même en cas d\'exception. On évite ainsi les oublis de <code>close()</code> (fuites de ressources).</p>' +
+    '<div class="col2"><div><h3 style="margin-top:0">Sans <code>with</code> (déconseillé)</h3><pre class="code">f = open("donnees.csv", "r")\n# ... lecture ...\nf.close()   # <- on peut oublier</pre></div><div><h3 style="margin-top:0">Avec <code>with</code> (recommandé)</h3><pre class="code">with open("donnees.csv", "r") as f:\n    # ... lecture ...\n# fermé automatiquement ici</pre></div></div>' +
+    '<h3>Fichier à analyser</h3>' +
+    '<textarea class="csv" id="f1-csv" spellcheck="false"></textarea>' +
+    '<div class="files" style="margin:8px 0"><button class="btn" id="f1-reset">Restaurer</button></div>' +
+    '<div class="verdict" id="f1-info"></div>' +
+    '<div class="fld"><span>Colonne</span><select id="f1-col"></select></div>' +
     '<div class="dwrap" id="f1-table"></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>colonne sélectionnée</span></div><div id="f1-plot"></div></div>' +
+    '<div class="plot-wrap"><div id="f1-plot"></div></div>' +
     '<div id="f1-stats"></div>' +
+    '<h3>Bonnes pratiques</h3>' +
+    '<ul><li>Toujours utiliser <code>with open(...) as f:</code></li><li>Spécifier <code>encoding="utf-8"</code></li><li>Nettoyer (<code>replace(",", ".")</code>, <code>strip()</code>) avant <code>float()</code></li><li>Convertir en <code>numpy</code> dès que possible</li><li>Ignorer les lignes mal formées (mauvais nombre de colonnes)</li></ul>' +
     codeBlock(CODE_F1);
   $('#f1-csv').value = CSV_DEFAULT;
   $('#f1-csv').addEventListener('input', drawF1);
@@ -429,82 +230,47 @@ function mountF1(root) {
   drawF1();
 }
 function drawF1() {
-  const txt = $('#f1-csv').value;
-  const res = parseCSV(txt);
-  const info = $('#f1-info'); const tableBox = $('#f1-table'); const statsBox = $('#f1-stats');
-  const plotBox = $('#f1-plot'); const selBox = $('#f1-col');
+  const txt = $('#f1-csv').value, res = parseCSV(txt);
+  const info = $('#f1-info'), tableBox = $('#f1-table'), statsBox = $('#f1-stats'), plotBox = $('#f1-plot'), selBox = $('#f1-col');
   tableBox.innerHTML = ''; statsBox.innerHTML = ''; plotBox.innerHTML = ''; selBox.innerHTML = '';
-  if (res.error) { info.className = 'verdict warn'; info.textContent = 'Erreur de parsing : ' + res.error; return; }
+  if (res.error) { info.className = 'verdict warn'; info.textContent = 'Erreur : ' + res.error; return; }
   const n = res.rows.length, m = res.header.length;
-  let infoTxt = n + ' ligne(s), ' + m + ' colonne(s), séparateur « ' + (res.sep === '\t' ? 'tab' : res.sep) + ' ».';
-  if (res.malformed) infoTxt += ' ' + res.malformed + ' ligne(s) ignorée(s) (mauvais nombre de colonnes).';
-  info.className = 'verdict ' + (res.malformed ? 'warn' : 'yes');
-  info.textContent = infoTxt;
+  let infoTxt = n + ' lignes, ' + m + ' colonnes, séparateur « ' + (res.sep === '\t' ? 'tab' : res.sep) + ' ».';
+  if (res.malformed) infoTxt += ' ' + res.malformed + ' ligne(s) ignorée(s).';
+  info.className = 'verdict ' + (res.malformed ? 'warn' : 'yes'); info.textContent = infoTxt;
   if (F1.col >= m) F1.col = m > 1 ? 1 : 0;
-  res.header.forEach((c, i) => selBox.append(h('option', { value: String(i), selected: i === F1.col }, c + '  (colonne ' + (i + 1) + ')')));
-  // table
+  res.header.forEach((c, i) => selBox.append(h('option', { value: String(i), selected: i === F1.col }, c)));
   const tb = h('tbody');
   res.rows.slice(0, 12).forEach(r => { const tr = h('tr'); r.forEach(c => tr.append(h('td', { class: 'm' }, c))); tb.append(tr); });
   tableBox.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, res.header.map(c => h('th', null, c)))), tb));
-  if (res.rows.length > 12) tableBox.append(h('div', { class: 'small', style: 'padding:4px 10px' }, '… et ' + (res.rows.length - 12) + ' autres lignes.'));
-  // extraction
-  const colName = res.header[F1.col];
-  const series = numericCol(res.header, res.rows, colName);
-  if (series.length < 2) {
-    statsBox.append(h('div', { class: 'verdict warn' }, 'La colonne « ' + colName + ' » ne contient pas assez de valeurs numériques.'));
-    return;
-  }
-  const ys = series.map(p => p.y);
-  const ts = series.map(p => p.t);
+  const series = numericCol(res.header, res.rows, res.header[F1.col]);
+  if (series.length < 2) return;
+  const ys = series.map(p => p.y), ts = series.map(p => p.t);
   const mu = mean(ys), sd = stddev(ys);
-  statsBox.append(stats([['n', String(ys.length)], ['Moyenne', fmt(mu, 4)], ['Écart type', fmt(sd, 4)], ['Minimum', fmt(Math.min(...ys), 4)], ['Maximum', fmt(Math.max(...ys), 4)]]));
-  const xmin = Math.min(...ts), xmax = Math.max(...ts);
-  const ymin = Math.min(...ys), ymax = Math.max(...ys);
-  const padY = (ymax - ymin) * 0.1 + 0.01;
-  const P = plot(640, 300, [xmin, xmax], [ymin - padY, ymax + padY]);
+  statsBox.append(stats([['n', String(ys.length)], ['Moyenne', fmt(mu, 4)], ['Écart type', fmt(sd, 4)], ['Min', fmt(Math.min(...ys), 2)], ['Max', fmt(Math.max(...ys), 2)]]));
+  const xmin = Math.min(...ts), xmax = Math.max(...ts), ymin = Math.min(...ys), ymax = Math.max(...ys), padY = (ymax - ymin) * 0.1 + 0.01;
+  const P = plot(640, 260, [xmin, xmax], [ymin - padY, ymax + padY]);
   P.polyline(series.map(p => [p.t, p.y]), '#2e6da4', 2);
   series.forEach(p => P.point(p.t, p.y, '#2e6da4', 3));
   plotBox.append(P.svg);
 }
 
-/* ================= Atelier 2 : moyenne et écart type ================= */
-const F2 = { n: 60, mu: 50, sigma: 5, seed: 0, data: null };
-function genF2() {
-  const xs = [];
-  for (let i = 0; i < F2.n; i++) xs.push(F2.mu + F2.sigma * gaussRand());
-  F2.data = xs;
-}
-const CODE_F2 = `import math
-
-def moyenne(xs):
-    return sum(xs) / len(xs)
-
-def variance(xs):
-    m = moyenne(xs)
-    return sum((x - m)**2 for x in xs) / len(xs)
-
-def ecart_type(xs):
-    return math.sqrt(variance(xs))
-
-
-# Exemple : mesures de température
-mesures = [20.1, 20.4, 20.6, 20.9, 21.3, 21.5, 21.8, 22.0, 22.3, 22.5]
-print('moyenne   =', moyenne(mesures))
-print('écart type =', ecart_type(mesures))`;
+/* ============ Atelier 2 : Stats (amélioré listes vs numpy) ============ */
+const F2 = { n: 60, mu: 50, sigma: 5, data: null };
+function gaussRand() { let u = 0, v = 0; while (u === 0) u = Math.random(); while (v === 0) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function genF2() { F2.data = []; for (let i = 0; i < F2.n; i++) F2.data.push(F2.mu + F2.sigma * gaussRand()); }
+const CODE_F2 = `import numpy as np\n\n# --- Listes Python ---\ndef moyenne(liste):\n    n = len(liste)\n    return sum(liste) / n\n\ndef variance(liste):\n    m = moyenne(liste)\n    return sum((x - m)**2 for x in liste) / len(liste)\n\n# --- numpy ---\nx = np.array(mesures)\nx_moy = np.mean(x)\nvar = np.var(x, ddof=0)\nec_type = np.std(x, ddof=0)`;
 function mountF2(root) {
   root.innerHTML = '<h2>Moyenne et écart type</h2>' +
-    '<p>À partir d\'un échantillon de n valeurs x<sub>1</sub>, …, x<sub>n</sub>, on résume la série par sa <b>moyenne</b> et son <b>écart type</b> :</p>' +
-    '<div class="formula">x̄ = (1/n) · Σ x<sub>i</sub> &nbsp;&nbsp;·&nbsp;&nbsp; σ² = (1/n) · Σ (x<sub>i</sub> − x̄)² &nbsp;&nbsp;·&nbsp;&nbsp; σ = √σ²</div>' +
-    '<div class="opts"><label class="fld"><span>Nombre de valeurs n = <b id="f2-n-out"></b></span><input type="range" id="f2-n" min="5" max="200" step="5" aria-label="n"></label>' +
-    '<label class="fld"><span>Moyenne vraie μ = <b id="f2-mu-out"></b></span><input type="range" id="f2-mu" min="0" max="100" step="1" aria-label="μ"></label>' +
-    '<label class="fld"><span>Écart type vrai σ = <b id="f2-sig-out"></b></span><input type="range" id="f2-sig" min="0.5" max="20" step="0.5" aria-label="σ"></label>' +
-    '<button class="btn" id="f2-new" type="button" style="margin-bottom:9px">Nouveau tirage</button></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:rgba(46,109,164,0.4)"></i>valeurs</span><span><i style="background:#c0281f"></i>moyenne x̄</span><span><i style="background:#9a5b00"></i>bande x̄ ± σ</span></div><div id="f2-plot"></div></div>' +
+    '<p>Moyenne et écart type d\'un échantillon : <b>x̄</b> caractérise le centre, <b>σ</b> la dispersion.</p>' +
+    '<div class="formula">x̄ = (1/n)·Σ x<sub>i</sub> &nbsp;·&nbsp; σ² = (1/n)·Σ(x<sub>i</sub> − x̄)² &nbsp;·&nbsp; σ = √σ²</div>' +
+    '<div class="opts"><label class="fld"><span>n = <b id="f2-n-out"></b></span><input type="range" id="f2-n" min="5" max="200" step="5"></label><label class="fld"><span>μ = <b id="f2-mu-out"></b></span><input type="range" id="f2-mu" min="0" max="100" step="1"></label><label class="fld"><span>σ = <b id="f2-sig-out"></b></span><input type="range" id="f2-sig" min="0.5" max="20" step="0.5"></label><button class="btn" id="f2-new" style="margin-bottom:9px">Nouveau</button></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:rgba(46,109,164,0.4)"></i>valeurs</span><span><i style="background:#c0281f"></i>x̄</span><span><i style="background:#9a5b00"></i>x̄ ± σ</span></div><div id="f2-plot"></div></div>' +
     '<div id="f2-stats"></div>' +
+    '<h3>Version listes vs numpy</h3>' +
+    '<div class="col2"><div><h4 style="margin:0 0 4px">Listes</h4><pre class="code">def moyenne(L):\n    return sum(L)/len(L)\n\ndef variance(L):\n    m = moyenne(L)\n    return sum((x-m)**2 for x in L)/len(L)\n\ndef ecart_type(L):\n    return variance(L)**0.5</pre></div><div><h4 style="margin:0 0 4px">numpy</h4><pre class="code">import numpy as np\nx = np.array(L)\nnp.mean(x)\nnp.var(x)     # ddof=0\nnp.std(x)</pre></div></div>' +
+    '<p class="small">Avec <code>ddof=1</code>, numpy calcule la variance d\'échantillon <b>s² = 1/(n−1)·Σ(x−x̄)²</b>.</p>' +
     codeBlock(CODE_F2);
-  ['n','mu','sig'].forEach(k => {
-    const el = $('#' + k.replace('sig','sig').replace('n','n').replace('mu','mu'));
-  });
   $('#f2-n').value = F2.n; $('#f2-mu').value = F2.mu; $('#f2-sig').value = F2.sigma;
   $('#f2-n').addEventListener('input', e => { F2.n = +e.target.value; genF2(); drawF2(); });
   $('#f2-mu').addEventListener('input', e => { F2.mu = +e.target.value; genF2(); drawF2(); });
@@ -513,72 +279,36 @@ function mountF2(root) {
   genF2(); drawF2();
 }
 function drawF2() {
-  $('#f2-n-out').textContent = F2.n;
-  $('#f2-mu-out').textContent = fmt(F2.mu, 1);
-  $('#f2-sig-out').textContent = fmt(F2.sigma, 1);
+  $('#f2-n-out').textContent = F2.n; $('#f2-mu-out').textContent = fmt(F2.mu, 1); $('#f2-sig-out').textContent = fmt(F2.sigma, 1);
   $('#f2-n').value = F2.n; $('#f2-mu').value = F2.mu; $('#f2-sig').value = F2.sigma;
-  const xs = F2.data;
-  const m = mean(xs), s = stddev(xs);
-  const ymin = Math.min(...xs), ymax = Math.max(...xs);
-  const padY = (ymax - ymin) * 0.1 + 0.5;
-  const yr = [Math.min(ymin, m - 2*s) - padY, Math.max(ymax, m + 2*s) + padY];
-  const P = plot(640, 320, [0, xs.length + 1], yr);
-  P.band(0, xs.length + 1, 'rgba(46,109,164,0.04)');
-  // bande ±σ
-  const y1 = m - s, y2 = m + s;
-  if (y1 > yr[0] && y2 < yr[1]) {
-    P.rect(0, xs.length + 1, y1, y2, 'rgba(154,91,0,0.10)');
-  }
-  // barres
+  const xs = F2.data, m = mean(xs), s = stddev(xs);
+  const ymin = Math.min(...xs), ymax = Math.max(...xs), padY = (ymax - ymin) * 0.1 + 0.5;
+  const yr = [Math.min(ymin, m - 2 * s) - padY, Math.max(ymax, m + 2 * s) + padY];
+  const P = plot(640, 300, [0, xs.length + 1], yr);
+  if (m - s > yr[0] && m + s < yr[1]) P.rect(0, xs.length + 1, m - s, m + s, 'rgba(154,91,0,0.10)');
   const bw = 0.8 * (xs.length > 100 ? 0.5 : 1);
-  xs.forEach((v, i) => P.rect(i + 0.5 - bw/2, i + 0.5 + bw/2, 0, v, 'rgba(46,109,164,0.55)'));
-  // moyenne
+  xs.forEach((v, i) => P.rect(i + 0.5 - bw / 2, i + 0.5 + bw / 2, 0, v, 'rgba(46,109,164,0.55)'));
   P.hline(m, '#c0281f', '5 4', 2);
-  if (y1 > yr[0]) P.hline(y1, '#9a5b00', '3 3', 1.5);
-  if (y2 < yr[1]) P.hline(y2, '#9a5b00', '3 3', 1.5);
+  P.hline(m - s, '#9a5b00', '3 3', 1.5); P.hline(m + s, '#9a5b00', '3 3', 1.5);
   $('#f2-plot').innerHTML = ''; $('#f2-plot').append(P.svg);
-  const sorted = xs.slice().sort((a, b) => a - b);
-  const med = sorted.length % 2 ? sorted[(sorted.length-1)/2] : (sorted[sorted.length/2-1] + sorted[sorted.length/2])/2;
   $('#f2-stats').innerHTML = '';
-  $('#f2-stats').append(stats([
-    ['n', String(xs.length)],
-    ['Moyenne x̄', fmt(m, 3)],
-    ['Variance σ²', fmt(variance(xs), 3)],
-    ['Écart type σ', fmt(s, 3)],
-    ['Médiane', fmt(med, 3)],
-    ['Min / Max', fmt(Math.min(...xs), 2) + ' / ' + fmt(Math.max(...xs), 2)]
-  ]));
-  $('#f2-stats').append(h('div', { class: 'verdict', html: 'La moyenne <b>x̄ = ' + fmt(m, 3) + '</b> estime μ = ' + fmt(F2.mu, 1) + '. L\'écart type <b>σ = ' + fmt(s, 3) + '</b> estime σ = ' + fmt(F2.sigma, 1) + '. La <b>bande x̄ ± σ</b> contient en moyenne environ 68 % des valeurs si la distribution est gaussienne ; <b>x̄ ± 2σ</b> en contient environ 95 %.' }));
+  $('#f2-stats').append(stats([['n', String(xs.length)], ['x̄', fmt(m, 3)], ['σ²', fmt(variance(xs), 3)], ['σ', fmt(s, 3)], ['Min/Max', fmt(Math.min(...xs), 2) + ' / ' + fmt(Math.max(...xs), 2)]]));
 }
 
-/* ================= Atelier 3 : moyenne glissante ================= */
+/* ============ Atelier 3 : Moyenne glissante ============ */
 const F3 = { N: 5, npoints: 120, noise: 1, data: null };
-function genF3() { F3.data = genTrendNoisy(F3.npoints, 0.1, F3.noise); }
-const CODE_F3 = `def moyenne_glissante(xs, N):
-    """Moyenne causale sur les N dernières valeurs."""
-    out = []
-    for n in range(len(xs)):
-        if n < N - 1:
-            out.append(None)            # pas assez d'échantillons
-        else:
-            out.append(sum(xs[n - N + 1 : n + 1]) / N)
-    return out
-
-
-# Exemple : lissage d'un signal bruité
-brut = [10.1, 9.8, 10.4, 10.0, 9.9, 10.3, 10.1, 9.7]
-lisse = moyenne_glissante(brut, N=3)
-print(lisse)`;
+function genF3() { F3.data = []; for (let i = 0; i < F3.npoints; i++) { const t = i * 0.1; F3.data.push(10 + 5 * Math.sin(2 * Math.PI * t / 5) + F3.noise * gaussRand()); } }
+function movingAverage(xs, N) {
+  const out = [];
+  for (let n = 0; n < xs.length; n++) { if (n < N - 1) { out.push(null); continue; } let s = 0; for (let k = 0; k < N; k++) s += xs[n - k]; out.push(s / N); }
+  return out;
+}
+const CODE_F3 = `def moyenne_glissante(xs, N):\n    out = []\n    for n in range(len(xs)):\n        if n < N - 1:\n            out.append(None)\n        else:\n            out.append(sum(xs[n-N+1:n+1])/N)\n    return out`;
 function mountF3(root) {
-  root.innerHTML = '<h2>Moyenne glissante</h2>' +
-    '<p>La <b>moyenne glissante</b> remplace chaque valeur par la moyenne des N dernières valeurs. C\'est un filtre passe-bas simple qui lisse le bruit, au prix d\'un <b>retard</b> d\'environ (N−1)/2 échantillons.</p>' +
-    '<div class="formula">y[n] = (1/N) · Σ<sub>k=0</sub><sup>N−1</sup> x[n−k]</div>' +
-    '<div class="opts"><label class="fld"><span>Fenêtre N = <b id="f3-N-out"></b></span><input type="range" id="f3-N" min="1" max="30" step="1" aria-label="N"></label>' +
-    '<label class="fld"><span>Bruit σ = <b id="f3-noise-out"></b></span><input type="range" id="f3-noise" min="0" max="3" step="0.1" aria-label="bruit"></label>' +
-    '<button class="btn" id="f3-new" type="button" style="margin-bottom:9px">Nouveau tirage</button></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#c0281f"></i>signal bruité</span><span><i style="background:#2e6da4"></i>moyenne glissante</span><span><i style="background:#1e7a2e"></i>tendance vraie</span></div><div id="f3-plot"></div></div>' +
-    '<div id="f3-stats"></div><div id="f3-note"></div>' +
-    codeBlock(CODE_F3);
+  root.innerHTML = '<h2>Moyenne glissante</h2><p>Filtre passe-bas simple : y[n] = (1/N)·Σ<sub>k=0</sub><sup>N−1</sup> x[n−k]. Retard ≈ (N−1)/2·T<sub>e</sub>.</p>' +
+    '<div class="opts"><label class="fld"><span>N = <b id="f3-N-out"></b></span><input type="range" id="f3-N" min="1" max="30" step="1"></label><label class="fld"><span>Bruit σ = <b id="f3-noise-out"></b></span><input type="range" id="f3-noise" min="0" max="3" step="0.1"></label><button class="btn" id="f3-new" style="margin-bottom:9px">Nouveau</button></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#c0281f"></i>brut</span><span><i style="background:#2e6da4"></i>lissé</span><span><i style="background:#1e7a2e"></i>tendance</span></div><div id="f3-plot"></div></div>' +
+    '<div id="f3-stats"></div><div id="f3-note"></div>' + codeBlock(CODE_F3);
   $('#f3-N').value = F3.N; $('#f3-noise').value = F3.noise;
   $('#f3-N').addEventListener('input', e => { F3.N = +e.target.value; drawF3(); });
   $('#f3-noise').addEventListener('input', e => { F3.noise = +e.target.value; genF3(); drawF3(); });
@@ -586,84 +316,37 @@ function mountF3(root) {
   genF3(); drawF3();
 }
 function drawF3() {
-  $('#f3-N-out').textContent = F3.N;
-  $('#f3-noise-out').textContent = fmt(F3.noise, 1);
-  const xs = F3.data;
-  const ys = movingAverage(xs, F3.N);
+  $('#f3-N-out').textContent = F3.N; $('#f3-noise-out').textContent = fmt(F3.noise, 1);
+  const xs = F3.data, ys = movingAverage(xs, F3.N);
   const valid = ys.filter(v => v !== null);
   const all = xs.concat(valid);
-  const ymin = Math.min(...all), ymax = Math.max(...all);
-  const padY = (ymax - ymin) * 0.1 + 0.1;
-  const P = plot(640, 320, [0, xs.length * 0.1], [ymin - padY, ymax + padY]);
-  // tendance vraie (sans bruit)
-  const trend = [];
-  for (let n = 0; n < xs.length; n++) { const t = n * 0.1; trend.push([t, 10 + 5 * Math.sin(2 * Math.PI * t / 5)]); }
+  const ymin = Math.min(...all), ymax = Math.max(...all), padY = (ymax - ymin) * 0.1 + 0.1;
+  const P = plot(640, 300, [0, xs.length * 0.1], [ymin - padY, ymax + padY]);
+  const trend = []; for (let n = 0; n < xs.length; n++) { const t = n * 0.1; trend.push([t, 10 + 5 * Math.sin(2 * Math.PI * t / 5)]); }
   P.polyline(trend, '#1e7a2e', 1.5, '5 4');
   P.polyline(xs.map((v, i) => [i * 0.1, v]), '#c0281f', 1.2);
   P.polyline(ys.map((v, i) => v === null ? null : [i * 0.1, v]), '#2e6da4', 2.5);
   $('#f3-plot').innerHTML = ''; $('#f3-plot').append(P.svg);
   const sBrut = stddev(xs), sLisse = stddev(valid);
-  const delay = (F3.N - 1) / 2 * 0.1;
   $('#f3-stats').innerHTML = '';
-  $('#f3-stats').append(stats([
-    ['N (fenêtre)', String(F3.N)],
-    ['σ du signal brut', fmt(sBrut, 3)],
-    ['σ du signal lissé', fmt(sLisse, 3)],
-    ['Réduction du bruit', fmt(100 * (1 - sLisse / sBrut), 1) + ' %'],
-    ['Retard ≈ (N−1)/2', fmt(delay, 2) + ' s']
-  ]));
+  $('#f3-stats').append(stats([['N', String(F3.N)], ['σ brut', fmt(sBrut, 3)], ['σ lissé', fmt(sLisse, 3)], ['Réduction', fmt(100 * (1 - sLisse / sBrut), 1) + ' %'], ['Retard', fmt((F3.N - 1) / 2 * 0.1, 2) + ' s']]));
   $('#f3-note').innerHTML = '';
-  let txt;
-  if (F3.N === 1) txt = 'Avec N = 1, aucune modification : la moyenne glissante se réduit au signal brut.';
-  else if (F3.N < 5) txt = 'Avec N = ' + F3.N + ', le lissage est léger et le retard faible. Le bruit est encore bien visible.';
-  else if (F3.N < 15) txt = 'Avec N = ' + F3.N + ', le bruit est nettement réduit (σ divisé par ≈ √N si le bruit est blanc) et le retard reste acceptable.';
-  else txt = 'Avec N = ' + F3.N + ', le lissage est fort mais le retard (' + fmt(delay, 2) + ' s) commence à déformer la courbe. Il faut chercher un compromis.';
-  $('#f3-note').append(h('div', { class: 'verdict', html: txt }));
+  const note = F3.N === 1 ? 'N = 1 : aucun lissage.' : F3.N < 5 ? 'Lissage léger, retard faible.' : F3.N < 15 ? 'Bruit nettement réduit, retard acceptable.' : 'Lissage fort, retard important (déformation).';
+  $('#f3-note').append(h('div', { class: 'verdict' }, note));
 }
 
-/* ================= Atelier 4 : filtres passe-bas ================= */
-const F4 = { order: 1, fc: 3, Te: 0.01, zeta: 0.7, npoints: 200, amp2: 0.5, noise: 0.05, data: null };
-function genF4() {
-  F4.data = genNoisySignal(F4.npoints, F4.Te, 1, 15, F4.amp2, F4.noise);
-}
-const CODE_F4 = `import math
-
-def filtre_pb1(xs, Te, fc):
-    """Filtre passe-bas du 1er ordre : y[n] = α·y[n-1] + (1-α)·x[n]."""
-    tau = 1 / (2 * math.pi * fc)
-    alpha = math.exp(-Te / tau)         # discrétisation exacte
-    ys = [xs[0]]
-    for n in range(1, len(xs)):
-        ys.append(alpha * ys[-1] + (1 - alpha) * xs[n])
-    return ys
-
-
-def filtre_pb2(xs, Te, fc, zeta=0.7):
-    """Filtre passe-bas du 2e ordre (Tustin / bilinéaire)."""
-    wn = 2 * math.pi * fc
-    a0 = 4/Te**2 + 4*zeta*wn/Te + wn**2
-    a1 = -8/Te**2 + 2*wn**2
-    a2 = 4/Te**2 - 4*zeta*wn/Te + wn**2
-    b0 = wn**2
-    b1 = 2 * wn**2
-    b2 = wn**2
-    y = [xs[0], xs[1] if len(xs) > 1 else xs[0]]
-    for n in range(2, len(xs)):
-        yn = (b0*xs[n] + b1*xs[n-1] + b2*xs[n-2]
-              - a1*y[n-1] - a2*y[n-2]) / a0
-        y.append(yn)
-    return y`;
+/* ============ Atelier 4 : Filtres ============ */
+const F4 = { order: 1, fc: 3, Te: 0.01, zeta: 0.7, npoints: 200, noise: 0.05, data: null };
+function genF4() { F4.data = []; for (let i = 0; i < F4.npoints; i++) { const t = i * F4.Te; F4.data.push(Math.sin(2 * Math.PI * 1 * t) + 0.5 * Math.sin(2 * Math.PI * 15 * t) + F4.noise * gaussRand()); } }
+function filterPB1(xs, Te, fc) { const tau = 1 / (2 * Math.PI * fc), alpha = Math.exp(-Te / tau); const ys = [xs[0]]; for (let n = 1; n < xs.length; n++) ys.push(alpha * ys[n - 1] + (1 - alpha) * xs[n]); return ys; }
+function filterPB2(xs, Te, fc, zeta) { const wn = 2 * Math.PI * fc; const a0 = 4/(Te*Te) + 4*zeta*wn/Te + wn*wn, a1 = -8/(Te*Te) + 2*wn*wn, a2 = 4/(Te*Te) - 4*zeta*wn/Te + wn*wn; const b0 = wn*wn, b1 = 2*wn*wn, b2 = wn*wn; const n = xs.length; const y = new Array(n); y[0] = xs[0]; if (n > 1) y[1] = xs[1]; for (let k = 2; k < n; k++) y[k] = (b0*xs[k] + b1*xs[k-1] + b2*xs[k-2] - a1*y[k-1] - a2*y[k-2]) / a0; return y; }
+const CODE_F4 = `import math\n\ndef filtre_pb1(xs, Te, fc):\n    tau = 1/(2*math.pi*fc)\n    alpha = math.exp(-Te/tau)\n    ys = [xs[0]]\n    for n in range(1, len(xs)):\n        ys.append(alpha*ys[-1] + (1-alpha)*xs[n])\n    return ys\n\ndef filtre_pb2(xs, Te, fc, zeta=0.7):\n    wn = 2*math.pi*fc\n    a0 = 4/Te**2 + 4*zeta*wn/Te + wn**2\n    a1 = -8/Te**2 + 2*wn**2\n    a2 = 4/Te**2 - 4*zeta*wn/Te + wn**2\n    b0 = wn**2; b1 = 2*wn**2; b2 = wn**2\n    y = [xs[0], xs[1] if len(xs) > 1 else xs[0]]\n    for n in range(2, len(xs)):\n        yn = (b0*xs[n] + b1*xs[n-1] + b2*xs[n-2]\n              - a1*y[n-1] - a2*y[n-2]) / a0\n        y.append(yn)\n    return y`;
 function mountF4(root) {
-  root.innerHTML = '<h2>Filtres passe-bas numériques</h2>' +
-    '<p>Un <b>filtre passe-bas</b> atténue les hautes fréquences et laisse passer les basses. On compare ici le signal original (basse fréquence 1 Hz + haute fréquence 15 Hz + bruit) au signal filtré.</p>' +
-    '<div class="opts"><div class="fld"><span>Ordre du filtre</span><div id="f4-order"></div></div>' +
-    '<label class="fld"><span>Fréquence de coupure f<sub>c</sub> = <b id="f4-fc-out"></b> Hz</span><input type="range" id="f4-fc" min="0.5" max="10" step="0.1" aria-label="fc"></label>' +
-    '<label class="fld"><span>Période d\'échantillonnage T<sub>e</sub> = <b id="f4-Te-out"></b> s</span><input type="range" id="f4-Te" min="0.002" max="0.05" step="0.001" aria-label="Te"></label>' +
-    '<label class="fld"><span>Amortissement ζ = <b id="f4-z-out"></b></span><input type="range" id="f4-z" min="0.1" max="2" step="0.05" aria-label="zeta"></label></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#c0281f"></i>signal original</span><span><i style="background:#2e6da4"></i>signal filtré</span></div><div id="f4-plot"></div></div>' +
-    '<div id="f4-stats"></div><div id="f4-note"></div>' +
-    codeBlock(CODE_F4);
-  $('#f4-order').append(chipsRow([['1', '1er ordre'], ['2', '2e ordre']], String(F4.order), k => { F4.order = +k; drawF4(); }, 'Ordre'));
+  root.innerHTML = '<h2>Filtres passe-bas numériques</h2><p>1er ordre (pente −20 dB/décade) ou 2e ordre (−40 dB/décade, réglage par ζ).</p>' +
+    '<div class="opts"><div class="fld"><span>Ordre</span><div id="f4-order"></div></div><label class="fld"><span>f<sub>c</sub> = <b id="f4-fc-out"></b> Hz</span><input type="range" id="f4-fc" min="0.5" max="10" step="0.1"></label><label class="fld"><span>T<sub>e</sub> = <b id="f4-Te-out"></b> s</span><input type="range" id="f4-Te" min="0.002" max="0.05" step="0.001"></label><label class="fld"><span>ζ = <b id="f4-z-out"></b></span><input type="range" id="f4-z" min="0.1" max="2" step="0.05"></label></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#c0281f"></i>brut</span><span><i style="background:#2e6da4"></i>filtré</span></div><div id="f4-plot"></div></div>' +
+    '<div id="f4-stats"></div><div id="f4-note"></div>' + codeBlock(CODE_F4);
+  $('#f4-order').append(chipsRow([['1', '1er ordre'], ['2', '2e ordre']], String(F4.order), k => { F4.order = +k; drawF4(); }));
   $('#f4-fc').value = F4.fc; $('#f4-Te').value = F4.Te; $('#f4-z').value = F4.zeta;
   $('#f4-fc').addEventListener('input', e => { F4.fc = +e.target.value; drawF4(); });
   $('#f4-Te').addEventListener('input', e => { F4.Te = +e.target.value; genF4(); drawF4(); });
@@ -671,296 +354,228 @@ function mountF4(root) {
   genF4(); drawF4();
 }
 function drawF4() {
-  $('#f4-fc-out').textContent = fmt(F4.fc, 1);
-  $('#f4-Te-out').textContent = fmt(F4.Te, 3);
-  $('#f4-z-out').textContent = fmt(F4.zeta, 2);
+  $('#f4-fc-out').textContent = fmt(F4.fc, 1); $('#f4-Te-out').textContent = fmt(F4.Te, 3); $('#f4-z-out').textContent = fmt(F4.zeta, 2);
   $('#f4-z').disabled = F4.order !== 2;
-  const xs = F4.data;
-  const ys = F4.order === 1 ? filterPB1(xs, F4.Te, F4.fc) : filterPB2(xs, F4.Te, F4.fc, F4.zeta);
-  const all = xs.concat(ys);
-  const ymin = Math.min(...all), ymax = Math.max(...all);
-  const padY = (ymax - ymin) * 0.1 + 0.1;
-  const P = plot(640, 320, [0, xs.length * F4.Te], [ymin - padY, ymax + padY]);
+  const xs = F4.data, ys = F4.order === 1 ? filterPB1(xs, F4.Te, F4.fc) : filterPB2(xs, F4.Te, F4.fc, F4.zeta);
+  const all = xs.concat(ys), ymin = Math.min(...all), ymax = Math.max(...all), padY = (ymax - ymin) * 0.1 + 0.1;
+  const P = plot(640, 300, [0, xs.length * F4.Te], [ymin - padY, ymax + padY]);
   P.polyline(xs.map((v, i) => [i * F4.Te, v]), '#c0281f', 1.2);
   P.polyline(ys.map((v, i) => [i * F4.Te, v]), '#2e6da4', 2.5);
   $('#f4-plot').innerHTML = ''; $('#f4-plot').append(P.svg);
-  const sBrut = stddev(xs), sFiltre = stddev(ys);
-  // estimation rapide de l'atténuation du 15 Hz (on compare les variations rapides)
-  const atten = F4.order === 1
-    ? 1 / Math.sqrt(1 + Math.pow(15 / F4.fc, 2))
-    : 1 / Math.sqrt(Math.pow(1 - Math.pow(15 / F4.fc, 2), 2) + Math.pow(2 * F4.zeta * 15 / F4.fc, 2));
+  const atten = F4.order === 1 ? 1 / Math.sqrt(1 + Math.pow(15 / F4.fc, 2)) : 1 / Math.sqrt(Math.pow(1 - Math.pow(15 / F4.fc, 2), 2) + Math.pow(2 * F4.zeta * 15 / F4.fc, 2));
   const attenDB = 20 * Math.log10(atten);
   $('#f4-stats').innerHTML = '';
-  $('#f4-stats').append(stats([
-    ['Ordre', String(F4.order)],
-    ['f<sub>c</sub>', fmt(F4.fc, 2) + ' Hz'],
-    ['T<sub>e</sub>', fmt(F4.Te, 3) + ' s'],
-    ['|H(j·15 Hz)|', fmt(atten, 4)],
-    ['Atténuation à 15 Hz', fmt(attenDB, 1) + ' dB']
-  ]));
+  $('#f4-stats').append(stats([['Ordre', String(F4.order)], ['f<sub>c</sub>', fmt(F4.fc, 2) + ' Hz'], ['T<sub>e</sub>', fmt(F4.Te, 3) + ' s'], ['|H(15 Hz)|', fmt(atten, 4)], ['Atténuation', fmt(attenDB, 1) + ' dB']]));
   $('#f4-note').innerHTML = '';
-  let txt = '';
-  if (F4.order === 1) {
-    txt = 'Le filtre du <b>1er ordre</b> a une pente asymptotique de <b>−20 dB/décade</b>. À 15 Hz (5 fois f<sub>c</sub>), il atténue d\'environ ' + fmt(Math.abs(attenDB), 0) + ' dB. La haute fréquence est réduite mais encore visible.';
-  } else {
-    txt = 'Le filtre du <b>2e ordre</b> a une pente asymptotique de <b>−40 dB/décade</b>. À 15 Hz, il atténue d\'environ ' + fmt(Math.abs(attenDB), 0) + ' dB : la haute fréquence disparaît presque. ';
-    if (F4.zeta < 0.4) txt += 'Avec ζ = ' + fmt(F4.zeta, 2) + ' < 0,4, on observe un <b>phénomène de résonance</b> près de f<sub>c</sub> (dépassement).';
-    else if (F4.zeta > 1) txt += 'Avec ζ = ' + fmt(F4.zeta, 2) + ' > 1, le filtre est apériodique : pas de dépassement, mais transition plus lente.';
-    else txt += 'Avec ζ = ' + fmt(F4.zeta, 2) + ' (proche de 0,7), la réponse est amortie sans dépassement notable : c\'est le réglage usuel.';
-  }
-  $('#f4-note').append(h('div', { class: 'verdict', html: txt }));
+  let txt = F4.order === 1 ? 'Le 1er ordre atténue de −20 dB/décade.' : 'Le 2e ordre atténue de −40 dB/décade.';
+  if (F4.order === 2) { if (F4.zeta < 0.4) txt += ' ζ = ' + fmt(F4.zeta, 2) + ' : résonance (dépassement).'; else if (F4.zeta > 1) txt += ' ζ > 1 : apériodique.'; else txt += ' ζ ≈ 0,7 : bon compromis.'; }
+  $('#f4-note').append(h('div', { class: 'verdict' }, txt));
 }
 
-/* ---------- enregistrement des ateliers ---------- */
+/* ---- Enregistrement ---- */
 const LABS = [
-  { id: 'f1', title: 'Fichiers CSV', hint: 'Lire, parser et extraire une colonne d\'un fichier CSV ; calculer des indicateurs.', mount: mountF1, leave: () => {}, reset: () => {} },
-  { id: 'f2', title: 'Moyenne et écart type', hint: 'Calculer et interpréter moyenne, variance, écart type ; bande x̄ ± σ.', mount: mountF2, leave: () => {}, reset: () => { F2.data = null; } },
-  { id: 'f3', title: 'Moyenne glissante', hint: 'Lisser un signal bruité par moyenne glissante ; compromis N / retard.', mount: mountF3, leave: () => {}, reset: () => { genF3(); } },
-  { id: 'f4', title: 'Filtres passe-bas', hint: 'Comparer les filtres du 1er et du 2e ordre ; rôle de f\u2091, ζ et T\u2091.', mount: mountF4, leave: () => {}, reset: () => { genF4(); } }
+  { id: 'f1', title: 'Fichiers CSV', hint: 'Lire avec with open, parser, extraire une colonne.', mount: mountF1, leave: () => {}, reset: () => {} },
+  { id: 'f2', title: 'Moyenne et écart type', hint: 'Listes vs numpy ; bande x̄ ± σ.', mount: mountF2, leave: () => {}, reset: () => { F2.data = null; } },
+  { id: 'f3', title: 'Moyenne glissante', hint: 'Compromis N / retard.', mount: mountF3, leave: () => {}, reset: () => { genF3(); } },
+  { id: 'f4', title: 'Filtres passe-bas', hint: '1er et 2e ordre ; rôle de f<sub>c</sub>, ζ, T<sub>e</sub>.', mount: mountF4, leave: () => {}, reset: () => { genF4(); } }
 ];
 LABS.forEach(lab => WORKSHOPS.push(lab));
 
-/* ---------- activités ---------- */
+/* ---- Activités ---- */
 const ACT = {
-  f1: {
-    title: 'Fichiers de données (CSV)', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'fichiers',
-    goal: 'Comprendre la structure d\'un fichier CSV, extraire une colonne, calculer quelques indicateurs.',
-    steps: [
-      'Observez le contenu du fichier ci-dessus : combien de lignes, combien de colonnes, quel est le séparateur ?',
-      'Sélectionnez la colonne « temperature ». Combien y a-t-il de valeurs ? Relevez la moyenne et l\'écart type.',
-      'Sélectionnez la colonne « pression ». Comparez l\'ordre de grandeur des valeurs et de leur dispersion avec la température.',
-      'Modifiez le fichier pour utiliser une virgule comme séparateur. Que constatez-vous ?',
-      'Supprimez une valeur dans une ligne, puis une virgule entière. Que se passe-t-il ? Comment le programme réagit-il ?'
-    ],
-    defi: { q: 'Un fichier CSV contient 1 000 lignes et 5 colonnes, dont une première colonne de temps. Combien de valeurs par colonne va-t-on extraire ? Peut-on faire des statistiques sur une colonne contenant du texte ?',
-      a: 'On extrait <b>1 000 valeurs par colonne</b> (en ignorant l\'entête). Une colonne de texte (par exemple un nom de capteur) ne peut pas être moyennée : il faut convertir les valeurs numériques au préalable. En pratique, on vérifie que chaque cellule est convertible en <code>float</code> avant de calculer des statistiques.' },
+  f1: { title: 'Fichiers CSV', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'fichiers',
+    goal: 'Lire un CSV avec with open, extraire une colonne, calculer des indicateurs.',
+    steps: ['Observez le contenu : combien de lignes, de colonnes, quel séparateur ?', 'Colonne « temperature » : moyenne et écart type ?', 'Colonne « pression » : comparez les ordres de grandeur.', 'Modifiez pour utiliser une virgule : que se passe-t-il ?', 'Supprimez une valeur dans une ligne : que se passe-t-il ?'],
+    defi: { q: 'Pourquoi with open est-il préférable à open + close ?', a: 'Le bloc <code>with</code> ferme automatiquement le fichier, même en cas d\'exception. On évite les fuites de ressources et les oublis de <code>close()</code>.' },
     qcm: [
-      { q: 'Quel est le séparateur le plus courant dans un CSV français (produit par Excel) ?', o: ['La virgule', 'Le point-virgule', 'L\'espace', 'Le retour à la ligne'], a: 1, w: 'En France, la virgule sert de séparateur décimal ; le point-virgule est donc utilisé pour les colonnes (norme RFC 4180 assouplie).' },
-      { q: 'Que contient habituellement la première ligne d\'un fichier CSV ?', o: ['Le nombre de lignes', 'Les noms des colonnes (entêtes)', 'Le séparateur utilisé', 'Une ligne vide'], a: 1, w: 'C\'est une convention : la première ligne donne le nom des colonnes. On peut la lire séparément puis traiter les lignes suivantes.' },
-      { q: 'En Python, quel module standard lit un fichier CSV ?', o: ['<code>csv</code>', '<code>txt</code>', '<code>file</code>', '<code>io</code> seul'], a: 0, w: 'Le module <code>csv</code> fournit <code>csv.reader</code> et <code>csv.DictReader</code>, qui gèrent les séparateurs et les guillemets.' },
-      { q: 'Si une ligne contient 4 cellules au lieu de 5, que faut-il faire ?', o: ['La garder quand même', 'L\'ignorer ou signaler une erreur de format', 'La supprimer du fichier', 'La fusionner avec la ligne suivante'], a: 1, w: 'Une ligne mal formée est presque toujours une erreur de saisie : on l\'ignore et on la signale, plutôt que d\'introduire des valeurs fausses dans les statistiques.' },
-      { q: 'Une colonne contient « 20,5 » (avec virgule). Que faut-il faire avant de calculer une moyenne en Python ?', o: ['Rien', 'Remplacer la virgule par un point, puis convertir en <code>float</code>', 'La convertir en <code>int</code>', 'La trier'], a: 1, w: '<code>float("20,5")</code> lève une erreur. Il faut faire <code>float(s.replace(",", "."))</code>.' }
+      { q: 'Quel bloc garantit la fermeture du fichier ?', o: ['open + close', 'with open', 'try/finally', 'file.open'], a: 1, w: 'with est un gestionnaire de contexte.' },
+      { q: 'Que fait <code>encoding="utf-8"</code> ?', o: ['compresse le fichier', 'précise l\'encodage', 'change le séparateur', 'ajoute un BOM'], a: 1, w: 'Évite les problèmes de caractères spéciaux (accents).' },
+      { q: 'Une ligne a 3 cellules au lieu de 5 ?', o: ['on la garde', 'on l\'ignore et signale', 'on la supprime du disque', 'on la duplique'], a: 1, w: 'Ligne mal formée = erreur de saisie.' },
+      { q: '20,5 avec virgule : conversion ?', o: ['float("20,5")', 'float("20.5")', 'float("20,5".replace(",", "."))', 'int("20,5")'], a: 2, w: 'Il faut remplacer la virgule par un point.' }
     ]
   },
-  f2: {
-    title: 'Moyenne et écart type', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'stats',
-    goal: 'Calculer la moyenne et l\'écart type d\'un échantillon, interpréter la bande x̄ ± σ, comprendre l\'effet de n.',
-    steps: [
-      'Choisissez n = 10, μ = 50, σ = 5. Relevez la moyenne et l\'écart type calculés. Sont-ils proches de μ et σ ?',
-      'Passez à n = 100 puis n = 200 (en gardant μ et σ). La moyenne se rapproche-t-elle de μ ? L\'écart type de σ ?',
-      'Changez σ (par exemple σ = 1 puis σ = 10). Comment évolue la bande x̄ ± σ ?',
-      'Cliquez plusieurs fois sur « Nouveau tirage » à n = 20. La moyenne saute-t-elle beaucoup d\'un tirage à l\'autre ? Et à n = 200 ?',
-      'Sur les données CSV de l\'atelier 1, calculez (à la main) la moyenne et l\'écart type de la colonne température, et comparez avec l\'affichage.'
-    ],
-    defi: { q: 'Un échantillon de 25 mesures a pour moyenne 20,0 et pour écart type 0,5. Combien de mesures environ sont comprises entre 19,0 et 21,0 ? Et entre 19,5 et 20,5 ?',
-      a: 'Si les mesures suivent une loi normale, la bande <b>x̄ ± σ</b> (19,5 – 20,5) contient environ <b>68 %</b> des valeurs, soit ≈ 17 mesures sur 25. La bande <b>x̄ ± 2σ</b> (19,0 – 21,0) en contient environ <b>95 %</b>, soit ≈ 24 mesures sur 25.' },
+  f2: { title: 'Moyenne et écart type', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'stats',
+    goal: 'Interpréter moyenne et écart type ; comprendre l\'effet de n.',
+    steps: ['n = 10, μ = 50, σ = 5 : comparer x̄ et μ, σ et σ.', 'n = 100 : la moyenne se rapproche-t-elle de μ ?', 'n = 200 : l\'écart type se rapproche-t-il de σ ?', 'Changer σ : effet sur la bande x̄ ± σ ?', 'Comparer la version listes et numpy.'],
+    defi: { q: 'Échantillon n = 25, x̄ = 20, σ = 0,5. Combien de valeurs dans [19,5 ; 20,5] ? Et [19 ; 21] ?', a: 'Distribution gaussienne : x̄ ± σ contient ~68 % des valeurs, soit ~17/25 ; x̄ ± 2σ contient ~95 %, soit ~24/25.' },
     qcm: [
-      { q: 'Quelle est la formule de la moyenne d\'un échantillon x<sub>1</sub>, …, x<sub>n</sub> ?', o: ['(1/n) Σ x<sub>i</sub>', 'Σ x<sub>i</sub>', '√(Σ x<sub>i</sub>²)', 'max(x<sub>i</sub>) − min(x<sub>i</sub>)'], a: 0, w: 'C\'est la somme des valeurs divisée par leur nombre : x̄ = (x<sub>1</sub> + … + x<sub>n</sub>)/n.' },
-      { q: 'L\'écart type mesure :', o: ['la valeur centrale', 'la dispersion autour de la moyenne', 'le maximum', 'le nombre de valeurs'], a: 1, w: 'σ = √( (1/n) Σ (x<sub>i</sub> − x̄)² ) mesure l\'écart typique à la moyenne, dans la même unité que les données.' },
-      { q: 'Si on double n en gardant la même loi, l\'écart type observé sur l\'échantillon…', o: ['double', 'est divisé par 2', 'reste à peu près égal à σ', 'tend vers 0'], a: 2, w: 'L\'écart type estimé reste proche de σ ; c\'est l\'écart type <i>de la moyenne</i> qui diminue en σ/√n.' },
-      { q: 'Un échantillon contient la valeur aberrante 10 000 alors que les autres valent ≈ 20. Que se passe-t-il ?', o: ['Rien, les indicateurs sont robustes', 'La moyenne et l\'écart type explosent', 'La médiane explose aussi', 'L\'écart type diminue'], a: 1, w: 'La moyenne et l\'écart type sont très sensibles aux valeurs extrêmes. La <b>médiane</b> est robuste, c\'est pourquoi on l\'utilise en présence d\'outliers.' }
+      { q: 'Moyenne :', o: ['(1/n)Σx', 'Σx', '√Σx²', 'max−min'], a: 0, w: 'Somme divisée par n.' },
+      { q: 'Écart type mesure :', o: ['le centre', 'la dispersion', 'le max', 'n'], a: 1, w: 'σ = √(1/n·Σ(x−x̄)²).' },
+      { q: 'n double → écart type observé ?', o: ['double', 'divisé par 2', '≈ σ', 'tend vers 0'], a: 2, w: 'σ reste ≈ σ ; c\'est σ de la moyenne qui diminue en σ/√n.' },
+      { q: 'Avec ddof=1, np.var calcule :', o: ['variance de population', 'variance d\'échantillon', 'le max', 'n'], a: 1, w: 'Division par n−1.' }
     ]
   },
-  f3: {
-    title: 'Moyenne glissante', level: 'Niveau 2 · Comprendre', time: '25 min', course: 'glissante',
-    goal: 'Comprendre le filtrage par moyenne glissante, son effet sur le bruit et son retard.',
-    steps: [
-      'Laissez N = 1 : le signal filtré est-il identique au signal bruité ?',
-      'Passez à N = 5, puis N = 10, N = 20. Comment évolue l\'écart type du signal lissé ?',
-      'Observez le décalage entre la tendance vraie (verte) et la moyenne glissante (bleue). Le retard dépend-il de N ?',
-      'Avec N = 30, la courbe lissée suit-elle encore les variations rapides de la tendance ?',
-      'Cherchez un compromis : quel N donne un bon lissage sans retard excessif pour cette sinusoïde de période 5 s ?'
-    ],
-    defi: { q: 'Un signal est échantillonné à T<sub>e</sub> = 0,1 s. On applique une moyenne glissante avec N = 10. Quel est le retard introduit (en secondes et en nombre d\'échantillons) ?',
-      a: 'Le retard d\'une moyenne glissante causale de longueur N est (N−1)/2 échantillons. Ici (10−1)/2 = <b>4,5 échantillons</b>, soit <b>0,45 s</b>. Cette valeur est visible sur le graphe : la courbe lissée est décalée vers la droite par rapport à la tendance vraie.' },
+  f3: { title: 'Moyenne glissante', level: 'Niveau 2 · Comprendre', time: '25 min', course: 'glissante',
+    goal: 'Lisser un signal ; compromis N / retard.',
+    steps: ['N = 1 : identique au brut ?', 'N = 5, 10, 20 : comment évolue σ lissé ?', 'Observez le décalage (retard).', 'N = 30 : la courbe suit-elle encore ?', 'Cherchez un N optimal.'],
+    defi: { q: 'T<sub>e</sub> = 0,1 s, N = 10. Retard ?', a: '(N−1)/2 · T<sub>e</sub> = 4,5 · 0,1 = <b>0,45 s</b> (4,5 échantillons).' },
     qcm: [
-      { q: 'La moyenne glissante de longueur N est un filtre :', o: ['passe-bande', 'passe-haut', 'passe-bas', 'passe-tout'], a: 2, w: 'En moyennant, on atténue les variations rapides (hautes fréquences) et on conserve les variations lentes (basses fréquences).' },
-      { q: 'Le retard introduit par une moyenne glissante causale de longueur N vaut environ :', o: ['0', 'N échantillons', '(N−1)/2 échantillons', 'N² échantillons'], a: 2, w: 'C\'est le temps que met le centre de la fenêtre pour atteindre le point courant. Visible expérimentalement.' },
-      { q: 'Quand N augmente, la variance du signal lissé :', o: ['augmente', 'diminue', 'reste constante', 'devient infinie'], a: 1, w: 'Si le bruit est blanc de variance σ², la variance du signal moyenné sur N points vaut σ²/N. Le bruit est donc réduit en 1/N.' },
-      { q: 'Quel est l\'inconvénient principal de la moyenne glissante pour N grand ?', o: ['Elle n\'atténue pas le bruit', 'Elle introduit un retard et déforme les variations rapides', 'Elle est instable', 'Elle n\'est pas causale'], a: 1, w: 'Un N trop grand lisse aussi les variations utiles du signal et introduit un retard important.' }
+      { q: 'Moyenne glissante = filtre :', o: ['passe-bande', 'passe-haut', 'passe-bas', 'passe-tout'], a: 2, w: 'Atténue les hautes fréquences.' },
+      { q: 'Retard :', o: ['0', 'N', '(N−1)/2', 'N²'], a: 2, w: 'Centre de la fenêtre.' },
+      { q: 'N augmente → variance lissée :', o: ['augmente', 'diminue (σ²/N)', 'constante', 'infinie'], a: 1, w: 'Bruit blanc : σ²/N.' },
+      { q: 'Inconvénient N grand :', o: ['pas de lissage', 'retard et déformation', 'instable', 'non causal'], a: 1, w: 'Retard important.' }
     ]
   },
-  f4: {
-    title: 'Filtres passe-bas 1er et 2e ordre', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'filtres',
-    goal: 'Comparer les filtres du 1er et du 2e ordre, comprendre le rôle de la fréquence de coupure, de l\'amortissement et de la période d\'échantillonnage.',
-    steps: [
-      'Laissez f<sub>c</sub> = 3 Hz et T<sub>e</sub> = 0,01 s. Comparez les courbes filtrées à 1er et 2e ordre.',
-      'À 15 Hz, quelle est l\'atténuation annoncée pour chaque ordre ? Vérifiez-la visuellement.',
-      'Passez f<sub>c</sub> à 1 Hz puis à 8 Hz. Comment évolue la courbe filtrée ?',
-      'En 2e ordre, faites varier ζ entre 0,1 et 2. Que se passe-t-il quand ζ < 0,4 ?',
-      'Faites varier T<sub>e</sub> : que se passe-t-il pour T<sub>e</sub> très petit ? très grand ?'
-    ],
-    defi: { q: 'Un filtre du 1er ordre a une pente asymptotique de −20 dB/décade. Combien atténue-t-il à 10 fois la fréquence de coupure ? Et un filtre du 2e ordre ?',
-      a: 'Pour un 1er ordre, à f = 10 f<sub>c</sub>, l\'atténuation vaut environ <b>−20 dB</b> (soit un facteur 10 en amplitude). Pour un 2e ordre, elle vaut <b>−40 dB</b> (facteur 100). C\'est pourquoi le 2e ordre est plus sélectif : il « nettoie » mieux les hautes fréquences.' },
+  f4: { title: 'Filtres passe-bas', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'filtres',
+    goal: 'Comparer 1er et 2e ordre ; rôle de f<sub>c</sub>, ζ, T<sub>e</sub>.',
+    steps: ['f<sub>c</sub> = 3 Hz, T<sub>e</sub> = 0,01 s : comparez 1er vs 2e ordre.', 'Atténuation à 15 Hz ?', 'f<sub>c</sub> = 1 Hz puis 8 Hz : effet ?', 'ζ = 0,1 vs 2 : résonance ?', 'T<sub>e</sub> très petit/grand : effet ?'],
+    defi: { q: '1er ordre : atténuation à 10 f<sub>c</sub> ? 2e ordre ?', a: '1er : −20 dB (facteur 10). 2e : −40 dB (facteur 100).' },
     qcm: [
-      { q: 'Un filtre passe-bas du 1er ordre a pour fonction de transfert :', o: ['H(p) = 1 + τp', 'H(p) = 1 / (1 + τp)', 'H(p) = ω<sub>n</sub>² / (p² + 2ζω<sub>n</sub> p + ω<sub>n</sub>²)', 'H(p) = p'], a: 1, w: 'C\'est la forme canonique du 1er ordre, avec τ = 1/ω<sub>c</sub> = 1/(2π f<sub>c</sub>).' },
-      { q: 'Un filtre passe-bas du 2e ordre a une pente asymptotique de :', o: ['−6 dB/octave', '−20 dB/décade', '−40 dB/décade', '0 dB/décade'], a: 2, w: 'Le 2e ordre atténue deux fois plus vite que le 1er, soit −40 dB/décade (−12 dB/octave).' },
-      { q: 'Pour ζ = 0,1, le filtre du 2e ordre :', o: ['est instable', 'présente une résonance marquée près de f<sub>c</sub>', 'n\'a aucun effet', 'devient un filtre passe-haut'], a: 1, w: 'Un amortissement faible provoque un pic de résonance à la fréquence propre, visible aussi en réponse temporelle (dépassement).' },
-      { q: 'Le choix de la période d\'échantillonnage T<sub>e</sub> doit respecter :', o: ['T<sub>e</sub> très grand devant 1/f<sub>c</sub>', 'T<sub>e</sub> petit devant 1/f<sub>c</sub> (au moins 10 fois)', 'T<sub>e</sub> = 1/f<sub>c</sub>', 'T<sub>e</sub> arbitraire'], a: 1, w: 'En pratique on prend T<sub>e</sub> ≪ 1/f<sub>c</sub> (typiquement T<sub>e</sub> ≈ 1/(10 f<sub>c</sub> à 1/(20 f<sub>c</sub>)), sinon la discrétisation dégrade le filtre.' },
-      { q: 'La forme discrète exacte du 1er ordre est :', o: ['y[n] = y[n−1] + (x[n]−y[n−1])/τ', 'y[n] = α·y[n−1] + (1−α)·x[n] avec α = exp(−T<sub>e</sub>/τ)', 'y[n] = x[n]', 'y[n] = (x[n] + x[n−1])/2'], a: 1, w: 'Cette forme est <b>exacte</b> : elle donne la même réponse qu\'un filtre analogique du 1er ordre aux instants d\'échantillonnage.' }
+      { q: 'H(p) 1er ordre :', o: ['1+τp', '1/(1+τp)', 'ω²/(p²+2ζωp+ω²)', 'p'], a: 1, w: 'Forme canonique du 1er ordre.' },
+      { q: 'Pente 2e ordre :', o: ['−6 dB/oct', '−20 dB/déc', '−40 dB/déc', '0'], a: 2, w: '−40 dB/décade.' },
+      { q: 'ζ = 0,1 :', o: ['instable', 'résonance marquée', 'aucun effet', 'passe-haut'], a: 1, w: 'Dépassement important.' },
+      { q: 'T<sub>e</sub> doit être :', o: ['grand devant 1/f<sub>c</sub>', 'petit devant 1/f<sub>c</sub>', '= 1/f<sub>c</sub>', 'quelconque'], a: 1, w: 'T<sub>e</sub> ≪ 1/f<sub>c</sub>.' }
     ]
   }
 };
 
-/* ---------- cours ---------- */
+/* ---- Cours ---- */
 const COURSE = [];
-COURSE.push({ id: 'fichiers', t: 'Fichiers de données (CSV)', h: `
-<p>En SII, on acquiert souvent des données expérimentales dans un <b>fichier texte</b>. Le format le plus courant est le <b>CSV</b> (<i>comma-separated values</i>) : une ligne par enregistrement, des colonnes séparées par un caractère (souvent <code>;</code> en France, <code>,</code> en anglais, ou une tabulation).</p>
-<h3>Structure d\'un fichier CSV</h3>
-<pre class="code">temps;temperature;pression
-0;20.0;1.0130
-0.5;20.3;1.0131
-1;20.7;1.0130
-...</pre>
-<p>La première ligne contient les <b>entêtes</b> (noms des colonnes). Les lignes suivantes contiennent les valeurs, convertibles en nombres (ou non, si la colonne est qualitative).</p>
-<h3>Lecture en Python</h3>
-<pre class="code">import csv
-
-with open('mesures.csv', newline='', encoding='utf-8') as f:
-    lignes = list(csv.reader(f, delimiter=';'))
-entetes = lignes[0]
-donnees = lignes[1:]</pre>
-<p>Le paramètre <code>newline=''</code> évite les problèmes de fin de ligne sous Windows ; <code>encoding='utf-8'</code> précise l\'encodage du fichier (important si les entêtes contiennent des accents).</p>
-<h3>Pièges classiques</h3>
+COURSE.push({ id: 'fichiers', t: 'Fichiers de données : lecture sécurisée', h: `
+<p>En SII, on acquiert souvent des mesures dans un fichier texte (<code>.csv</code> ou <code>.txt</code>). Le format CSV (comma-separated values) est le plus courant : une ligne par enregistrement, colonnes séparées par <code>;</code> (France) ou <code>,</code>.</p>
+<h3>Pourquoi <code>with open</code> ?</h3>
 <ul>
-<li><b>Séparateur décimal</b> : en France, la virgule <code>,</code> peut servir de séparateur décimal, et le <code>;</code> de séparateur de colonnes. Convertir avec <code>float(s.replace(',', '.'))</code>.</li>
-<li><b>Cellules vides</b> ou <b>non numériques</b> : filtrer avant de calculer (les ignorer ou lever une erreur explicite).</li>
-<li><b>Lignes mal formées</b> : ignorer les lignes dont le nombre de colonnes diffère de l\'entête.</li>
-<li><b>Espaces</b> autour des cellules : utiliser <code>s.strip()</code>.</li>
-<li><b>Fins de ligne</b> : <code>split('\\n')</code> ou mieux, laisser <code>csv</code> gérer.</li>
+<li>C'est un <b>gestionnaire de contexte</b> : il ouvre le fichier, exécute le bloc, puis <b>ferme automatiquement</b> le fichier.</li>
+<li>Fermeture garantie <b>même en cas d'exception</b> dans le bloc.</li>
+<li>Évite les fuites de ressources (fichiers laissés ouverts par oubli de <code>close()</code>).</li>
 </ul>
-<div class="retain"><b>À retenir.</b> Un CSV est un fichier texte : sa lecture est simple mais doit être <b>robuste</b> (séparateur, conversion, lignes invalides). En Python, le module <code>csv</code> fait l\'essentiel ; on convertit ensuite les colonnes en <code>float</code> pour les calculs.</div>` });
+<div class="col2"><div><h3 style="margin-top:0">Sans <code>with</code> (déconseillé)</h3><pre class="code">f = open("d.csv", "r")
+# ... lecture ...
+f.close()   # <- on peut oublier</pre></div><div><h3 style="margin-top:0">Avec <code>with</code> (recommandé)</h3><pre class="code">with open("d.csv", "r", encoding="utf-8") as f:
+    # ... lecture ...
+# fermé automatiquement</pre></div></div>
+<h3>Exemple complet</h3>
+<pre class="code">import numpy as np
+
+with open("mesures.csv", "r", encoding="utf-8") as fichier:
+    for _ in range(2):                # ignorer 2 lignes d'en-tête
+        fichier.readline()
+    temps, tension = [], []
+    for ligne in fichier:
+        ligne = ligne.replace(",", ".").strip()
+        colonnes = ligne.split(";")
+        temps.append(float(colonnes[0]))
+        tension.append(float(colonnes[1]))
+
+t = np.array(temps)
+U = np.array(tension)
+U_moy = np.mean(U)</pre>
+<h3>Bonnes pratiques</h3>
+<ul>
+<li>Toujours <code>with open(...) as f:</code>.</li>
+<li>Spécifier <code>encoding="utf-8"</code> (accents, caractères spéciaux).</li>
+<li>Nettoyer avant conversion : <code>strip()</code>, <code>replace(",", ".")</code>.</li>
+<li>Ignorer les lignes mal formées (mauvais nombre de colonnes).</li>
+<li>Convertir en <code>numpy</code> dès que possible.</li>
+</ul>
+<div class="retain"><b>À retenir.</b> <code>with open</code> = code plus sûr et plus lisible. CSV = fichier texte, séparateur à vérifier, conversion <code>float</code> à faire.</div>` });
+
+COURSE.push({ id: 'stockage', t: 'Listes vs numpy', h: `
+<p>Pour stocker une série de mesures, deux structures existent : <b>listes Python</b> et <b>tableaux numpy</b>.</p>
+<h3>Listes Python</h3>
+<ul><li>Dynamiques : <code>append</code>, <code>pop</code>, <code>insert</code>.</li><li>Hétérogènes.</li><li>Boucles explicites pour les calculs.</li></ul>
+<pre class="code">L = [1.2, 3.4, 5.6]
+L.append(7.8)
+L[1]             # accès
+L[1] = 9.9       # modification</pre>
+<h3>Tableaux numpy</h3>
+<ul><li>Statiques : taille fixée à la création.</li><li>Homogènes (<code>float64</code>).</li><li>Vectorisés : opérations mathématiques directes.</li></ul>
+<pre class="code">import numpy as np
+t = np.array([1.2, 3.4, 5.6])
+t + 2              # vectorisé
+np.sin(t)          # vectorisé
+t[t &gt; 3]          # filtrage</pre>
+<h3>Tableau comparatif</h3>
+<table class="ctable"><thead><tr><th>Opération</th><th>Liste</th><th>numpy</th></tr></thead><tbody>
+<tr><td>Accès</td><td>O(1)</td><td>O(1)</td></tr>
+<tr><td>Ajout en fin</td><td>O(1)</td><td>impossible</td></tr>
+<tr><td>Produit terme à terme</td><td>boucle</td><td><code>u * v</code></td></tr>
+<tr><td>Moyenne / sinus</td><td>boucle</td><td><code>np.mean</code>, <code>np.sin</code></td></tr>
+<tr><td>Filtrage</td><td>boucle + if</td><td><code>u[u &gt; 3]</code></td></tr>
+</tbody></table>
+<div class="retain"><b>À retenir.</b> Listes pour petites séries dynamiques ; numpy pour tout calcul numérique.</div>` });
 
 COURSE.push({ id: 'stats', t: 'Moyenne et écart type', h: `
-<p>Pour résumer une série de n valeurs x<sub>1</sub>, …, x<sub>n</sub>, on utilise deux indicateurs fondamentaux.</p>
 <h3>Moyenne</h3>
-<div class="formula">x̄ = (1/n) · Σ<sub>i=1</sub><sup>n</sup> x<sub>i</sub></div>
-<p>La moyenne donne la valeur centrale ; elle est très sensible aux valeurs aberrantes (une seule grande valeur peut la tirer fortement).</p>
+<div class="formula">x̄ = (1/n) Σ<sub>i=1</sub><sup>n</sup> x<sub>i</sub></div>
 <h3>Variance et écart type</h3>
-<div class="formula">σ² = (1/n) · Σ<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> − x̄)² &nbsp;&nbsp;·&nbsp;&nbsp; σ = √σ²</div>
-<p>La <b>variance</b> σ² est la moyenne des carrés des écarts à la moyenne. L\'<b>écart type</b> σ est sa racine carrée : il s\'exprime dans la même unité que x, ce qui le rend directement interprétable.</p>
-<h3>Interprétation</h3>
-<p>Si la distribution est approximativement gaussienne :</p>
-<ul>
-<li><b>x̄ ± σ</b> contient environ <b>68 %</b> des valeurs ;</li>
-<li><b>x̄ ± 2σ</b> contient environ <b>95 %</b> des valeurs ;</li>
-<li><b>x̄ ± 3σ</b> contient environ <b>99,7 %</b> des valeurs.</li>
-</ul>
-<p>Cette règle permet de détecter les valeurs aberrantes : une mesure à x̄ + 4σ a une probabilité très faible d\'apparaître par hasard.</p>
-<h3>Estimateur et variance d\'échantillon</h3>
-<p>Pour un échantillon de taille n, deux formules coexistent :</p>
-<ul>
-<li>σ<sub>n</sub>² = (1/n) Σ (x<sub>i</sub> − x̄)² — <b>variance de population</b> (ou biaisée) ;</li>
-<li>s² = (1/(n−1)) Σ (x<sub>i</sub> − x̄)² — <b>variance d\'échantillon</b> (ou non biaisée).</li>
-</ul>
-<p>En SII, on utilise le plus souvent σ<sub>n</sub>, sauf mention explicite contraire.</p>
-<h3>Propriétés utiles</h3>
-<ul>
-<li>Si on ajoute une constante c à toutes les valeurs : x̄ devient x̄ + c, σ est inchangé.</li>
-<li>Si on multiplie toutes les valeurs par k : x̄ devient k·x̄, σ devient |k|·σ.</li>
-<li>L\'écart type de la moyenne (sur n échantillons) vaut σ/√n : c\'est pourquoi la moyenne devient plus stable quand n augmente.</li>
-</ul>
-<div class="retain"><b>À retenir.</b> x̄ caractérise le <b>centre</b>, σ la <b>dispersion</b>. La bande x̄ ± σ contient environ 68 % des valeurs d\'une population gaussienne. La moyenne est sensible aux outliers, la médiane non.</div>` });
+<div class="formula">σ² = (1/n) Σ (x<sub>i</sub> − x̄)² &nbsp;·&nbsp; σ = √σ²</div>
+<h3>Listes vs numpy</h3>
+<div class="col2"><div><h4 style="margin:0 0 4px">Listes</h4><pre class="code">def moyenne(L):
+    return sum(L)/len(L)
+
+def variance(L):
+    m = moyenne(L)
+    return sum((x-m)**2 for x in L)/len(L)
+
+def ecart_type(L):
+    return variance(L)**0.5</pre></div><div><h4 style="margin:0 0 4px">numpy</h4><pre class="code">import numpy as np
+x = np.array(L)
+np.mean(x)
+np.var(x)     # ddof=0
+np.std(x)</pre></div></div>
+<h3>Bande x̄ ± σ</h3>
+<p>Pour une distribution gaussienne :</p>
+<ul><li>x̄ ± σ contient environ <b>68 %</b> des valeurs.</li><li>x̄ ± 2σ contient environ <b>95 %</b>.</li><li>x̄ ± 3σ contient environ <b>99,7 %</b>.</li></ul>
+<h3>Variance d'échantillon</h3>
+<p>Deux formules coexistent :</p>
+<ul><li>σ<sub>n</sub>² = (1/n) Σ(x−x̄)² — variance de population (numpy : <code>ddof=0</code>).</li><li>s² = 1/(n−1) Σ(x−x̄)² — variance d'échantillon (numpy : <code>ddof=1</code>).</li></ul>
+<div class="retain"><b>À retenir.</b> x̄ = centre, σ = dispersion. numpy : <code>np.mean</code>, <code>np.std</code>, <code>np.var</code>.</div>` });
 
 COURSE.push({ id: 'glissante', t: 'Moyenne glissante', h: `
-<p>La <b>moyenne glissante</b> (ou <i>moving average</i>) est la moyenne des N dernières valeurs :</p>
-<div class="formula">y[n] = (1/N) · Σ<sub>k=0</sub><sup>N−1</sup> x[n−k]</div>
-<p>C\'est un <b>filtre passe-bas</b> très simple, souvent utilisé pour lisser un signal bruité.</p>
-<h3>Réduction du bruit</h3>
-<p>Si le bruit est blanc de variance σ<sub>b</sub>², la variance du signal lissé vaut σ<sub>b</sub>²/N. L\'écart type est divisé par <b>√N</b> : pour N = 100, le bruit est divisé par 10. C\'est l\'un des intérêts majeurs du moyennage.</p>
-<h3>Retard</h3>
-<p>La moyenne glissante est <b>causale</b> : elle n\'utilise que le passé. Elle introduit donc un retard moyen de <b>(N−1)/2</b> échantillons, soit (N−1)/2 · T<sub>e</sub> en secondes. Ce retard déforme les variations rapides du signal.</p>
-<h3>Réponse en fréquence</h3>
-<p>La fonction de transfert de la moyenne glissante de longueur N à la pulsation réduite ωT<sub>e</sub> est :</p>
-<div class="formula">|H(e^{jωT<sub>e</sub>})| = |sin(NωT<sub>e</sub>/2) / (N · sin(ωT<sub>e</sub>/2))|</div>
-<p>Cette fonction vaut 1 à fréquence nulle, passe par zéro pour f = k/(N·T<sub>e</sub>), puis présente des lobes secondaires. Ce n\'est donc pas un excellent filtre, mais il est simple et efficace sur les basses fréquences.</p>
-<h3>Implémentation efficace</h3>
-<p>Le calcul direct de la somme est en O(N) par échantillon. On peut le rendre O(1) par une <b>récurrence</b> :</p>
+<div class="formula">y[n] = (1/N) Σ<sub>k=0</sub><sup>N−1</sup> x[n−k]</div>
+<h3>Effets</h3>
+<ul><li>Réduction du bruit : σ divisé par √N (bruit blanc).</li><li>Retard : (N−1)/2 · T<sub>e</sub>.</li><li>Filtre passe-bas (mais lobes secondaires).</li></ul>
 <pre class="code">def moyenne_glissante(xs, N):
-    out = [None] * len(xs)
-    s = 0.0
+    out = []
     for n in range(len(xs)):
-        s += xs[n]
-        if n >= N:
-            s -= xs[n - N]
-        if n >= N - 1:
-            out[n] = s / N
+        if n < N - 1:
+            out.append(None)
+        else:
+            out.append(sum(xs[n-N+1:n+1])/N)
     return out</pre>
-<div class="retain"><b>À retenir.</b> Moyenne glissante = filtre passe-bas simple. Bruit divisé par √N, retard (N−1)/2 · T<sub>e</sub>. Compromis à trouver entre lissage et retard.</div>` });
+<div class="retain"><b>À retenir.</b> Compromis N : lissage vs retard.</div>` });
 
 COURSE.push({ id: 'filtres', t: 'Filtres passe-bas numériques', h: `
-<p>Un <b>filtre passe-bas</b> laisse passer les basses fréquences et atténue les hautes fréquences. On le caractérise par sa <b>fréquence de coupure</b> f<sub>c</sub> et sa <b>pente</b> d\'atténuation après f<sub>c</sub>.</p>
 <h3>1er ordre</h3>
-<p>Fonction de transfert continue :</p>
-<div class="formula">H(p) = 1 / (1 + τp), &nbsp; τ = 1/(2π f<sub>c</sub>)</div>
-<p>Pente asymptotique : <b>−20 dB/décade</b>. Forme discrète <b>exacte</b> (réponse identique à l\'analogique aux instants d\'échantillonnage) :</p>
-<div class="formula">y[n] = α · y[n−1] + (1−α) · x[n], &nbsp; α = exp(−T<sub>e</sub>/τ)</div>
-<p>Une autre discrétisation plus simple est <b>Euler arrière</b> :</p>
-<div class="formula">y[n] = y[n−1] + (T<sub>e</sub>/τ) · (x[n] − y[n−1])</div>
-<p>Elle est correcte si T<sub>e</sub> ≪ τ, mais peut être instable si T<sub>e</sub> est trop grand.</p>
+<div class="formula">H(p) = 1/(1 + τp) &nbsp;·&nbsp; τ = 1/(2πf<sub>c</sub>)</div>
+<p>Pente : −20 dB/décade. Forme discrète exacte :</p>
+<div class="formula">y[n] = α·y[n−1] + (1−α)·x[n], α = exp(−T<sub>e</sub>/τ)</div>
 <h3>2e ordre</h3>
-<p>Forme canonique :</p>
-<div class="formula">H(p) = ω<sub>n</sub>² / (p² + 2ζω<sub>n</sub> p + ω<sub>n</sub>²), &nbsp; ω<sub>n</sub> = 2π f<sub>c</sub></div>
-<p>Pente asymptotique : <b>−40 dB/décade</b>. Discrétisation par <b>transformation bilinéaire</b> (Tustin) :</p>
-<div class="formula">s ≈ (2/T<sub>e</sub>) · (1−z⁻¹)/(1+z⁻¹)</div>
-<p>On obtient :</p>
+<div class="formula">H(p) = ω<sub>n</sub>² / (p² + 2ζω<sub>n</sub>p + ω<sub>n</sub>²)</div>
+<p>Pente : −40 dB/décade. Discrétisation Tustin :</p>
 <div class="formula">y[n] = (b<sub>0</sub>x[n] + b<sub>1</sub>x[n−1] + b<sub>2</sub>x[n−2] − a<sub>1</sub>y[n−1] − a<sub>2</sub>y[n−2]) / a<sub>0</sub></div>
-<p>avec :</p>
-<ul>
-<li>a<sub>0</sub> = 4/T<sub>e</sub>² + 4ζω<sub>n</sub>/T<sub>e</sub> + ω<sub>n</sub>²</li>
-<li>a<sub>1</sub> = −8/T<sub>e</sub>² + 2ω<sub>n</sub>²</li>
-<li>a<sub>2</sub> = 4/T<sub>e</sub>² − 4ζω<sub>n</sub>/T<sub>e</sub> + ω<sub>n</sub>²</li>
-<li>b<sub>0</sub> = b<sub>2</sub> = ω<sub>n</sub>², b<sub>1</sub> = 2ω<sub>n</sub>²</li>
-</ul>
 <h3>Rôle de ζ</h3>
-<ul>
-<li><b>ζ = 1</b> : régime critique, réponse la plus rapide sans dépassement.</li>
-<li><b>ζ &gt; 1</b> : régime apériodique, pas de dépassement mais plus lent.</li>
-<li><b>ζ &lt; 1</b> : régime oscillatoire, dépassement d\'autant plus marqué que ζ est petit.</li>
-<li><b>ζ ≈ 0,7</b> : meilleur compromis rapidité / stabilité (réponse de Butterworth).</li>
-</ul>
+<ul><li>ζ = 1 : régime critique.</li><li>ζ &lt; 1 : dépassement.</li><li>ζ ≈ 0,7 : compromis (Butterworth).</li></ul>
 <h3>Choix de T<sub>e</sub></h3>
-<p>Il faut <b>T<sub>e</sub> ≪ 1/f<sub>c</sub></b> (typiquement 10 à 20 fois plus petit) pour que la discrétisation reproduise correctement le filtre analogique. Un T<sub>e</sub> trop grand conduit à un filtre instable ou très déformé.</p>
-<div class="retain"><b>À retenir.</b> 1er ordre : −20 dB/décade, α = exp(−T<sub>e</sub>/τ). 2e ordre : −40 dB/décade, ζ règle l\'amortissement. T<sub>e</sub> doit rester petit devant 1/f<sub>c</sub>.</div>` });
+<p>T<sub>e</sub> ≪ 1/f<sub>c</sub> (typiquement 10 à 20× plus petit).</p>
+<div class="retain"><b>À retenir.</b> 1er ordre : simple, −20 dB/déc. 2e ordre : −40 dB/déc., ζ règle l'amortissement.</div>` });
 
-COURSE.push({ id: 'bilan', t: 'Bilan comparatif', h: `
+COURSE.push({ id: 'bilan', t: 'Bilan', h: `
 <table class="ctable"><thead><tr><th>Traitement</th><th>Rôle</th><th>Avantage</th><th>Limite</th></tr></thead><tbody>
-<tr><td>Moyenne, écart type</td><td>Résumer une série</td><td>Calcul direct, interprétable</td><td>Sensible aux valeurs aberrantes</td></tr>
-<tr><td>Médiane, quartiles</td><td>Résumer en robustesse</td><td>Peu sensible aux outliers</td><td>Moins utilisé en automatique</td></tr>
-<tr><td>Moyenne glissante (N)</td><td>Lisser un signal</td><td>Très simple, réduction du bruit en √N</td><td>Retard (N−1)/2 · T<sub>e</sub></td></tr>
-<tr><td>Filtre passe-bas 1er ordre</td><td>Lisser, filtrer</td><td>Forme exacte simple, peu de calcul</td><td>Pente faible (−20 dB/déc.)</td></tr>
-<tr><td>Filtre passe-bas 2e ordre</td><td>Filtrer plus sélectif</td><td>Pente −40 dB/déc., réglage fin par ζ</td><td>Formule plus complexe, risque de résonance</td></tr>
+<tr><td>Moyenne, écart type</td><td>Résumer une série</td><td>Rapide, interprétable</td><td>Sensible aux outliers</td></tr>
+<tr><td>Moyenne glissante (N)</td><td>Lisser</td><td>Simple, √N réduction</td><td>Retard (N−1)/2·T<sub>e</sub></td></tr>
+<tr><td>Passe-bas 1er ordre</td><td>Filtrer</td><td>Exact, peu de calcul</td><td>Pente faible</td></tr>
+<tr><td>Passe-bas 2e ordre</td><td>Filtrer plus</td><td>Pente raide, réglage par ζ</td><td>Résonance si ζ petit</td></tr>
 </tbody></table>
-<h3>Que choisir ?</h3>
-<ul>
-<li><b>Résumer un échantillon</b> : moyenne et écart type ; compléter par médiane et quartiles si outliers suspectés.</li>
-<li><b>Lisser un signal brut</b> : moyenne glissante (peu de calcul, un seul paramètre) ou filtre du 1er ordre (réponse en fréquence maîtrisée).</li>
-<li><b>Filtrer plus fortement les hautes fréquences</b> : filtre du 2e ordre (pente plus raide) avec un amortissement bien choisi (ζ ≈ 0,7).</li>
-<li><b>Ne pas oublier</b> : le choix de T<sub>e</sub> (échantillonnage) conditionne la qualité du filtre numérique.</li>
-</ul>
-<div class="retain"><b>À retenir.</b> En traitement de données, on combine toujours : <b>nettoyage</b> (parsing robuste), <b>résumé</b> (moyenne / écart type), <b>lissage</b> (moyenne glissante ou filtre passe-bas). Chaque étape a ses avantages et ses pièges.</div>` });
+<div class="retain"><b>À retenir.</b> En pratique : <code>with open</code> → numpy → stats → filtre. Chaque étape a ses pièges.</div>` });
 
 COURSE.push({ id: 'gloss', t: 'Vocabulaire', h: `
 <dl class="gloss">
-<dt>CSV</dt><dd>Format texte tabulaire : une ligne par enregistrement, colonnes séparées par un caractère (<code>;</code>, <code>,</code> ou tab).</dd>
-<dt>Entête</dt><dd>Première ligne d\'un fichier CSV, contenant le nom des colonnes.</dd>
-<dt>Parsing</dt><dd>Analyse d\'un texte structuré pour en extraire des données utilisables.</dd>
-<dt>Moyenne x̄</dt><dd>Somme des valeurs divisée par leur nombre.</dd>
-<dt>Variance σ²</dt><dd>Moyenne des carrés des écarts à la moyenne.</dd>
-<dt>Écart type σ</dt><dd>Racine carrée de la variance ; dispersion typique autour de la moyenne.</dd>
-<dt>Médiane</dt><dd>Valeur qui sépare l\'échantillon en deux moitiés égales ; robuste aux outliers.</dd>
-<dt>Outlier</dt><dd>Valeur aberrante, très éloignée du reste de l\'échantillon.</dd>
-<dt>Bande x̄ ± σ</dt><dd>Intervalle centré sur la moyenne de demi-largeur σ ; contient ~68 % des valeurs d\'une population gaussienne.</dd>
-<dt>Moyenne glissante</dt><dd>Moyenne des N dernières valeurs ; filtre passe-bas simple.</dd>
-<dt>Filtre passe-bas</dt><dd>Filtre qui conserve les basses fréquences et atténue les hautes fréquences.</dd>
-<dt>Fréquence de coupure f<sub>c</sub></dt><dd>Fréquence à partir de laquelle le filtre atténue significativement le signal.</dd>
-<dt>Pente</dt><dd>Atténuation en dB par décade (ou par octave) au-delà de f<sub>c</sub>.</dd>
-<dt>Amortissement ζ</dt><dd>Paramètre du 2e ordre ; ζ &lt; 1 donne un dépassement, ζ ≈ 0,7 est le bon compromis.</dd>
-<dt>Période d\'échantillonnage T<sub>e</sub></dt><dd>Intervalle de temps entre deux mesures successives ; doit être petit devant 1/f<sub>c</sub>.</dd>
-<dt>Transformation bilinéaire (Tustin)</dt><dd>Méthode de discrétisation s ≈ (2/T<sub>e</sub>)(1−z⁻¹)/(1+z⁻¹).</dd>
+<dt>CSV</dt><dd>Format texte tabulaire.</dd>
+<dt>with open</dt><dd>Gestionnaire de contexte qui ferme automatiquement le fichier.</dd>
+<dt>Parsing</dt><dd>Analyse d'un texte structuré.</dd>
+<dt>Moyenne x̄</dt><dd>Centre de l'échantillon.</dd>
+<dt>Écart type σ</dt><dd>Dispersion autour de la moyenne.</dd>
+<dt>ddof</dt><dd>Delta degrees of freedom : 0 pour population, 1 pour échantillon.</dd>
+<dt>Moyenne glissante</dt><dd>Moyenne des N dernières valeurs.</dd>
+<dt>Filtre passe-bas</dt><dd>Atténue les hautes fréquences.</dd>
+<dt>Pente</dt><dd>Atténuation en dB par décade.</dd>
+<dt>Amortissement ζ</dt><dd>Paramètre du 2e ordre.</dd>
+<dt>Tustin</dt><dd>Discrétisation bilinéaire.</dd>
 </dl>` });
 
-/* ---------- interface ---------- */
+/* ---- Interface ---- */
 const UI = { cur: 'f1' };
 const AS = { key: 'f1', tab: 'steps', open: false, st: lsGet(KEYS.act, {}), arm: null };
 const CS = { open: false, id: 'fichiers' };
@@ -968,48 +583,28 @@ function actSave() { lsSet(KEYS.act, AS.st); }
 function actState() { return AS.st[AS.key] || (AS.st[AS.key] = { a: {}, checked: false, shown: false }); }
 function actScore(a) { const s = actState(); return a.qcm.filter((q, i) => s.a[i] === q.a).length; }
 function wsById(id) { return WORKSHOPS.find(w => w.id === id) || WORKSHOPS[0]; }
-function renderSeg() {
-  const seg = $('#wsSeg'); seg.innerHTML = '';
-  WORKSHOPS.forEach((w, i) => seg.append(h('button', { type: 'button', role: 'tab', 'aria-pressed': w.id === UI.cur ? 'true' : 'false', 'aria-selected': w.id === UI.cur ? 'true' : 'false', onclick: () => gotoWs(w.id) }, (i + 1) + '. ' + w.title)));
-}
-function mountWs() {
-  const w = wsById(UI.cur), root = $('#ws');
-  $('#hint').textContent = w.hint; root.innerHTML = '';
-  w.mount(root);
-  const sc = $('#scroller'); if (sc) sc.scrollTop = 0;
-}
-function gotoWs(id) {
-  const old = wsById(UI.cur); if (old.leave) old.leave();
-  if (CS.open) { CS.open = false; renderCourse(); }
-  UI.cur = id; AS.key = id; AS.tab = 'steps';
-  renderSeg(); mountWs(); renderAct();
-}
+function renderSeg() { const seg = $('#wsSeg'); seg.innerHTML = ''; WORKSHOPS.forEach((w, i) => seg.append(h('button', { type: 'button', role: 'tab', 'aria-pressed': w.id === UI.cur ? 'true' : 'false', onclick: () => gotoWs(w.id) }, (i + 1) + '. ' + w.title))); }
+function mountWs() { const w = wsById(UI.cur), root = $('#ws'); $('#hint').textContent = w.hint; root.innerHTML = ''; w.mount(root); $('#scroller').scrollTop = 0; }
+function gotoWs(id) { const old = wsById(UI.cur); if (old.leave) old.leave(); if (CS.open) { CS.open = false; renderCourse(); } UI.cur = id; AS.key = id; AS.tab = 'steps'; renderSeg(); mountWs(); renderAct(); }
 function renderAct() {
   const box = $('#act'), btn = $('#bAct');
   btn.setAttribute('aria-pressed', AS.open ? 'true' : 'false'); btn.classList.toggle('pri', AS.open);
-  box.hidden = !AS.open;
-  if (!AS.open) { box.innerHTML = ''; return; }
+  box.hidden = !AS.open; if (!AS.open) { box.innerHTML = ''; return; }
   const oldB = box.querySelector('.pbody'), tag = AS.key + '|' + AS.tab, keep = oldB && box.dataset.k === tag ? oldB.scrollTop : 0;
-  box.dataset.k = tag;
-  box.innerHTML = '';
+  box.dataset.k = tag; box.innerHTML = '';
   const a = ACT[AS.key];
-  const close = h('button', { class: 'btn sm', type: 'button', onclick: () => { AS.open = false; renderAct(); } }, 'Fermer');
-  box.append(h('div', { class: 'phead' }, h('b', null, 'Activité'), h('span', { class: 'sub' }, a.title), close));
+  box.append(h('div', { class: 'phead' }, h('b', null, 'Activité'), h('span', { class: 'sub' }, a.title), h('button', { class: 'btn sm', onclick: () => { AS.open = false; renderAct(); } }, 'Fermer')));
   const nq = a.qcm.length;
   box.append(h('div', { class: 'tabs', role: 'tablist' },
     h('button', { type: 'button', role: 'tab', 'aria-selected': AS.tab === 'steps' ? 'true' : 'false', onclick: () => { AS.tab = 'steps'; renderAct(); } }, 'Consignes'),
     h('button', { type: 'button', role: 'tab', 'aria-selected': AS.tab === 'qcm' ? 'true' : 'false', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Questions (' + nq + ')')));
   const body = h('div', { class: 'pbody' });
   if (AS.tab === 'steps') {
-    body.append(h('p', { class: 'small' }, a.level + ' · environ ' + a.time), h('div', { class: 'goal' }, h('b', null, 'Objectif. '), a.goal));
+    body.append(h('p', { class: 'small' }, a.level + ' · ' + a.time), h('div', { class: 'goal' }, h('b', null, 'Objectif. '), a.goal));
     body.append(h('ol', { class: 'steps' }, a.steps.map(s => h('li', { html: s }))));
     body.append(h('div', { class: 'defi' }, h('b', null, 'Défi'), h('p', { html: a.defi.q }), h('details', null, h('summary', null, 'Voir la réponse'), h('p', { html: a.defi.a }))));
-    if (a.course) body.append(h('p', null, h('button', { class: 'btn', type: 'button', onclick: () => openCourse(a.course) }, 'Voir le cours : ' + courseSection(a.course).t)));
-    body.append(h('p', null, h('button', { class: 'btn', type: 'button', onclick: ev => {
-      const b = ev.currentTarget;
-      if (!AS.arm) { b.textContent = 'Confirmer ? Votre travail sera effacé'; AS.arm = setTimeout(() => { b.textContent = 'Recommencer l\'atelier'; AS.arm = null; }, 3500); return; }
-      clearTimeout(AS.arm); AS.arm = null; wsById(UI.cur).reset(); mountWs(); renderAct(); } }, 'Recommencer l\'atelier')));
-    body.append(h('p', null, h('button', { class: 'btn pri', type: 'button', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Passer aux questions')));
+    if (a.course) body.append(h('p', null, h('button', { class: 'btn', onclick: () => openCourse(a.course) }, 'Voir le cours')));
+    body.append(h('p', null, h('button', { class: 'btn pri', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Passer aux questions')));
   } else {
     const s = actState(), show = s.checked || s.shown;
     a.qcm.forEach((q, i) => {
@@ -1020,23 +615,20 @@ function renderAct() {
         inp.addEventListener('change', () => { s.a[i] = j; actSave(); renderAct(); });
         fs.append(h('label', { class: 'opt' + (good ? ' good' : '') + (bad ? ' bad' : '') }, inp, h('span', { html: o + (good ? '  ✓' : '') + (bad ? '  ✗' : '') })));
       });
-      if (show) { const miss = s.a[i] == null && !s.shown; fs.append(h('p', { class: 'why', html: (miss ? 'Sans réponse. ' : '') + q.w })); }
+      if (show) fs.append(h('p', { class: 'why', html: (s.a[i] == null && !s.shown ? 'Sans réponse. ' : '') + q.w }));
       body.append(fs);
     });
-    const done = Object.keys(s.a).length;
-    body.append(h('p', { class: 'small' }, s.shown ? 'Réponses affichées.' : s.checked ? '' : done + ' réponse(s) sur ' + nq + '.'));
     if (s.checked && !s.shown) body.append(h('p', { class: 'score' }, 'Score : ' + actScore(a) + ' / ' + nq));
     const row = h('div', { class: 'files' });
-    if (!show) row.append(h('button', { class: 'btn pri', type: 'button', onclick: () => { s.checked = true; actSave(); renderAct(); } }, 'Corriger'));
-    row.append(h('button', { class: 'btn', type: 'button', onclick: () => { s.shown = true; actSave(); renderAct(); } }, 'Afficher les réponses'));
-    if (show) row.append(h('button', { class: 'btn', type: 'button', onclick: () => { AS.st[AS.key] = { a: {}, checked: false, shown: false }; actSave(); renderAct(); } }, 'Recommencer'));
+    if (!show) row.append(h('button', { class: 'btn pri', onclick: () => { s.checked = true; actSave(); renderAct(); } }, 'Corriger'));
+    row.append(h('button', { class: 'btn', onclick: () => { s.shown = true; actSave(); renderAct(); } }, 'Afficher les réponses'));
+    if (show) row.append(h('button', { class: 'btn', onclick: () => { AS.st[AS.key] = { a: {}, checked: false, shown: false }; actSave(); renderAct(); } }, 'Recommencer'));
     body.append(row);
   }
   box.append(body); body.scrollTop = keep;
 }
 function actToggle() { if (CS.open) { CS.open = false; renderCourse(); } AS.open = !AS.open; renderAct(); }
 $('#bAct').addEventListener('click', actToggle);
-
 function courseSection(id) { return COURSE.find(s => s.id === id) || COURSE[0]; }
 function renderCourse() {
   const box = $('#course'), btn = $('#bCourse'), work = $('#work');
@@ -1046,32 +638,15 @@ function renderCourse() {
   box.innerHTML = '';
   const cur = courseSection(CS.id), idx = COURSE.indexOf(cur);
   const go = id => { CS.id = id; renderCourse(); };
-  const nav = h('nav', { class: 'ctoc', 'aria-label': 'Sommaire du cours' }, COURSE.map((s, i) => h('button', { type: 'button', class: s.id === cur.id ? 'on' : '', 'aria-current': s.id === cur.id ? 'true' : 'false', onclick: () => go(s.id) }, (i + 1) + '. ' + s.t)));
-  const sel = h('select', { class: 'ctoc-sel', 'aria-label': 'Choisir une section', onchange: e => go(e.target.value) }, COURSE.map((s, i) => h('option', { value: s.id, selected: s.id === cur.id }, (i + 1) + '. ' + s.t)));
+  const nav = h('nav', { class: 'ctoc' }, COURSE.map((s, i) => h('button', { type: 'button', class: s.id === cur.id ? 'on' : '', onclick: () => go(s.id) }, (i + 1) + '. ' + s.t)));
+  const sel = h('select', { class: 'ctoc-sel', onchange: e => go(e.target.value) }, COURSE.map((s, i) => h('option', { value: s.id, selected: s.id === cur.id }, (i + 1) + '. ' + s.t)));
   const art = h('article', { class: 'cbody' });
-  art.append(h('p', { class: 'ckick' }, 'Cours · section ' + (idx + 1) + ' sur ' + COURSE.length), h('h2', null, cur.t), h('div', { html: cur.h }));
-  art.append(h('div', { class: 'cpn' },
-    idx > 0 ? h('button', { class: 'btn', type: 'button', onclick: () => go(COURSE[idx - 1].id) }, '← ' + COURSE[idx - 1].t) : h('span'),
-    idx < COURSE.length - 1 ? h('button', { class: 'btn pri', type: 'button', onclick: () => go(COURSE[idx + 1].id) }, COURSE[idx + 1].t + ' →') : h('span')));
-  const top = h('div', { class: 'ctop' }, h('b', null, 'Cours : traitement de données'), h('button', { class: 'btn pri sm', type: 'button', onclick: () => { CS.open = false; renderCourse(); } }, 'Retour à l\'atelier'));
-  box.append(top, sel, h('div', { class: 'cwrap' }, nav, art));
-  const sc = box.querySelector('.cwrap'); if (sc) sc.scrollTop = 0; box.scrollTop = 0;
+  art.append(h('p', { class: 'ckick' }, 'Cours · section ' + (idx + 1) + '/' + COURSE.length), h('h2', null, cur.t), h('div', { html: cur.h }));
+  art.append(h('div', { class: 'cpn' }, idx > 0 ? h('button', { class: 'btn', onclick: () => go(COURSE[idx - 1].id) }, '← ' + COURSE[idx - 1].t) : h('span'), idx < COURSE.length - 1 ? h('button', { class: 'btn pri', onclick: () => go(COURSE[idx + 1].id) }, COURSE[idx + 1].t + ' →') : h('span')));
+  box.append(h('div', { class: 'ctop' }, h('b', null, 'Cours'), h('button', { class: 'btn pri sm', onclick: () => { CS.open = false; renderCourse(); } }, 'Retour')), sel, h('div', { class: 'cwrap' }, nav, art));
 }
 function openCourse(id) { if (id) CS.id = id; CS.open = true; renderCourse(); }
 $('#bCourse').addEventListener('click', () => { CS.open = !CS.open; renderCourse(); });
-
-function closeDlg() { $('#dlg').hidden = true; $('#dlg').innerHTML = ''; }
-function openDlg(title, body) {
-  const d = $('#dlg'); d.innerHTML = ''; d.hidden = false;
-  d.append(h('div', { class: 'dlgbox', role: 'dialog', 'aria-label': title }, h('header', null, h('b', null, title), h('button', { class: 'btn sm', type: 'button', onclick: closeDlg }, 'Fermer')), h('div', { class: 'dbody' }, body)));
-  d.onclick = ev => { if (ev.target === d) closeDlg(); };
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#dlg').hidden) closeDlg(); });
-$('#bHelp').addEventListener('click', () => {
-  openDlg('Aide', h('div', { html: '<p>Quatre ateliers sur le traitement de données du programme SII de CPGE 1<sup>re</sup> année : fichiers CSV, moyenne et écart type, moyenne glissante, filtres passe-bas du 1er et du 2e ordre.</p>' +
-    '<h3>Utilisation</h3><ul><li>Choisissez un atelier dans la barre du haut.</li><li>Modifiez le contenu du CSV directement dans la zone de texte (atelier 1).</li><li>Réglez les curseurs (n, σ, N, f<sub>c</sub>, T<sub>e</sub>, ζ) et observez l\'effet en direct sur le graphe.</li><li>Le bouton <b>Activité</b> affiche les consignes, un défi et un QCM avec correction.</li><li>Le bouton <b>Cours</b> détaille chaque méthode.</li></ul>' +
-    '<h3>Vos données</h3><p>Les réponses au QCM sont mémorisées dans ce navigateur uniquement.</p>' }));
-});
 (function init() { AS.open = !isSmall(); renderSeg(); mountWs(); renderAct(); renderCourse(); })();
 </script>
 </body></html>
