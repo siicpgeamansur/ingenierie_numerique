@@ -178,14 +178,16 @@ function sv(tag, attrs, ...kids) {
   return el;
 }
 function isSmall() { try { return window.matchMedia('(max-width:820px)').matches; } catch (e) { return false; } }
-const KEYS = { act: 'sii-num-v2' };
+const KEYS = { act: 'sii-num-v3' };
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 const WORKSHOPS = [];
 
 /* ---------- utilitaires numériques ---------- */
 const fmt = (v, d) => isFinite(v) ? (+v).toFixed(d == null ? 4 : d).replace('.', ',') : '—';
-function tolLabel(t) { return '10⁻' + Math.round(-Math.log10(t)); }
+const SUPD = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','+':'⁺'};
+function sup(n) { return String(n).split('').map(c => SUPD[c] || c).join(''); }
+function tolLabel(t) { return '10⁻' + sup(Math.round(-Math.log10(t))); }
 function niceStep(range, target) {
   const raw = range / target;
   const exp = Math.floor(Math.log10(raw));
@@ -222,9 +224,8 @@ function plot(W, H, xr, yr) {
   g0.append(sv('text', { x: ml + iw, y: mt + ih + 28, 'text-anchor': 'end', 'font-size': 11, fill: '#5a6068' }, 'x'));
   g0.append(sv('text', { x: ml - 30, y: mt + 10, 'font-size': 11, fill: '#5a6068' }, 'y'));
   const pg = sv('g'); svg.append(pg);
-  const P = {
+  return {
     svg, toX, toY, g: pg, mt, mb, ml, mr, iw, ih, xr, yr,
-    clear() { while (pg.firstChild) pg.removeChild(pg.firstChild); },
     band(x1, x2, color) {
       let px1 = Math.max(ml, Math.min(ml + iw, toX(x1)));
       let px2 = Math.max(ml, Math.min(ml + iw, toX(x2)));
@@ -274,7 +275,6 @@ function plot(W, H, xr, yr) {
       pg.append(sv('text', { x: toX(x), y: toY(y), 'text-anchor': opts.anchor || 'middle', 'font-size': opts.size || 11, fill: opts.color || '#111', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': opts.weight || 500 }, str));
     }
   };
-  return P;
 }
 function stats(list) { return h('div', { class: 'gstats' }, list.map(k => h('div', { class: 'stat' }, h('span', null, k[0]), h('b', null, k[1])))); }
 function chipsRow(items, cur, cb, label) {
@@ -331,7 +331,7 @@ const CODE_F1 = 'def dichotomie(f, a, b, eps):\n    """Racine de f sur [a, b], a
 function mountF1(root) {
   root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Deux méthodes pour approcher une racine : la <b>dichotomie</b> encadre le zéro en divisant l\'intervalle par deux ; la méthode de <b>Newton</b> remplace la courbe par sa tangente et itère. Dans les deux cas, l\'algorithme s\'arrête quand la <b>tolérance ε</b> est atteinte : modifiez-la pour observer son influence sur le nombre d\'itérations.</p>' +
     '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol" aria-label="Tolérance d\'arrêt">' +
-    ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map((v,i) => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>10⁻' + (i + 2) + '</option>').join('') +
+    ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>' + tolLabel(+v) + '</option>').join('') +
     '</select></label></div>' +
     '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev" type="button">◀ Précédent</button><button class="btn pri" id="f1-next" type="button">Suivant ▶</button><button class="btn" id="f1-play" type="button">Lecture</button><button class="btn" id="f1-all" type="button">Tout exécuter</button><button class="btn" id="f1-reset" type="button">Départ</button></div>' +
     '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>courbe y = f(x)</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#7b4fc2"></i>tangente (Newton)</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span></div><div id="f1-plot"></div></div>' +
@@ -395,14 +395,14 @@ function drawF1() {
     setMsg('#f1-msg', 'n = ' + f.n + ' — x = ' + fmt(f.x, 6) + ', f(x) = ' + fmt(f.fx, 6) + ', f\'(x) = ' + fmt(f.dfx, 6) + '. ' + (f.stop ? 'Arrêt.' : 'Prochain point x − f(x)/f\'(x) = ' + fmt(f.xn, 6) + '.'));
   }
   const sb = $('#f1-stats'); sb.innerHTML = '';
-  sb.append(stats([['Itération', String(f.n)], ['Tolérance ε', '10⁻' + Math.round(-Math.log10(F1.tol))], ['Largeur de l\'intervalle', F1.algo === 'dichotomie' ? fmt(f.w, 6) : '—'], ['Erreur |x − racine|', F1.algo === 'dichotomie' ? fmt(Math.abs(f.m - fun.root), 8) : fmt(Math.abs(f.x - fun.root), 8)]]));
+  sb.append(stats([['Itération', String(f.n)], ['Tolérance ε', tolLabel(F1.tol)], ['Largeur de l\'intervalle', F1.algo === 'dichotomie' ? fmt(f.w, 6) : '—'], ['Erreur |x − racine|', F1.algo === 'dichotomie' ? fmt(Math.abs(f.m - fun.root), 8) : fmt(Math.abs(f.x - fun.root), 8)]]));
   const tb = $('#f1-table'); tb.innerHTML = '';
   if (F1.algo === 'dichotomie') {
     const rows = F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.a, 6)), h('td', { class: 'm' }, fmt(fr.b, 6)), h('td', { class: 'm' }, fmt(fr.w, 6)), h('td', { class: 'm' }, fmt(fr.m, 6)), h('td', { class: 'm' }, fmt(fr.fm, 6)), h('td', { class: 'm' }, fr.stop || '')));
     tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'a', 'b', 'b − a', 'm', 'f(m)', ''].map(t => h('th', null, t)))), h('tbody', null, rows)));
   } else {
     const rows = F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.x, 6)), h('td', { class: 'm' }, fmt(fr.fx, 6)), h('td', { class: 'm' }, fmt(fr.dfx, 6)), h('td', { class: 'm' }, isFinite(fr.xn) ? fmt(fr.xn, 6) : '—'), h('td', { class: 'm' }, fr.stop || '')));
-    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'x_n', 'f(x_n)', 'f\'(x_n)', 'x_{n+1}', ''].map(t => h('th', null, t)))), h('tbody', null, rows)));
+    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'x<sub>n</sub>', 'f(x<sub>n</sub>)', 'f\'(x<sub>n</sub>)', 'x<sub>n+1</sub>', ''].map(t => h('th', { html: t })))), h('tbody', null, rows)));
   }
   const nb = $('#f1-note'); nb.innerHTML = '';
   if (S.k === F.length - 1) {
@@ -411,13 +411,13 @@ function drawF1() {
     if (last.stop === 'width') stopTxt = 'Arrêt atteint : largeur ' + fmt(last.w, 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
     else if (last.stop === 'fm') stopTxt = 'Arrêt atteint : |f(m)| = ' + fmt(Math.abs(last.fm), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
     else if (last.stop === 'fx') stopTxt = 'Arrêt atteint : |f(x)| = ' + fmt(Math.abs(last.fx), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
-    else if (last.stop === 'delta') stopTxt = 'Arrêt atteint : |x_{n+1} − x_n| = ' + fmt(Math.abs(last.xn - last.x), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
+    else if (last.stop === 'delta') stopTxt = 'Arrêt atteint : |x<sub>n+1</sub> − x<sub>n</sub>| = ' + fmt(Math.abs(last.xn - last.x), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
     else if (last.stop === 'dfx') stopTxt = 'Arrêt : f\'(x) ≈ 0, division impossible. ';
     else if (last.stop === 'max') stopTxt = 'Arrêt : nombre maximum d\'itérations (' + F1.maxn + ') atteint sans satisfaire ε = ' + tolLabel(F1.tol) + '. ';
     const baseTxt = F1.algo === 'dichotomie'
-      ? 'Bilan : après ' + last.n + ' itérations, largeur (b − a)/2^n = ' + fmt((fun.b - fun.a) / Math.pow(2, last.n), 8) + ', erreur majorée par ' + fmt(Math.abs(last.m - fun.root), 8) + '.'
+      ? 'Bilan : après ' + last.n + ' itérations, largeur (b − a)/2<sup>n</sup> = ' + fmt((fun.b - fun.a) / Math.pow(2, last.n), 8) + ', erreur majorée par ' + fmt(Math.abs(last.m - fun.root), 8) + '.'
       : 'Bilan : ' + last.n + ' itérations pour une erreur de ' + fmt(Math.abs(last.x - fun.root), 10) + '.';
-    nb.append(h('div', { class: 'verdict' }, stopTxt + baseTxt));
+    nb.append(h('div', { class: 'verdict', html: stopTxt + baseTxt }));
   }
   $('#f1-prev').disabled = S.k === 0; $('#f1-next').disabled = S.k === F.length - 1;
 }
@@ -453,14 +453,14 @@ function gaussFrames(A, B) {
   return F;
 }
 function mtxTable(M, pivot, row, phase) {
-  const n = M.length, w = M[0].length;
+  const n = M.length;
   const tb = h('tbody');
   M.forEach((r, i) => {
     const tr = h('tr');
     r.forEach((v, j) => {
       let cls = '';
       if (j === n) cls += 'sep ';
-      if (j === Math.min(phase === 'solve' ? n : Math.max(0, pivot), w - 1) && pivot >= 0 && i === pivot) cls += 'piv';
+      if (j === Math.min(phase === 'solve' ? n : Math.max(0, pivot), M[0].length - 1) && pivot >= 0 && i === pivot) cls += 'piv';
       if (i === row && (phase === 'elim' || phase === 'swap')) cls += 'mod';
       tr.append(h('td', { class: cls.trim() }, fmt(v, 3)));
     });
@@ -554,7 +554,7 @@ function drawF3() {
   nb.append(h('div', { class: 'verdict' }, 'Avec n = ' + R.n + ' pas, l\'erreur globale est de l\'ordre de ' + fmt(err, 4) + '. Diviser h par 2 (donc doubler n) divise typiquement l\'erreur par 2 : la méthode d\'Euler explicite est d\'<b>ordre 1</b>.'));
   const tb = $('#f3-table'); tb.innerHTML = '';
   const rows = R.T.map((t, i) => h('tr', null, h('td', null, String(i)), h('td', { class: 'm' }, fmt(t, 4)), h('td', { class: 'm' }, fmt(R.Y[i], 6)), h('td', { class: 'm' }, fmt(o.exact(t), 6)), h('td', { class: 'm' }, fmt(Math.abs(R.Y[i] - o.exact(t)), 6))));
-  tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 't_n', 'y_n (Euler)', 'y(t_n) exact', '|erreur|'].map(t => h('th', null, t)))), h('tbody', null, rows)));
+  tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 't<sub>n</sub>', 'y<sub>n</sub> (Euler)', 'y(t<sub>n</sub>) exact', '|erreur|'].map(t => h('th', { html: t })))), h('tbody', null, rows)));
 }
 
 /* ================= Atelier 4 : intégration et dérivation ================= */
@@ -604,7 +604,6 @@ function drawInt() {
   $('#f4-nout').textContent = F4.n; $('#f4-n').value = F4.n;
   const o = INTS[F4.fn];
   const R = integrate(o.f, o.a, o.b, F4.n, F4.method);
-  // échantillonnage de la courbe sur [a, b] pour un cadrage correct
   const samples = [];
   for (let i = 0; i <= 100; i++) samples.push(o.f(o.a + (o.b - o.a) * i / 100));
   const ymax = Math.max(...samples, 0.1), ymin = Math.min(...samples, 0);
@@ -625,8 +624,8 @@ function drawInt() {
   $('#f4-istats').innerHTML = '';
   $('#f4-istats').append(stats([['n', String(F4.n)], ['h', fmt(R.h, 4)], ['Approximation', fmt(R.s, 6)], ['Valeur exacte', fmt(o.exact, 6)], ['Erreur |Δ|', fmt(err, 6)]]));
   const nb = $('#f4-inote'); nb.innerHTML = '';
-  const orders = { left: 'O(h)', right: 'O(h)', mid: 'O(h²)', trap: 'O(h²)' };
-  nb.append(h('div', { class: 'verdict' }, 'La méthode des ' + (F4.method === 'trap' ? 'trapèzes' : F4.method === 'mid' ? 'rectangles au point milieu' : 'rectangles') + ' est d\'ordre ' + orders[F4.method] + '. Doubler n (donc diviser h par 2) ' + (F4.method === 'trap' || F4.method === 'mid' ? 'divise l\'erreur par 4 environ.' : 'divise l\'erreur par 2 environ.') + ' Erreur actuelle : ' + fmt(err, 6) + '.'));
+  const orders = { left: 'O(h)', right: 'O(h)', mid: 'O(h<sup>2</sup>)', trap: 'O(h<sup>2</sup>)' };
+  nb.innerHTML = '<div class="verdict">La méthode des ' + (F4.method === 'trap' ? 'trapèzes' : F4.method === 'mid' ? 'rectangles au point milieu' : 'rectangles') + ' est d\'ordre ' + orders[F4.method] + '. Doubler n (donc diviser h par 2) ' + (F4.method === 'trap' || F4.method === 'mid' ? 'divise l\'erreur par 4 environ.' : 'divise l\'erreur par 2 environ.') + ' Erreur actuelle : ' + fmt(err, 6) + '.</div>';
 }
 function drawDiff() {
   const fnb = $('#f4-fn2'); fnb.innerHTML = ''; fnb.append(chipsRow(Object.keys(INTS).map(k => [k, INTS[k].label.split(' sur')[0]]), F4.fn, k => { F4.fn = k; drawF4(); }, 'Fonction'));
@@ -639,7 +638,6 @@ function drawDiff() {
   const fp_c = (o.f(x0 + h) - o.f(x0 - h)) / (2 * h);
   $('#f4-xout').textContent = fmt(x0, 3); $('#f4-hout').textContent = fmt(h, 3);
   const xr = [x0 - 2 * h, x0 + 2 * h];
-  // échantillonnage sur tout l'intervalle pour cadrer la courbe
   const samples = [];
   for (let i = 0; i <= 100; i++) samples.push(o.f(xr[0] + (xr[1] - xr[0]) * i / 100));
   const ymin = Math.min(...samples), ymax = Math.max(...samples);
@@ -658,7 +656,7 @@ function drawDiff() {
   $('#f4-dstats').innerHTML = '';
   $('#f4-dstats').append(stats([['f\'(x₀) exact', fmt(fp_exact, 6)], ['Schéma avant', fmt(fp_av, 6)], ['Schéma arrière', fmt(fp_ar, 6)], ['Schéma centré', fmt(fp_c, 6)]]));
   const nb = $('#f4-dnote'); nb.innerHTML = '';
-  nb.append(h('div', { class: 'verdict' }, 'Les schémas avant et arrière sont d\'ordre 1 (erreur O(h)), le schéma centré est d\'ordre 2 (erreur O(h²)). Erreurs : avant ' + fmt(Math.abs(fp_av - fp_exact), 6) + ', arrière ' + fmt(Math.abs(fp_ar - fp_exact), 6) + ', centré ' + fmt(Math.abs(fp_c - fp_exact), 6) + '.'));
+  nb.innerHTML = '<div class="verdict">Les schémas avant et arrière sont d\'ordre 1 (erreur O(h)), le schéma centré est d\'ordre 2 (erreur O(h<sup>2</sup>)). Erreurs : avant ' + fmt(Math.abs(fp_av - fp_exact), 6) + ', arrière ' + fmt(Math.abs(fp_ar - fp_exact), 6) + ', centré ' + fmt(Math.abs(fp_c - fp_exact), 6) + '.</div>';
 }
 
 /* ---------- enregistrement des ateliers ---------- */
@@ -683,13 +681,13 @@ const ACT = {
       'Essayez Newton avec un mauvais point de départ (par exemple x₀ = 0 pour f(x) = x² − 2) : que se passe-t-il et pourquoi ?'
     ],
     defi: { q: 'Sur [0 ; 2], combien d\'itérations de dichotomie faut-il pour garantir une largeur inférieure à 10⁻⁶ ? Et combien de Newton ?',
-      a: 'Dichotomie : la largeur vaut 2/2ⁿ. Il faut 2/2ⁿ ≤ 10⁻⁶, soit 2ⁿ ≥ 2·10⁶, donc n ≥ log₂(2·10⁶) ≈ 20,9 → <b>21 itérations</b> (à régler sur ε = 10⁻⁶ dans le paramètre de tolérance). Newton : à partir de x₀ = 2 sur x² − 2, l\'erreur est à peu près le carré de la précédente ; il suffit de <b>4 ou 5 itérations</b> pour atteindre 10⁻⁶ (convergence quadratique).' },
+      a: 'Dichotomie : la largeur vaut 2/2<sup>n</sup>. Il faut 2/2<sup>n</sup> ≤ 10⁻⁶, soit 2<sup>n</sup> ≥ 2·10⁶, donc n ≥ log₂(2·10⁶) ≈ 20,9 → <b>21 itérations</b> (à régler sur ε = 10⁻⁶ dans le paramètre de tolérance). Newton : à partir de x₀ = 2 sur x² − 2, l\'erreur est à peu près le carré de la précédente ; il suffit de <b>4 ou 5 itérations</b> pour atteindre 10⁻⁶ (convergence quadratique).' },
     qcm: [
-      { q: 'Quelle hypothèse est indispensable pour appliquer la dichotomie sur [a, b] ?', o: ['f est dérivable sur [a, b]', 'f(a) et f(b) sont de signes opposés', 'f est croissante sur [a, b]', 'f(a) = f(b)'], a: 1, w: 'Le théorème des valeurs intermédiaires garantit une racine dès que f change de signe : f(a)·f(b) < 0.' },
-      { q: 'À chaque itération de la dichotomie, la largeur de l\'intervalle…', o: ['est divisée par 2', 'est divisée par 4', 'diminue de h', 'reste constante'], a: 0, w: 'On coupe l\'intervalle en deux et on garde la moitié qui contient le changement de signe : w_{n+1} = w_n / 2.' },
-      { q: 'L\'itération de Newton s\'écrit :', o: ['x_{n+1} = x_n + f(x_n)/f\'(x_n)', 'x_{n+1} = x_n − f(x_n)/f\'(x_n)', 'x_{n+1} = (a + b)/2', 'x_{n+1} = f(x_n)'], a: 1, w: 'C\'est l\'intersection de la tangente en (x_n, f(x_n)) avec l\'axe des abscisses : x_{n+1} = x_n − f(x_n)/f\'(x_n).' },
+      { q: 'Quelle hypothèse est indispensable pour appliquer la dichotomie sur [a, b] ?', o: ['f est dérivable sur [a, b]', 'f(a) et f(b) sont de signes opposés', 'f est croissante sur [a, b]', 'f(a) = f(b)'], a: 1, w: 'Le théorème des valeurs intermédiaires garantit une racine dès que f change de signe : f(a)·f(b) &lt; 0.' },
+      { q: 'À chaque itération de la dichotomie, la largeur de l\'intervalle…', o: ['est divisée par 2', 'est divisée par 4', 'diminue de h', 'reste constante'], a: 0, w: 'On coupe l\'intervalle en deux et on garde la moitié qui contient le changement de signe : w<sub>n+1</sub> = w<sub>n</sub> / 2.' },
+      { q: 'L\'itération de Newton s\'écrit :', o: ['x<sub>n+1</sub> = x<sub>n</sub> + f(x<sub>n</sub>)/f\'(x<sub>n</sub>)', 'x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>)', 'x<sub>n+1</sub> = (a + b)/2', 'x<sub>n+1</sub> = f(x<sub>n</sub>)'], a: 1, w: 'C\'est l\'intersection de la tangente en (x<sub>n</sub>, f(x<sub>n</sub>)) avec l\'axe des abscisses : x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>).' },
       { q: 'La convergence de la méthode de Newton est en général :', o: ['linéaire', 'quadratique (le nombre de chiffres exacts double à chaque pas)', 'constante', 'O(n²)'], a: 1, w: 'Au voisinage d\'une racine simple où f\' ne s\'annule pas, l\'erreur à l\'étape n+1 est de l\'ordre du carré de l\'erreur à l\'étape n.' },
-      { q: 'Le critère d\'arrêt |x_{n+1} − x_n| < ε signifie que :', o: ['on a atteint la racine exacte', 'les itérés ne bougent plus à ε près, ce qui est un bon indicateur de convergence', 'la fonction est nulle en x_{n+1}', 'la méthode a échoué'], a: 1, w: 'On ne peut pas tester |x − x_exact| (inconnu), donc on teste la stabilité des itérés. Pour Newton, |x_{n+1} − x_n| est aussi une estimation de l\'erreur.' }
+      { q: 'Le critère d\'arrêt |x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε signifie que :', o: ['on a atteint la racine exacte', 'les itérés ne bougent plus à ε près, ce qui est un bon indicateur de convergence', 'la fonction est nulle en x<sub>n+1</sub>', 'la méthode a échoué'], a: 1, w: 'On ne peut pas tester |x − x<sub>exact</sub>| (inconnu), donc on teste la stabilité des itérés. Pour Newton, |x<sub>n+1</sub> − x<sub>n</sub>| est aussi une estimation de l\'erreur.' }
     ]
   },
   f2: {
@@ -706,9 +704,9 @@ const ACT = {
       a: 'Environ <b>2n³/3</b> opérations pour la descente et <b>n²</b> pour la remontée. C\'est le coût algorithmique standard ; pour n = 1000, cela fait de l\'ordre d\'un milliard d\'opérations — c\'est pourquoi on utilise des méthodes itératives pour les très grands systèmes.' },
     qcm: [
       { q: 'On résout A·X = B par Gauss. Que représente la matrice augmentée ?', o: ['La transposée de A', 'La matrice [A | B] : les colonnes de A, puis celle de B', 'L\'inverse de A', 'La matrice identité'], a: 1, w: 'On accole B à droite de A pour appliquer les mêmes combinaisons de lignes aux deux membres.' },
-      { q: 'Le pivot partiel consiste à :', o: ['diviser par le plus petit pivot', 'choisir le coefficient de plus grande valeur absolue dans la colonne', 'supprimer les lignes inutiles', 'trier la matrice'], a: 1, w: 'On échange la ligne courante avec celle qui a le plus grand |a_ik| dans la colonne k : cela réduit les erreurs numériques (division par un nombre non minuscule).' },
+      { q: 'Le pivot partiel consiste à :', o: ['diviser par le plus petit pivot', 'choisir le coefficient de plus grande valeur absolue dans la colonne', 'supprimer les lignes inutiles', 'trier la matrice'], a: 1, w: 'On échange la ligne courante avec celle qui a le plus grand |a<sub>ik</sub>| dans la colonne k : cela réduit les erreurs numériques (division par un nombre non minuscule).' },
       { q: 'Le nombre d\'opérations pour un système n×n par Gauss est de l\'ordre de :', o: ['n', 'n²', 'n³', 'n log n'], a: 2, w: 'Chaque élimination sur une colonne coûte O(n²) et on en fait n, soit O(n³).' },
-      { q: 'Une fois la matrice triangulaire supérieure obtenue, on termine par :', o: ['une nouvelle élimination', 'la substitution remontante (back substitution)', 'un calcul de déterminant', 'rien, la solution est lue directement'], a: 1, w: 'On commence par la dernière ligne (x_n), puis on remonte en utilisant les équations déjà résolues.' }
+      { q: 'Une fois la matrice triangulaire supérieure obtenue, on termine par :', o: ['une nouvelle élimination', 'la substitution remontante (back substitution)', 'un calcul de déterminant', 'rien, la solution est lue directement'], a: 1, w: 'On commence par la dernière ligne (x<sub>n</sub>), puis on remonte en utilisant les équations déjà résolues.' }
     ]
   },
   f3: {
@@ -724,7 +722,7 @@ const ACT = {
     defi: { q: 'Sur y\' = y, y(0) = 1, on veut approcher y(2) à 10⁻³ près par Euler. Quel ordre de grandeur du pas h faut-il choisir ?',
       a: 'L\'erreur globale est en O(h). Une estimation fine montre que l\'erreur en T = 2 est de l\'ordre de e²·h/2 ≈ 3,7·h. Pour avoir une erreur de 10⁻³, il faut h ≈ <b>2,7·10⁻⁴</b>, soit environ <b>7400 pas</b>. C\'est beaucoup : c\'est pourquoi on préfère des schémas d\'ordre supérieur (RK4) en pratique.' },
     qcm: [
-      { q: 'Le schéma d\'Euler explicite s\'écrit :', o: ['y_{n+1} = y_n + h·f(t_n, y_{n+1})', 'y_{n+1} = y_n + h·f(t_n, y_n)', 'y_{n+1} = y_n + h·f(t_{n+1}, y_{n+1})', 'y_{n+1} = f(t_n, y_n)'], a: 1, w: 'C\'est la méthode d\'Euler explicite : on utilise la pente au point courant (t_n, y_n) pour avancer d\'un pas h.' },
+      { q: 'Le schéma d\'Euler explicite s\'écrit :', o: ['y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n+1</sub>)', 'y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>)', 'y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n+1</sub>, y<sub>n+1</sub>)', 'y<sub>n+1</sub> = f(t<sub>n</sub>, y<sub>n</sub>)'], a: 1, w: 'C\'est la méthode d\'Euler explicite : on utilise la pente au point courant (t<sub>n</sub>, y<sub>n</sub>) pour avancer d\'un pas h.' },
       { q: 'L\'ordre de convergence globale d\'Euler explicite est :', o: ['1', '2', '3', '4'], a: 0, w: 'L\'erreur de troncature locale est O(h²) mais l\'erreur globale accumulée est O(h).' },
       { q: 'Que se passe-t-il si h est trop grand ?', o: ['L\'approximation est meilleure', 'L\'approximation peut être très imprécise, voire instable', 'Rien ne change', 'La méthode devient exacte'], a: 1, w: 'Sur des équations raides (par exemple y\' = −100y), un h trop grand fait exploser la suite numérique.' },
       { q: 'Quel avantage a le schéma d\'Euler explicite ?', o: ['Il est très précis', 'Il est très simple à implémenter (un seul appel à f par pas)', 'Il est toujours stable', 'Il est d\'ordre élevé'], a: 1, w: 'Euler explicite ne demande qu\'un appel à f par pas : c\'est le schéma le plus simple possible, mais d\'ordre 1 seulement.' }
@@ -762,13 +760,13 @@ COURSE.push({ id: 'notions', t: 'Notions générales', h: `
 <h3>Critère d\'arrêt</h3>
 <p>Un algorithme itératif s\'arrête quand l\'une des conditions suivantes est réalisée :</p>
 <ul>
-<li>|x_{n+1} − x_n| &lt; ε : les itérés ne bougent plus (indicateur de convergence) ;</li>
-<li>|f(x_n)| &lt; ε : la valeur de f est presque nulle ;</li>
+<li>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε : les itérés ne bougent plus (indicateur de convergence) ;</li>
+<li>|f(x<sub>n</sub>)| &lt; ε : la valeur de f est presque nulle ;</li>
 <li>|b − a| &lt; ε : l\'intervalle d\'encadrement est plus petit que ε (dichotomie) ;</li>
 <li>n atteint N_max : garde-fou pour éviter une boucle infinie.</li>
 </ul>
 <h3>Convergence et ordre</h3>
-<p>Une suite (x_n) converge vers x avec un ordre p s\'il existe C &gt; 0 telle que |x_{n+1} − x| ≤ C·|x_n − x|^p pour n assez grand.</p>
+<p>Une suite (x<sub>n</sub>) converge vers x avec un ordre p s\'il existe C &gt; 0 telle que |x<sub>n+1</sub> − x| ≤ C·|x<sub>n</sub> − x|<sup>p</sup> pour n assez grand.</p>
 <ul>
 <li><b>Ordre 1</b> (linéaire) : le nombre de chiffres exacts augmente d\'un nombre constant à chaque pas. Exemple : dichotomie, méthode d\'Euler.</li>
 <li><b>Ordre 2</b> (quadratique) : le nombre de chiffres exacts double à chaque pas. Exemple : méthode de Newton.</li>
@@ -789,7 +787,7 @@ COURSE.push({ id: 'equations', t: 'Équation f(x) = 0', h: `
             a = m
     return (a + b) / 2</pre>
 <ul>
-<li>La largeur de l\'intervalle est divisée par 2 à chaque itération : après n pas, w_n = (b − a)/2^n.</li>
+<li>La largeur de l\'intervalle est divisée par 2 à chaque itération : après n pas, w<sub>n</sub> = (b − a)/2<sup>n</sup>.</li>
 <li>Il faut donc environ <b>log₂((b − a)/ε)</b> itérations pour une précision ε. C\'est très lent mais infaillible.</li>
 <li>Critère d\'arrêt typique : <b>b − a &lt; ε</b>.</li>
 <li>Convergence <b>linéaire</b> (ordre 1).</li>
@@ -803,12 +801,12 @@ COURSE.push({ id: 'equations', t: 'Équation f(x) = 0', h: `
             return x
         x = x - f(x) / fp(x)
     return x</pre>
-<p>Interprétation géométrique : on remplace la courbe par sa tangente au point (x_n, f(x_n)), et on prend l\'abscisse de l\'intersection de cette tangente avec l\'axe des abscisses.</p>
-<div class="formula">x_{n+1} = x_n − f(x_n)/f\'(x_n)</div>
+<p>Interprétation géométrique : on remplace la courbe par sa tangente au point (x<sub>n</sub>, f(x<sub>n</sub>)), et on prend l\'abscisse de l\'intersection de cette tangente avec l\'axe des abscisses.</p>
+<div class="formula">x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>)</div>
 <ul>
 <li>Convergence <b>quadratique</b> quand on part près de la racine : les chiffres exacts doublent à chaque itération.</li>
-<li>Critères d\'arrêt typiques : <b>|f(x_n)| &lt; ε</b> ou <b>|x_{n+1} − x_n| &lt; ε</b>.</li>
-<li>Très rapide, mais fragile : si f\'(x_n) ≈ 0 ou si x₀ est mal choisi, la méthode peut diverger ou osciller.</li>
+<li>Critères d\'arrêt typiques : <b>|f(x<sub>n</sub>)| &lt; ε</b> ou <b>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε</b>.</li>
+<li>Très rapide, mais fragile : si f\'(x<sub>n</sub>) ≈ 0 ou si x₀ est mal choisi, la méthode peut diverger ou osciller.</li>
 </ul>
 <div class="retain"><b>À retenir.</b> Dichotomie : robuste mais lente (log₂). Newton : rapide (quadratique) mais locale — il faut un bon point de départ et f\'. La tolérance ε règle la précision et le coût.</div>` });
 
@@ -834,7 +832,7 @@ COURSE.push({ id: 'systemes', t: 'Système linéaire A·X = B', h: `
         X[i] = s / M[i][i]
     return X</pre>
 <h3>Pivot partiel</h3>
-<p>À l\'étape k, on choisit la ligne i dont le coefficient |a_ik| est maximal, et on l\'échange avec la ligne k. Cela évite de diviser par un nombre très petit, ce qui amplifierait les erreurs d\'arrondi.</p>
+<p>À l\'étape k, on choisit la ligne i dont le coefficient |a<sub>ik</sub>| est maximal, et on l\'échange avec la ligne k. Cela évite de diviser par un nombre très petit, ce qui amplifierait les erreurs d\'arrondi.</p>
 <h3>Coût</h3>
 <p>La descente coûte de l\'ordre de <b>2n³/3</b> opérations, la remontée n².</p>
 <h3>Cas pathologiques</h3>
@@ -848,7 +846,7 @@ COURSE.push({ id: 'euler', t: 'Équations différentielles : Euler', h: `
 <p>Un problème de Cauchy s\'écrit : trouver y(t) telle que</p>
 <div class="formula">y\'(t) = f(t, y(t)), &nbsp; y(t₀) = y₀</div>
 <p>Le schéma d\'<b>Euler explicite</b> discrétise le temps en pas h et calcule y<sub>n+1</sub> à partir de y<sub>n</sub> :</p>
-<div class="formula">y_{n+1} = y_n + h · f(t_n, y_n), &nbsp; t_n = t₀ + n·h</div>
+<div class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(t<sub>n</sub>, y<sub>n</sub>), &nbsp; t<sub>n</sub> = t₀ + n·h</div>
 <pre class="code">def euler(f, t0, y0, T, h):
     n = int(round((T - t0) / h))
     t, y = t0, y0
@@ -859,7 +857,7 @@ COURSE.push({ id: 'euler', t: 'Équations différentielles : Euler', h: `
         T_list.append(t); Y_list.append(y)
     return T_list, Y_list</pre>
 <h3>Interprétation</h3>
-<p>Sur chaque intervalle [t_n, t_{n+1}], on remplace la courbe solution par sa tangente au point (t_n, y_n).</p>
+<p>Sur chaque intervalle [t<sub>n</sub>, t<sub>n+1</sub>], on remplace la courbe solution par sa tangente au point (t<sub>n</sub>, y<sub>n</sub>).</p>
 <h3>Ordre et erreur</h3>
 <ul>
 <li>Erreur de troncature <b>locale</b> : O(h²).</li>
@@ -877,11 +875,11 @@ COURSE.push({ id: 'euler', t: 'Équations différentielles : Euler', h: `
 COURSE.push({ id: 'integration', t: 'Intégration et dérivation numériques', h: `
 <h3>Intégration</h3>
 <p>On approche ∫ₐᵇ f(x) dx en découpant [a, b] en n sous-intervalles de largeur h = (b − a)/n et en approchant f sur chaque morceau.</p>
-<table class="ctable"><thead><tr><th>Méthode</th><th>Formule sur [x_i, x_{i+1}]</th><th>Erreur globale</th></tr></thead><tbody>
-<tr><td>Rectangle à gauche</td><td>h · f(x_i)</td><td>O(h)</td></tr>
-<tr><td>Rectangle à droite</td><td>h · f(x_{i+1})</td><td>O(h)</td></tr>
-<tr><td>Point milieu</td><td>h · f((x_i + x_{i+1})/2)</td><td>O(h²)</td></tr>
-<tr><td>Trapèzes</td><td>h/2 · (f(x_i) + f(x_{i+1}))</td><td>O(h²)</td></tr>
+<table class="ctable"><thead><tr><th>Méthode</th><th>Formule sur [x<sub>i</sub>, x<sub>i+1</sub>]</th><th>Erreur globale</th></tr></thead><tbody>
+<tr><td>Rectangle à gauche</td><td>h · f(x<sub>i</sub>)</td><td>O(h)</td></tr>
+<tr><td>Rectangle à droite</td><td>h · f(x<sub>i+1</sub>)</td><td>O(h)</td></tr>
+<tr><td>Point milieu</td><td>h · f((x<sub>i</sub> + x<sub>i+1</sub>)/2)</td><td>O(h²)</td></tr>
+<tr><td>Trapèzes</td><td>h/2 · (f(x<sub>i</sub>) + f(x<sub>i+1</sub>))</td><td>O(h²)</td></tr>
 </tbody></table>
 <pre class="code">def trapezes(f, a, b, n):
     h = (b - a) / n
@@ -919,22 +917,22 @@ COURSE.push({ id: 'bilan', t: 'Bilan comparatif', h: `
 COURSE.push({ id: 'gloss', t: 'Vocabulaire', h: `
 <dl class="gloss">
 <dt>Méthode numérique</dt><dd>Algorithme qui calcule une solution approchée d\'un problème mathématique.</dd>
-<dt>Itération</dt><dd>Un pas d\'un calcul répété ; on note x_n la valeur à l\'étape n.</dd>
+<dt>Itération</dt><dd>Un pas d\'un calcul répété ; on note x<sub>n</sub> la valeur à l\'étape n.</dd>
 <dt>Tolérance ε</dt><dd>Seuil à partir duquel on considère que la solution est suffisamment précise ; sert de critère d\'arrêt.</dd>
-<dt>Convergence</dt><dd>Propriété d\'une suite (x_n) qui tend vers la solution x.</dd>
-<dt>Ordre de convergence</dt><dd>Entier p tel que l\'erreur à l\'étape n+1 soit majorée par C·(erreur à l\'étape n)^p.</dd>
+<dt>Convergence</dt><dd>Propriété d\'une suite (x<sub>n</sub>) qui tend vers la solution x.</dd>
+<dt>Ordre de convergence</dt><dd>Entier p tel que l\'erreur à l\'étape n+1 soit majorée par C·(erreur à l\'étape n)<sup>p</sup>.</dd>
 <dt>Critère d\'arrêt</dt><dd>Condition qui fait sortir d\'une boucle itérative (|f(x)| &lt; ε, |Δx| &lt; ε, etc.).</dd>
 <dt>Erreur de troncature</dt><dd>Erreur due à l\'approximation de la formule exacte.</dd>
 <dt>Erreur d\'arrondi</dt><dd>Erreur due à la représentation finie des nombres en machine.</dd>
 <dt>Dichotomie</dt><dd>Méthode de recherche de racine par division de l\'intervalle en deux.</dd>
-<dt>Méthode de Newton</dt><dd>Itération x_{n+1} = x_n − f(x_n)/f\'(x_n), basée sur la tangente.</dd>
+<dt>Méthode de Newton</dt><dd>Itération x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>), basée sur la tangente.</dd>
 <dt>Pivot de Gauss</dt><dd>Méthode d\'élimination pour résoudre un système linéaire.</dd>
 <dt>Pivot partiel</dt><dd>Choix du plus grand coefficient en valeur absolue dans la colonne pour limiter les erreurs.</dd>
 <dt>Matrice augmentée</dt><dd>Matrice [A | B] obtenue en accolant le second membre B à la matrice A.</dd>
 <dt>Substitution remontante</dt><dd>Résolution d\'un système triangulaire en partant de la dernière équation.</dd>
-<dt>Euler explicite</dt><dd>Schéma y_{n+1} = y_n + h·f(t_n, y_n) pour les équations différentielles.</dd>
+<dt>Euler explicite</dt><dd>Schéma y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>) pour les équations différentielles.</dd>
 <dt>Pas (h)</dt><dd>Écart entre deux points successifs de la discrétisation.</dd>
-<dt>Schéma d\'ordre p</dt><dd>Schéma dont l\'erreur globale est en O(h^p).</dd>
+<dt>Schéma d\'ordre p</dt><dd>Schéma dont l\'erreur globale est en O(h<sup>p</sup>).</dd>
 </dl>` });
 
 /* ---------- interface ---------- */
@@ -990,14 +988,14 @@ function renderAct() {
   } else {
     const s = actState(), show = s.checked || s.shown;
     a.qcm.forEach((q, i) => {
-      const fs = h('fieldset', { class: 'q' }, h('legend', null, (i + 1) + '. ' + q.q));
+      const fs = h('fieldset', { class: 'q' }, h('legend', { html: (i + 1) + '. ' + q.q }));
       q.o.forEach((o, j) => {
         const good = show && j === q.a, bad = s.checked && !s.shown && s.a[i] === j && j !== q.a;
         const inp = h('input', { type: 'radio', name: 'q' + i, checked: show && s.shown ? j === q.a : s.a[i] === j, disabled: show });
         inp.addEventListener('change', () => { s.a[i] = j; actSave(); renderAct(); });
-        fs.append(h('label', { class: 'opt' + (good ? ' good' : '') + (bad ? ' bad' : '') }, inp, h('span', null, o + (good ? '  ✓' : '') + (bad ? '  ✗' : ''))));
+        fs.append(h('label', { class: 'opt' + (good ? ' good' : '') + (bad ? ' bad' : '') }, inp, h('span', { html: o + (good ? '  ✓' : '') + (bad ? '  ✗' : '') })));
       });
-      if (show) { const miss = s.a[i] == null && !s.shown; fs.append(h('p', { class: 'why' }, (miss ? 'Sans réponse. ' : '') + q.w)); }
+      if (show) { const miss = s.a[i] == null && !s.shown; fs.append(h('p', { class: 'why', html: (miss ? 'Sans réponse. ' : '') + q.w })); }
       body.append(fs);
     });
     const done = Object.keys(s.a).length;
