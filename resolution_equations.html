@@ -326,18 +326,18 @@ function mountF1(root) {
     '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev" type="button">◀ Précédent</button><button class="btn pri" id="f1-next" type="button">Suivant ▶</button><button class="btn" id="f1-play" type="button">Lecture</button><button class="btn" id="f1-all" type="button">Tout exécuter</button><button class="btn" id="f1-reset" type="button">Départ</button></div>' +
     '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>courbe y = f(x)</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#7b4fc2"></i>tangente (Newton)</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span></div><div id="f1-plot"></div></div>' +
     '<div class="verdict" id="f1-msg" aria-live="polite"></div><div id="f1-stats"></div><div id="f1-note"></div><div class="dwrap" id="f1-table"></div>';
-  $('#f1-prev').addEventListener('click', () => { labStop(F1); const S = getState('f1', { k: 0 }); if (S.k > 0) { S.k--; drawF1(); } });
-  $('#f1-next').addEventListener('click', () => { labStop(F1); const S = getState('f1', { k: 0 }); const r = f1Frames(); const len = (r.F || []).length; if (S.k < len - 1) { S.k++; drawF1(); } });
-  $('#f1-all').addEventListener('click', () => { labStop(F1); const S = getState('f1', { k: 0 }); S.k = 1e9; drawF1(); });
-  $('#f1-reset').addEventListener('click', () => { labStop(F1); const S = getState('f1', { k: 0 }); S.k = 0; drawF1(); });
+  $('#f1-prev').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); if (S.k > 0) { S.k--; drawF1(); } });
+  $('#f1-next').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); const r = f1Frames(); const len = (r.F || []).length; if (S.k < len - 1) { S.k++; drawF1(); } });
+  $('#f1-all').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); S.k = 1e9; drawF1(); });
+  $('#f1-reset').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); S.k = 0; drawF1(); });
   $('#f1-play').addEventListener('click', () => {
     const S = getState('f1', { k: 0 });
-    if (S.timer) { labStop(F1); return; }
+    if (S.timer) { labStop('f1'); return; }
     const r = f1Frames(); if (r.error) return;
     if (S.k >= r.F.length - 1) S.k = 0;
     $('#f1-play').textContent = 'Pause';
     S.timer = setInterval(() => {
-      if (S.k >= r.F.length - 1) { labStop(F1); drawF1(); return; }
+      if (S.k >= r.F.length - 1) { labStop('f1'); drawF1(); return; }
       S.k++; drawF1();
     }, 650);
     drawF1();
@@ -352,7 +352,7 @@ function drawF1() {
   const S = getState('f1', { k: 0 });
   const fun = FUNCS[F1.func];
   const fb = $('#f1-func'); if (fb) { fb.innerHTML = ''; fb.append(chipsRow(Object.keys(FUNCS).map(k => [k, FUNCS[k].label]), F1.func, k => { F1.func = k; S.k = 0; drawF1(); }, 'Fonction')); }
-  const ab = $('#f1-algo'); if (ab) { ab.innerHTML = ''; ab.append(chipsRow([['dichotomie', 'Dichotomie'], ['newton', 'Newton']], F1.algo, k => { F1.algo = k; S.k = 0; labStop(F1); drawF1(); }, 'Méthode')); }
+  const ab = $('#f1-algo'); if (ab) { ab.innerHTML = ''; ab.append(chipsRow([['dichotomie', 'Dichotomie'], ['newton', 'Newton']], F1.algo, k => { F1.algo = k; S.k = 0; labStop('f1'); drawF1(); }, 'Méthode')); }
   const r = f1Frames();
   if (r.error) { $('#f1-plot').innerHTML = ''; setMsg('#f1-msg', r.error, 'warn'); $('#f1-table').innerHTML = ''; $('#f1-stats').innerHTML = ''; $('#f1-note').innerHTML = ''; return; }
   const F = r.F; if (S.k >= F.length) S.k = F.length - 1;
@@ -441,9 +441,6 @@ function mtxTable(M, pivot, row, phase) {
     r.forEach((v, j) => {
       let cls = '';
       if (j === n) cls += 'sep ';
-      if (pivot === i && (phase === 'swap' || phase === 'elim' || phase === 'start' || j <= (phase === 'solve' ? n : n))) {
-        // pivot column highlight
-      }
       if (j === Math.min(phase === 'solve' ? n : Math.max(0, pivot), w - 1) && pivot >= 0 && i === pivot) cls += 'piv';
       if (i === row && phase === 'elim') cls += 'mod';
       if (i === row && phase === 'swap') cls += 'mod';
@@ -590,7 +587,6 @@ function drawInt() {
   R.rects.forEach(r => {
     if (r.kind === 'rect') P.rect(r.x0, r.x1, 0, r.y1, 'rgba(46,109,164,0.18)');
     else {
-      // trapèze : polygone (x0,0)(x0,y0)(x1,y1)(x1,0)
       P.rect(r.x0, r.x1, 0, Math.max(r.y0, r.y1), 'rgba(154,91,0,0.12)');
       P.seg(r.x0, 0, r.x0, r.y0, 'rgba(154,91,0,0.6)', 1.5);
       P.seg(r.x1, 0, r.x1, r.y1, 'rgba(154,91,0,0.6)', 1.5);
@@ -625,11 +621,8 @@ function drawDiff() {
   P.point(x0, o.f(x0), '#c0281f', 5);
   P.hline(o.f(x0), '#9a5b00', '2 3');
   P.vline(x0, '#5a6068', '2 3');
-  // tangente exacte
   P.seg(xr[0], o.f(x0) + fp_exact * (xr[0] - x0), xr[1], o.f(x0) + fp_exact * (xr[1] - x0), '#2e6da4', 1.5, '6 3');
-  // sécante avant
   P.seg(x0, o.f(x0), x0 + h, o.f(x0 + h), '#7b4fc2', 2);
-  // sécante arrière
   P.seg(x0 - h, o.f(x0 - h), x0, o.f(x0), '#1e7a2e', 2);
   P.point(x0 + h, o.f(x0 + h), '#7b4fc2', 3.5);
   P.point(x0 - h, o.f(x0 - h), '#1e7a2e', 3.5);
