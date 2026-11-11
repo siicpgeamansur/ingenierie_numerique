@@ -7,14 +7,7 @@
 <style>
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-:root{
-  --font-ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
-  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-  --bg:#ffffff;--bar:#eeeeee;--panel:#ffffff;--panel2:#f1f3f6;--field:#ffffff;--line:#b9bfc7;
-  --fg:#111111;--muted:#5a6068;--accent:#2e6da4;--accent-fg:#ffffff;--accent-soft:#dcebf8;--accent-ink:#1b4a76;--run:#2e8b3a;
-  --ok:#1e7a2e;--warn:#9a5b00;--bad:#c0281f;--violet:#7b4fc2;
-  color-scheme:light;
-}
+:root{--font-ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;--bg:#ffffff;--bar:#eeeeee;--panel:#ffffff;--panel2:#f1f3f6;--field:#ffffff;--line:#b9bfc7;--fg:#111111;--muted:#5a6068;--accent:#2e6da4;--accent-fg:#ffffff;--accent-soft:#dcebf8;--accent-ink:#1b4a76;--ok:#1e7a2e;--warn:#9a5b00;--bad:#c0281f;--violet:#7b4fc2;color-scheme:light}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--font-ui)}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -22,7 +15,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 #app{height:100%;display:flex;flex-direction:column;min-height:0}
 .band{background:var(--bar);border-bottom:1px solid var(--line);flex:none}
 .row{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;padding-block:7px}
-.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;letter-spacing:.01em}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px}
 .brand small{font-weight:400;color:var(--muted);font-size:13px}
 .files{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .btn{font-weight:500;font-size:13px;padding:6px 11px;border:1px solid var(--line);background:var(--panel);border-radius:7px;cursor:pointer}
@@ -32,7 +25,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn.sm{padding:3px 8px;font-size:12px}
 :is(button,input,select,textarea,summary):focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;background:var(--panel);max-width:100%;overflow-x:auto}
-.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:500;font-size:13px;cursor:pointer;white-space:nowrap}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
 .work{flex:1;min-height:0;display:flex;gap:10px;padding-block:10px}
@@ -51,11 +44,9 @@ input[type=text],input[type=number],textarea,select{width:100%;background:var(--
 input[type=range]{width:100%;padding:0;accent-color:var(--accent)}
 .mono{font-family:var(--font-mono);font-size:12.5px}
 .small{font-size:12px;color:var(--muted);margin:0 0 9px}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;z-index:60;max-width:90vw}
 #dlg{position:fixed;inset:0;background:rgba(10,16,22,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
 .dlgbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(640px,100%);max-height:88%;display:flex;flex-direction:column}
 .dlgbox header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
-.dlgbox header b{font-size:16px}
 .dlgbox .dbody{padding:14px 16px;overflow:auto}
 .dlgbox h3{margin:14px 0 4px;font-size:14px}.dlgbox p,.dlgbox li{margin:4px 0;font-size:13.5px}
 #act{flex:none;width:clamp(280px,24vw,340px);display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--panel);min-height:0;max-height:100%}
@@ -101,7 +92,7 @@ pre.code{font:12.5px/1.55 var(--font-mono);margin:8px 0;background:var(--panel2)
 #ws p,#ws li{font-size:14.5px;line-height:1.55}
 #ws .small{font-size:12.5px}
 .opts{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:flex-end;margin:6px 0 10px}.opts .fld{margin:0}
-.opts input[type=range]{width:200px;max-width:100%}
+.opts input[type=range]{width:170px;max-width:100%}
 .opts select{width:auto}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .chip{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:4px 11px;font-size:13px;cursor:pointer}
@@ -116,24 +107,22 @@ pre.code{font:12.5px/1.55 var(--font-mono);margin:8px 0;background:var(--panel2)
 .dt th,.dt td{padding:5px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
 .dt thead th{background:var(--panel2);font-weight:600}
 .dt td.m{font-family:var(--font-mono);font-size:12.5px}
-.dt tr:last-child td{border-bottom:0}
 .plot{width:100%;height:auto;display:block;background:#fff;border-radius:8px}
 .plot-wrap{border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;margin:8px 0}
 .plot-legend{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:4px 0 2px}
 .plot-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .mtx{border-collapse:collapse;font-family:var(--font-mono);font-size:13px;border-left:2px solid var(--fg);border-right:2px solid var(--fg);margin:0 auto}
-.mtx td{padding:4px 11px;text-align:right;transition:background .15s}
+.mtx td{padding:4px 11px;text-align:right}
 .mtx td.piv{background:rgba(46,109,164,0.18);font-weight:600;color:var(--accent-ink)}
 .mtx td.mod{background:rgba(154,91,0,0.14)}
 .mtx td.sep{border-left:1px solid var(--fg)}
 .mtx-wrap{display:flex;justify-content:center;margin:10px 0}
 .mtx-cap{font-size:12px;color:var(--muted);text-align:center;margin:2px 0 8px}
-@media (max-width:820px){
-  .ctoc{display:none}.ctoc-sel{display:block}.cwrap{padding-top:8px}.cbody{padding-right:0}.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}
-  #act{position:fixed;left:0;right:0;bottom:0;width:auto;height:70%;max-height:none;border-radius:14px 14px 0 0;z-index:35;box-shadow:0 -8px 30px rgba(0,0,0,.28);padding-bottom:env(safe-area-inset-bottom,0px)}
-  .work{flex-direction:column;gap:8px}
-}
-@media (prefers-reduced-motion:no-preference){.btn{transition:border-color .12s,background .12s}.mtx td{transition:background .15s}}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0}
+.col2 pre.code{margin:0}
+@media (max-width:760px){.col2{grid-template-columns:1fr}}
+@media (max-width:820px){.ctoc{display:none}.ctoc-sel{display:block}.cwrap{padding-top:8px}.cbody{padding-right:0}.gloss{grid-template-columns:1fr}.gloss dd{margin-bottom:6px}#act{position:fixed;left:0;right:0;bottom:0;width:auto;height:70%;max-height:none;border-radius:14px 14px 0 0;z-index:35;box-shadow:0 -8px 30px rgba(0,0,0,.28);padding-bottom:env(safe-area-inset-bottom,0px)}.work{flex-direction:column;gap:8px}.opts input[type=range]{width:140px}}
+@media (prefers-reduced-motion:no-preference){.btn{transition:border-color .12s,background .12s}}
 </style></head><body>
 <div id="app">
   <header class="band"><div class="inner row">
@@ -152,138 +141,87 @@ pre.code{font:12.5px/1.55 var(--font-mono);margin:8px 0;background:var(--panel2)
   <section id="course" hidden aria-label="Cours"></section>
 </div>
 <div id="dlg" hidden></div>
-<div id="toast" hidden></div>
 
 <script>
 'use strict';
-const $ = (s, r) => (r || document).querySelector(s);
-function h(tag, attrs, ...kids) {
-  const el = document.createElement(tag);
-  if (attrs) for (const [k, v] of Object.entries(attrs)) {
-    if (v === false || v == null) continue;
-    if (k === 'class') el.className = v;
-    else if (k === 'html') el.innerHTML = v;
-    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
-    else if (v === true) el.setAttribute(k, '');
-    else el.setAttribute(k, v);
-  }
-  for (const k of kids.flat()) if (k != null && k !== false) el.append(k.nodeType ? k : document.createTextNode(k));
-  return el;
-}
-const NS = 'http://www.w3.org/2000/svg';
-function sv(tag, attrs, ...kids) {
-  const el = document.createElementNS(NS, tag);
-  if (attrs) for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
-  for (const k of kids.flat()) if (k != null) el.append(k);
-  return el;
-}
-function isSmall() { try { return window.matchMedia('(max-width:820px)').matches; } catch (e) { return false; } }
-const KEYS = { act: 'sii-num-v3' };
-function lsGet(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
-function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-const WORKSHOPS = [];
-
-/* ---------- utilitaires numériques ---------- */
-const fmt = (v, d) => isFinite(v) ? (+v).toFixed(d == null ? 4 : d).replace('.', ',') : '—';
-const SUPD = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','+':'⁺'};
-function sup(n) { return String(n).split('').map(c => SUPD[c] || c).join(''); }
-function tolLabel(t) { return '10⁻' + sup(Math.round(-Math.log10(t))); }
-function niceStep(range, target) {
-  const raw = range / target;
-  const exp = Math.floor(Math.log10(raw));
-  const base = Math.pow(10, exp);
-  const m = raw / base;
-  if (m < 1.5) return base;
-  if (m < 3.5) return 2 * base;
-  if (m < 7.5) return 5 * base;
-  return 10 * base;
-}
-function plot(W, H, xr, yr) {
-  const ml = 50, mr = 16, mt = 14, mb = 32;
-  const iw = W - ml - mr, ih = H - mt - mb;
-  const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, class: 'plot' });
-  svg.style.width = '100%'; svg.style.height = 'auto'; svg.style.display = 'block';
-  const toX = x => ml + (x - xr[0]) / (xr[1] - xr[0]) * iw;
-  const toY = y => mt + (yr[1] - y) / (yr[1] - yr[0]) * ih;
-  const g0 = sv('g'); svg.append(g0);
-  const xs = niceStep(xr[1] - xr[0], 6), ys = niceStep(yr[1] - yr[0], 5);
-  for (let x = Math.ceil(xr[0] / xs) * xs; x <= xr[1] + 1e-9; x += xs)
-    g0.append(sv('line', { x1: toX(x), y1: mt, x2: toX(x), y2: mt + ih, stroke: '#e8ebef', 'stroke-width': 1 }));
-  for (let y = Math.ceil(yr[0] / ys) * ys; y <= yr[1] + 1e-9; y += ys)
-    g0.append(sv('line', { x1: ml, y1: toY(y), x2: ml + iw, y2: toY(y), stroke: '#e8ebef', 'stroke-width': 1 }));
-  if (xr[0] <= 0 && xr[1] >= 0) g0.append(sv('line', { x1: toX(0), y1: mt, x2: toX(0), y2: mt + ih, stroke: '#5a6068', 'stroke-width': 1 }));
-  if (yr[0] <= 0 && yr[1] >= 0) g0.append(sv('line', { x1: ml, y1: toY(0), x2: ml + iw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
-  for (let x = Math.ceil(xr[0] / xs) * xs; x <= xr[1] + 1e-9; x += xs) {
-    if (Math.abs(x) < xs * 0.01) continue;
-    g0.append(sv('text', { x: toX(x), y: mt + ih + 15, 'text-anchor': 'middle', 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, String(+x.toFixed(2)).replace('.', ',')));
-  }
-  for (let y = Math.ceil(yr[0] / ys) * ys; y <= yr[1] + 1e-9; y += ys) {
-    if (Math.abs(y) < ys * 0.01) continue;
-    g0.append(sv('text', { x: ml - 5, y: toY(y) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, String(+y.toFixed(2)).replace('.', ',')));
-  }
-  g0.append(sv('text', { x: ml + iw, y: mt + ih + 28, 'text-anchor': 'end', 'font-size': 11, fill: '#5a6068' }, 'x'));
-  g0.append(sv('text', { x: ml - 30, y: mt + 10, 'font-size': 11, fill: '#5a6068' }, 'y'));
-  const pg = sv('g'); svg.append(pg);
-  return {
-    svg, toX, toY, g: pg, mt, mb, ml, mr, iw, ih, xr, yr,
-    band(x1, x2, color) {
-      let px1 = Math.max(ml, Math.min(ml + iw, toX(x1)));
-      let px2 = Math.max(ml, Math.min(ml + iw, toX(x2)));
-      if (px2 < px1) [px1, px2] = [px2, px1];
-      if (px2 - px1 < 0.5) return;
-      pg.append(sv('rect', { x: px1, y: mt, width: px2 - px1, height: ih, fill: color || 'rgba(46,109,164,0.13)' }));
-    },
-    curve(f, color, width) {
-      let d = '', started = false;
-      const N = 240;
-      for (let i = 0; i <= N; i++) {
-        const x = xr[0] + (xr[1] - xr[0]) * i / N;
-        let y = f(x);
-        if (!isFinite(y)) { started = false; continue; }
-        if (y < yr[0]) y = yr[0]; if (y > yr[1]) y = yr[1];
-        d += (started ? 'L' : 'M') + toX(x).toFixed(2) + ' ' + toY(y).toFixed(2) + ' ';
-        started = true;
-      }
-      pg.append(sv('path', { d, fill: 'none', stroke: color || '#2e6da4', 'stroke-width': width || 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
-    },
-    polyline(pts, color, width, dash) {
-      const d = pts.map((p, i) => (i ? 'L' : 'M') + toX(p[0]).toFixed(2) + ' ' + toY(p[1]).toFixed(2)).join(' ');
-      pg.append(sv('path', { d, fill: 'none', stroke: color || '#1e7a2e', 'stroke-width': width || 2, 'stroke-dasharray': dash || '' }));
-    },
-    point(x, y, color, r) {
-      pg.append(sv('circle', { cx: toX(x), cy: toY(y), r: r || 4.5, fill: color || '#c0281f', stroke: '#fff', 'stroke-width': 1.5 }));
-    },
-    vline(x, color, dash) {
-      pg.append(sv('line', { x1: toX(x), y1: mt, x2: toX(x), y2: mt + ih, stroke: color || '#c0281f', 'stroke-width': 1.5, 'stroke-dasharray': dash || '4 3' }));
-    },
-    hline(y, color, dash) {
-      pg.append(sv('line', { x1: ml, y1: toY(y), x2: ml + iw, y2: toY(y), stroke: color || '#9a5b00', 'stroke-width': 1.5, 'stroke-dasharray': dash || '4 3' }));
-    },
-    seg(x1, y1, x2, y2, color, width, dash) {
-      pg.append(sv('line', { x1: toX(x1), y1: toY(y1), x2: toX(x2), y2: toY(y2), stroke: color || '#7b4fc2', 'stroke-width': width || 2, 'stroke-dasharray': dash || '' }));
-    },
-    rect(x0, x1, y0, y1, color) {
-      const px0 = Math.max(ml, Math.min(ml + iw, toX(x0)));
-      const px1 = Math.max(ml, Math.min(ml + iw, toX(x1)));
-      const py0 = Math.max(mt, Math.min(mt + ih, toY(y1)));
-      const py1 = Math.max(mt, Math.min(mt + ih, toY(y0)));
-      if (px1 - px0 < 0.3) return;
-      pg.append(sv('rect', { x: px0, y: py0, width: px1 - px0, height: py1 - py0, fill: color || 'rgba(46,109,164,0.18)', stroke: 'rgba(46,109,164,0.5)', 'stroke-width': 0.8 }));
-    },
-    text(x, y, str, opts) {
-      opts = opts || {};
-      pg.append(sv('text', { x: toX(x), y: toY(y), 'text-anchor': opts.anchor || 'middle', 'font-size': opts.size || 11, fill: opts.color || '#111', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': opts.weight || 500 }, str));
-    }
+const $=(s,r)=>(r||document).querySelector(s);
+function h(tag,attrs,...kids){const el=document.createElement(tag);if(attrs)for(const[k,v]of Object.entries(attrs)){if(v===false||v==null)continue;if(k==='class')el.className=v;else if(k==='html')el.innerHTML=v;else if(k.startsWith('on'))el.addEventListener(k.slice(2),v);else if(v===true)el.setAttribute(k,'');else el.setAttribute(k,v);}for(const k of kids.flat())if(k!=null&&k!==false)el.append(k.nodeType?k:document.createTextNode(k));return el;}
+const NS='http://www.w3.org/2000/svg';
+function sv(tag,attrs,...kids){const el=document.createElementNS(NS,tag);if(attrs)for(const[k,v]of Object.entries(attrs))el.setAttribute(k,v);for(const k of kids.flat())if(k!=null)el.append(k);return el;}
+function isSmall(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+const KEYS={act:'sii-num-v4'};
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+const WORKSHOPS=[];
+const fmt=(v,d)=>isFinite(v)?(+v).toFixed(d==null?4:d).replace('.',','):'—';
+function niceStep(range,target){const raw=range/target;const exp=Math.floor(Math.log10(raw));const base=Math.pow(10,exp);const m=raw/base;if(m<1.5)return base;if(m<3.5)return 2*base;if(m<7.5)return 5*base;return 10*base;}
+function plot(W,H,xr,yr){
+  const ml=50,mr=16,mt=14,mb=32,iw=W-ml-mr,ih=H-mt-mb;
+  const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,class:'plot'});
+  svg.style.width='100%';svg.style.height='auto';svg.style.display='block';
+  const toX=x=>ml+(x-xr[0])/(xr[1]-xr[0])*iw,toY=y=>mt+(yr[1]-y)/(yr[1]-yr[0])*ih;
+  const g0=sv('g');svg.append(g0);
+  const xs=niceStep(xr[1]-xr[0],6),ys=niceStep(yr[1]-yr[0],5);
+  for(let x=Math.ceil(xr[0]/xs)*xs;x<=xr[1]+1e-9;x+=xs)g0.append(sv('line',{x1:toX(x),y1:mt,x2:toX(x),y2:mt+ih,stroke:'#e8ebef','stroke-width':1}));
+  for(let y=Math.ceil(yr[0]/ys)*ys;y<=yr[1]+1e-9;y+=ys)g0.append(sv('line',{x1:ml,y1:toY(y),x2:ml+iw,y2:toY(y),stroke:'#e8ebef','stroke-width':1}));
+  if(xr[0]<=0&&xr[1]>=0)g0.append(sv('line',{x1:toX(0),y1:mt,x2:toX(0),y2:mt+ih,stroke:'#5a6068','stroke-width':1}));
+  if(yr[0]<=0&&yr[1]>=0)g0.append(sv('line',{x1:ml,y1:toY(0),x2:ml+iw,y2:toY(0),stroke:'#5a6068','stroke-width':1}));
+  for(let x=Math.ceil(xr[0]/xs)*xs;x<=xr[1]+1e-9;x+=xs){if(Math.abs(x)<xs*0.01)continue;g0.append(sv('text',{x:toX(x),y:mt+ih+15,'text-anchor':'middle','font-size':11,fill:'#5a6068','font-family':'IBM Plex Mono, monospace'},String(+x.toFixed(2)).replace('.',',')));}
+  for(let y=Math.ceil(yr[0]/ys)*ys;y<=yr[1]+1e-9;y+=ys){if(Math.abs(y)<ys*0.01)continue;g0.append(sv('text',{x:ml-5,y:toY(y)+4,'text-anchor':'end','font-size':11,fill:'#5a6068','font-family':'IBM Plex Mono, monospace'},String(+y.toFixed(2)).replace('.',',')));}
+  g0.append(sv('text',{x:ml+iw,y:mt+ih+28,'text-anchor':'end','font-size':11,fill:'#5a6068'},'x'));
+  g0.append(sv('text',{x:ml-30,y:mt+10,'font-size':11,fill:'#5a6068'},'y'));
+  const pg=sv('g');svg.append(pg);
+  return{svg,toX,toY,g:pg,mt,mb,ml,mr,iw,ih,xr,yr,
+    band(x1,x2,color){let px1=Math.max(ml,Math.min(ml+iw,toX(x1)));let px2=Math.max(ml,Math.min(ml+iw,toX(x2)));if(px2<px1)[px1,px2]=[px2,px1];if(px2-px1<0.5)return;pg.append(sv('rect',{x:px1,y:mt,width:px2-px1,height:ih,fill:color||'rgba(46,109,164,0.13)'}));},
+    curve(f,color,width){let d='',started=false;const N=240;for(let i=0;i<=N;i++){const x=xr[0]+(xr[1]-xr[0])*i/N;let y=f(x);if(!isFinite(y)){started=false;continue;}if(y<yr[0])y=yr[0];if(y>yr[1])y=yr[1];d+=(started?'L':'M')+toX(x).toFixed(2)+' '+toY(y).toFixed(2)+' ';started=true;}pg.append(sv('path',{d,fill:'none',stroke:color||'#2e6da4','stroke-width':width||2,'stroke-linejoin':'round','stroke-linecap':'round'}));},
+    polyline(pts,color,width,dash){const d=pts.filter(p=>p).map((p,i)=>(i?'L':'M')+toX(p[0]).toFixed(2)+' '+toY(p[1]).toFixed(2)).join(' ');pg.append(sv('path',{d,fill:'none',stroke:color||'#1e7a2e','stroke-width':width||2,'stroke-dasharray':dash||''}));},
+    point(x,y,color,r,shape){if(shape==='square'){pg.append(sv('rect',{x:toX(x)-(r||3),y:toY(y)-(r||3),width:2*(r||3),height:2*(r||3),fill:color||'#c0281f',stroke:'#fff','stroke-width':1.2}));}else{pg.append(sv('circle',{cx:toX(x),cy:toY(y),r:r||4.5,fill:color||'#c0281f',stroke:'#fff','stroke-width':1.5}));}},
+    vline(x,color,dash,width){pg.append(sv('line',{x1:toX(x),y1:mt,x2:toX(x),y2:mt+ih,stroke:color||'#c0281f','stroke-width':width||1.5,'stroke-dasharray':dash||'4 3'}));},
+    hline(y,color,dash,width){pg.append(sv('line',{x1:ml,y1:toY(y),x2:ml+iw,y2:toY(y),stroke:color||'#9a5b00','stroke-width':width||1.5,'stroke-dasharray':dash||'4 3'}));},
+    seg(x1,y1,x2,y2,color,width,dash){pg.append(sv('line',{x1:toX(x1),y1:toY(y1),x2:toX(x2),y2:toY(y2),stroke:color||'#7b4fc2','stroke-width':width||2,'stroke-dasharray':dash||''}));},
+    text(x,y,str,opts){opts=opts||{};pg.append(sv('text',{x:toX(x),y:toY(y),'text-anchor':opts.anchor||'middle','font-size':opts.size||11,fill:opts.color||'#111','font-family':'IBM Plex Mono, monospace','font-weight':opts.weight||500},str));}
   };
 }
-function stats(list) { return h('div', { class: 'gstats' }, list.map(k => h('div', { class: 'stat' }, h('span', null, k[0]), h('b', null, k[1])))); }
-function chipsRow(items, cur, cb, label) {
-  return h('div', { class: 'chips', role: 'group', 'aria-label': label || '' }, items.map(it => h('button', { type: 'button', class: 'chip' + (cur === it[0] ? ' on' : ''), 'aria-pressed': cur === it[0] ? 'true' : 'false', onclick: () => cb(it[0]) }, it[1])));
-}
-function setMsg(sel, text, kind) { const m = $(sel); if (!m) return; m.textContent = text; m.className = 'verdict' + (kind ? ' ' + kind : ''); }
-function codeBlock(src) { return '<h3>Code Python</h3><pre class="code">' + src + '</pre>'; }
+function stats(list){return h('div',{class:'gstats'},list.map(k=>h('div',{class:'stat'},h('span',{html:k[0]}),h('b',null,k[1]))));}
+function chipsRow(items,cur,cb,label){return h('div',{class:'chips',role:'group','aria-label':label||''},items.map(it=>h('button',{type:'button',class:'chip'+(cur===it[0]?' on':''),'aria-pressed':cur===it[0]?'true':'false',onclick:()=>cb(it[0])},it[1])));}
+function setMsg(sel,text,kind){const m=$(sel);if(!m)return;m.textContent=text;m.className='verdict'+(kind?' '+kind:'');}
+function codeBlock(src){return '<h3>Code Python</h3><pre class="code">'+src+'</pre>';}
 
-/* ================= Atelier 1 : f(x) = 0 ================= */
+/* ============ Atelier 0 : Données (listes vs numpy) ============ */
+const EXS = {
+  add: { label: 'Addition de vecteurs', listes: 'u = [1, 2, 3]\nv = [5, 6, 7]\nres = []\nfor i in range(len(u)):\n    res.append(u[i] + v[i])', numpy: 'import numpy as np\nu = np.array([1, 2, 3])\nv = np.array([5, 6, 7])\nres = u + v', res: '[6, 8, 10]' },
+  sqrt: { label: 'Racine carrée', listes: 'import math\n\nu = [1, 2, 3]\nv = []\nfor x in u:\n    v.append(math.sqrt(x))', numpy: 'import numpy as np\nu = np.array([1, 2, 3])\nv = np.sqrt(u)', res: '[1.0, 1.414, 1.732]' },
+  filt: { label: 'Filtrage x > 3', listes: 'u = [1, 2, 3, 4, 5]\nv = []\nfor x in u:\n    if x > 3:\n        v.append(x)', numpy: 'import numpy as np\nu = np.array([1, 2, 3, 4, 5])\nv = u[u > 3]', res: '[4, 5]' }
+};
+const F0 = { ex: 'add' };
+const CODE_F0 = 'import numpy as np\n\n# --- Listes Python ---\nL = [1.2, 3.4, 5.6]\nL.append(7.8)            # ajout\nlen(L)                   # taille\nL[1]                     # accès\nL[1] = 9.9               # modification\n\n# --- Tableaux numpy ---\nt = np.array([1.2, 3.4, 5.6])\nt = np.linspace(0, 10, 100)\nt = np.zeros((3, 4))\nt + 2                    # vectorisé\nnp.sin(t)                # vectorisé';
+function mountF0(root) {
+  root.innerHTML = '<h2>Données : listes Python vs tableaux numpy</h2>' +
+    '<p>On manipule en SII des séries de mesures. Le choix de la structure <b>liste Python</b> ou <b>tableau numpy</b> change la lisibilité et la performance. Comparez les trois exemples ci-dessous : pour chaque opération, la version numpy est plus courte et vectorisée (aucune boucle explicite).</p>' +
+    '<div class="fld"><span>Exemple</span><div id="f0-ex"></div></div>' +
+    '<div class="col2"><div><h3 style="margin-top:0">Listes Python</h3><pre class="code" id="f0-listes"></pre></div><div><h3 style="margin-top:0">Tableaux numpy</h3><pre class="code" id="f0-numpy"></pre></div></div>' +
+    '<div class="verdict" id="f0-res"></div>' +
+    '<h3>Tableau comparatif</h3>' +
+    '<table class="ctable"><thead><tr><th>Opération</th><th>Liste</th><th>Tableau numpy</th></tr></thead><tbody>' +
+    '<tr><td>Accès à un élément</td><td>O(1)</td><td>O(1)</td></tr>' +
+    '<tr><td>Ajout en fin</td><td><code>L.append(x)</code> — O(1)</td><td>impossible (taille fixe)</td></tr>' +
+    '<tr><td>Produit terme à terme</td><td>boucle obligatoire</td><td><code>u * v</code> (vectorisé)</td></tr>' +
+    '<tr><td>Moyenne / sinus / variance</td><td>boucle ou <code>sum</code></td><td><code>np.mean</code>, <code>np.sin</code>, <code>np.var</code> (rapide)</td></tr>' +
+    '<tr><td>Filtrage conditionnel</td><td>boucle + <code>if</code></td><td><code>u[u &gt; 3]</code></td></tr>' +
+    '</tbody></table>' +
+    '<div class="verdict yes"><b>Règle pratique :</b> utilisez des listes pour de petites séries à taille variable ; préférez <b>numpy</b> dès qu\'il y a du calcul (moyenne, dérivée, intégration, filtrage, tracé). C\'est plus rapide, plus lisible, et le code ressemble aux formules mathématiques.</div>' +
+    codeBlock(CODE_F0);
+  $('#f0-ex').append(chipsRow(Object.keys(EXS).map(k=>[k, EXS[k].label]), F0.ex, k => { F0.ex = k; drawF0(); }, 'Exemple'));
+  drawF0();
+}
+function drawF0() {
+  const ex = EXS[F0.ex];
+  $('#f0-listes').textContent = ex.listes;
+  $('#f0-numpy').textContent = ex.numpy;
+  $('#f0-res').textContent = 'Résultat : ' + ex.res;
+}
+
+/* ============ Atelier 1 : f(x)=0 ============ */
 const FUNCS = {
   'x2-2':  { label: 'f(x) = x² − 2', f: x => x*x - 2, df: x => 2*x, root: Math.SQRT2, a: 0, b: 2, x0: 2, xr: [-0.5, 2.5], yr: [-3, 4] },
   'cos-x': { label: 'f(x) = cos x − x', f: x => Math.cos(x) - x, df: x => -Math.sin(x) - 1, root: 0.7390851332151607, a: 0, b: 1, x0: 1, xr: [-0.3, 1.6], yr: [-1.6, 1.4] },
@@ -292,146 +230,100 @@ const FUNCS = {
 const LAB_STATE = {};
 function getState(id, defaults) { return LAB_STATE[id] || (LAB_STATE[id] = Object.assign({ k: 0, timer: null }, defaults)); }
 const F1 = { algo: 'dichotomie', func: 'x2-2', maxn: 50, tol: 1e-6 };
+function labStop(key) { const S = LAB_STATE[key]; if (S && S.timer) { clearInterval(S.timer); S.timer = null; } const b = $('#' + key + '-play'); if (b) b.textContent = 'Lecture'; }
 function f1Frames() {
   const fun = FUNCS[F1.func], a0 = fun.a, b0 = fun.b, x0 = fun.x0;
   if (F1.algo === 'dichotomie') {
     let a = a0, b = b0; const F = [];
-    if (fun.f(a) * fun.f(b) > 0) return { error: 'f(a) et f(b) sont de même signe : la dichotomie ne s\'applique pas.' };
+    if (fun.f(a) * fun.f(b) > 0) return { error: 'f(a) et f(b) sont de même signe.' };
     for (let n = 0; n <= F1.maxn; n++) {
-      const m = (a + b) / 2;
-      const w = b - a;
-      const fm = fun.f(m);
+      const m = (a + b) / 2, w = b - a, fm = fun.f(m);
       let stop = null;
-      if (w < F1.tol) stop = 'width';
-      else if (Math.abs(fm) < F1.tol) stop = 'fm';
-      else if (n === F1.maxn) stop = 'max';
+      if (w < F1.tol) stop = 'width'; else if (Math.abs(fm) < F1.tol) stop = 'fm'; else if (n === F1.maxn) stop = 'max';
       F.push({ a, b, m, fa: fun.f(a), fb: fun.f(b), fm, n, w, stop });
       if (stop) break;
       if (fun.f(a) * fm < 0) b = m; else a = m;
     }
     return { F };
-  } else {
-    let x = x0; const F = [];
-    for (let n = 0; n <= F1.maxn; n++) {
-      const fx = fun.f(x), dfx = fun.df(x);
-      if (Math.abs(dfx) < 1e-14) { F.push({ x, fx, dfx, xn: NaN, n, stop: 'dfx' }); break; }
-      const xn = x - fx / dfx;
-      let stop = null;
-      if (Math.abs(fx) < F1.tol) stop = 'fx';
-      else if (Math.abs(xn - x) < F1.tol) stop = 'delta';
-      else if (n === F1.maxn) stop = 'max';
-      F.push({ x, fx, dfx, xn, n, stop });
-      if (stop) break;
-      x = xn;
-    }
-    return { F };
   }
+  let x = x0; const F = [];
+  for (let n = 0; n <= F1.maxn; n++) {
+    const fx = fun.f(x), dfx = fun.df(x);
+    if (Math.abs(dfx) < 1e-14) { F.push({ x, fx, dfx, xn: NaN, n, stop: 'dfx' }); break; }
+    const xn = x - fx / dfx;
+    let stop = null;
+    if (Math.abs(fx) < F1.tol) stop = 'fx'; else if (Math.abs(xn - x) < F1.tol) stop = 'delta'; else if (n === F1.maxn) stop = 'max';
+    F.push({ x, fx, dfx, xn, n, stop });
+    if (stop) break;
+    x = xn;
+  }
+  return { F };
 }
-const CODE_F1 = 'def dichotomie(f, a, b, eps):\n    """Racine de f sur [a, b], avec f(a)*f(b) <= 0."""\n    while b - a > eps:\n        m = (a + b) / 2\n        if f(a) * f(m) <= 0:\n            b = m\n        else:\n            a = m\n    return (a + b) / 2\n\n\ndef newton(f, fp, x0, eps, N=50):\n    """Newton : arrêt si |f(x)| < eps ou |x_{n+1} - x_n| < eps."""\n    x = x0\n    for _ in range(N):\n        if abs(f(x)) < eps:\n            return x\n        x = x - f(x) / fp(x)\n    return x';
+const CODE_F1 = 'def dichotomie(f, a, b, eps):\n    while b - a > eps:\n        m = (a + b) / 2\n        if f(a) * f(m) <= 0: b = m\n        else: a = m\n    return (a + b) / 2\n\ndef newton(f, fp, x0, eps, N=50):\n    x = x0\n    for _ in range(N):\n        if abs(f(x)) < eps: return x\n        x = x - f(x) / fp(x)\n    return x';
 function mountF1(root) {
-  root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Deux méthodes pour approcher une racine : la <b>dichotomie</b> encadre le zéro en divisant l\'intervalle par deux ; la méthode de <b>Newton</b> remplace la courbe par sa tangente et itère. Dans les deux cas, l\'algorithme s\'arrête quand la <b>tolérance ε</b> est atteinte : modifiez-la pour observer son influence sur le nombre d\'itérations.</p>' +
-    '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol" aria-label="Tolérance d\'arrêt">' +
-    ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>' + tolLabel(+v) + '</option>').join('') +
-    '</select></label></div>' +
-    '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev" type="button">◀ Précédent</button><button class="btn pri" id="f1-next" type="button">Suivant ▶</button><button class="btn" id="f1-play" type="button">Lecture</button><button class="btn" id="f1-all" type="button">Tout exécuter</button><button class="btn" id="f1-reset" type="button">Départ</button></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>courbe y = f(x)</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#7b4fc2"></i>tangente (Newton)</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span></div><div id="f1-plot"></div></div>' +
-    '<div class="verdict" id="f1-msg" aria-live="polite"></div><div id="f1-stats"></div><div id="f1-note"></div><div class="dwrap" id="f1-table"></div>' +
-    codeBlock(CODE_F1);
-  $('#f1-tol').addEventListener('change', e => { F1.tol = +e.target.value; const S = getState('f1', { k: 0 }); S.k = 0; drawF1(); });
+  root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Dichotomie et Newton. La <b>tolérance ε</b> sert de critère d\'arrêt : modifiez-la pour observer son effet.</p>' +
+    '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol">' + ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>10⁻' + Math.round(-Math.log10(+v)) + '</option>').join('') + '</select></label></div>' +
+    '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev">◀ Précédent</button><button class="btn pri" id="f1-next">Suivant ▶</button><button class="btn" id="f1-play">Lecture</button><button class="btn" id="f1-all">Tout exécuter</button><button class="btn" id="f1-reset">Départ</button></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#7b4fc2"></i>tangente</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span></div><div id="f1-plot"></div></div>' +
+    '<div class="verdict" id="f1-msg"></div><div id="f1-stats"></div><div id="f1-note"></div><div class="dwrap" id="f1-table"></div>' + codeBlock(CODE_F1);
+  $('#f1-tol').addEventListener('change', e => { F1.tol = +e.target.value; getState('f1', { k: 0 }).k = 0; drawF1(); });
   $('#f1-prev').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); if (S.k > 0) { S.k--; drawF1(); } });
-  $('#f1-next').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); const r = f1Frames(); const len = (r.F || []).length; if (S.k < len - 1) { S.k++; drawF1(); } });
-  $('#f1-all').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); S.k = 1e9; drawF1(); });
-  $('#f1-reset').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); S.k = 0; drawF1(); });
+  $('#f1-next').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); const r = f1Frames(); if (S.k < r.F.length - 1) { S.k++; drawF1(); } });
+  $('#f1-all').addEventListener('click', () => { labStop('f1'); getState('f1', { k: 0 }).k = 1e9; drawF1(); });
+  $('#f1-reset').addEventListener('click', () => { labStop('f1'); getState('f1', { k: 0 }).k = 0; drawF1(); });
   $('#f1-play').addEventListener('click', () => {
     const S = getState('f1', { k: 0 });
     if (S.timer) { labStop('f1'); return; }
     const r = f1Frames(); if (r.error) return;
     if (S.k >= r.F.length - 1) S.k = 0;
     $('#f1-play').textContent = 'Pause';
-    S.timer = setInterval(() => {
-      if (S.k >= r.F.length - 1) { labStop('f1'); drawF1(); return; }
-      S.k++; drawF1();
-    }, 650);
+    S.timer = setInterval(() => { if (S.k >= r.F.length - 1) { labStop('f1'); drawF1(); return; } S.k++; drawF1(); }, 650);
     drawF1();
   });
   drawF1();
 }
-function labStop(key) {
-  const S = LAB_STATE[key]; if (S && S.timer) { clearInterval(S.timer); S.timer = null; }
-  const b = $('#' + key + '-play'); if (b) b.textContent = 'Lecture';
-}
 function drawF1() {
-  const S = getState('f1', { k: 0 });
-  const fun = FUNCS[F1.func];
-  const fb = $('#f1-func'); if (fb) { fb.innerHTML = ''; fb.append(chipsRow(Object.keys(FUNCS).map(k => [k, FUNCS[k].label]), F1.func, k => { F1.func = k; S.k = 0; drawF1(); }, 'Fonction')); }
-  const ab = $('#f1-algo'); if (ab) { ab.innerHTML = ''; ab.append(chipsRow([['dichotomie', 'Dichotomie'], ['newton', 'Newton']], F1.algo, k => { F1.algo = k; S.k = 0; labStop('f1'); drawF1(); }, 'Méthode')); }
+  const S = getState('f1', { k: 0 }), fun = FUNCS[F1.func];
+  const fb = $('#f1-func'); if (fb) { fb.innerHTML = ''; fb.append(chipsRow(Object.keys(FUNCS).map(k => [k, FUNCS[k].label]), F1.func, k => { F1.func = k; S.k = 0; drawF1(); })); }
+  const ab = $('#f1-algo'); if (ab) { ab.innerHTML = ''; ab.append(chipsRow([['dichotomie', 'Dichotomie'], ['newton', 'Newton']], F1.algo, k => { F1.algo = k; S.k = 0; labStop('f1'); drawF1(); })); }
   const r = f1Frames();
-  if (r.error) { $('#f1-plot').innerHTML = ''; setMsg('#f1-msg', r.error, 'warn'); $('#f1-table').innerHTML = ''; $('#f1-stats').innerHTML = ''; $('#f1-note').innerHTML = ''; return; }
-  const F = r.F; if (S.k >= F.length) S.k = F.length - 1;
-  if (S.k < 0) S.k = 0;
+  if (r.error) { $('#f1-plot').innerHTML = ''; setMsg('#f1-msg', r.error, 'warn'); return; }
+  const F = r.F; if (S.k >= F.length) S.k = F.length - 1; if (S.k < 0) S.k = 0;
   const f = F[S.k];
   const P = plot(640, 340, fun.xr, fun.yr);
-  P.curve(fun.f);
-  P.hline(0, '#5a6068', '');
+  P.curve(fun.f); P.hline(0, '#5a6068', '');
   P.point(fun.root, 0, '#1e7a2e', 4); P.vline(fun.root, '#1e7a2e', '2 3');
   if (F1.algo === 'dichotomie') {
-    P.band(f.a, f.b, 'rgba(46,109,164,0.12)');
-    P.vline(f.a, '#2e6da4', ''); P.vline(f.b, '#2e6da4', '');
-    P.point(f.m, f.fm, '#c0281f');
-    P.vline(f.m, '#c0281f', '4 3');
-    P.text(f.m, f.fm + (f.fm >= 0 ? 0.3 : -0.3), 'm = ' + fmt(f.m, 4), { color: '#c0281f' });
+    P.band(f.a, f.b, 'rgba(46,109,164,0.12)'); P.vline(f.a, '#2e6da4'); P.vline(f.b, '#2e6da4', '');
+    P.point(f.m, f.fm, '#c0281f'); P.vline(f.m, '#c0281f', '4 3');
   } else {
     P.point(f.x, f.fx, '#c0281f');
-    if (isFinite(f.xn)) {
-      P.vline(f.xn, '#9a5b00', '3 3');
-      P.seg(f.x, f.fx, f.xn, 0, '#7b4fc2', 2, '6 3');
-      P.point(f.xn, 0, '#9a5b00', 3.5);
-    }
+    if (isFinite(f.xn)) { P.vline(f.xn, '#9a5b00', '3 3'); P.seg(f.x, f.fx, f.xn, 0, '#7b4fc2', 2, '6 3'); P.point(f.xn, 0, '#9a5b00', 3.5); }
   }
   $('#f1-plot').innerHTML = ''; $('#f1-plot').append(P.svg);
-  if (F1.algo === 'dichotomie') {
-    setMsg('#f1-msg', 'n = ' + f.n + ' — intervalle [' + fmt(f.a, 4) + ' ; ' + fmt(f.b, 4) + '], largeur ' + fmt(f.w, 6) + '. m = ' + fmt(f.m, 6) + ', f(m) = ' + fmt(f.fm, 6) + '. ' + (f.stop ? 'Arrêt.' : 'Signe de f(a)·f(m) : ' + (f.fa * f.fm < 0 ? 'négatif → on garde [a, m]' : 'positif → on garde [m, b]') + '.'));
-  } else {
-    setMsg('#f1-msg', 'n = ' + f.n + ' — x = ' + fmt(f.x, 6) + ', f(x) = ' + fmt(f.fx, 6) + ', f\'(x) = ' + fmt(f.dfx, 6) + '. ' + (f.stop ? 'Arrêt.' : 'Prochain point x − f(x)/f\'(x) = ' + fmt(f.xn, 6) + '.'));
-  }
+  if (F1.algo === 'dichotomie') setMsg('#f1-msg', 'n = ' + f.n + ' — largeur ' + fmt(f.w, 6) + '. m = ' + fmt(f.m, 6) + ', f(m) = ' + fmt(f.fm, 6) + '.' + (f.stop ? ' Arrêt.' : ''));
+  else setMsg('#f1-msg', 'n = ' + f.n + ' — x = ' + fmt(f.x, 6) + ', f(x) = ' + fmt(f.fx, 6) + '.' + (f.stop ? ' Arrêt.' : ''));
   const sb = $('#f1-stats'); sb.innerHTML = '';
-  sb.append(stats([['Itération', String(f.n)], ['Tolérance ε', tolLabel(F1.tol)], ['Largeur de l\'intervalle', F1.algo === 'dichotomie' ? fmt(f.w, 6) : '—'], ['Erreur |x − racine|', F1.algo === 'dichotomie' ? fmt(Math.abs(f.m - fun.root), 8) : fmt(Math.abs(f.x - fun.root), 8)]]));
+  sb.append(stats([['Itération', String(f.n)], ['Tolérance ε', '10⁻' + Math.round(-Math.log10(F1.tol))], ['Largeur', F1.algo === 'dichotomie' ? fmt(f.w, 6) : '—'], ['Erreur', fmt(Math.abs((F1.algo === 'dichotomie' ? f.m : f.x) - fun.root), 8)]]));
   const tb = $('#f1-table'); tb.innerHTML = '';
   if (F1.algo === 'dichotomie') {
-    const rows = F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.a, 6)), h('td', { class: 'm' }, fmt(fr.b, 6)), h('td', { class: 'm' }, fmt(fr.w, 6)), h('td', { class: 'm' }, fmt(fr.m, 6)), h('td', { class: 'm' }, fmt(fr.fm, 6)), h('td', { class: 'm' }, fr.stop || '')));
-    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'a', 'b', 'b − a', 'm', 'f(m)', ''].map(t => h('th', null, t)))), h('tbody', null, rows)));
+    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'a', 'b', 'b−a', 'm', 'f(m)'].map(t => h('th', null, t)))), h('tbody', null, F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.a, 6)), h('td', { class: 'm' }, fmt(fr.b, 6)), h('td', { class: 'm' }, fmt(fr.w, 6)), h('td', { class: 'm' }, fmt(fr.m, 6)), h('td', { class: 'm' }, fmt(fr.fm, 6)))))));
   } else {
-    const rows = F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.x, 6)), h('td', { class: 'm' }, fmt(fr.fx, 6)), h('td', { class: 'm' }, fmt(fr.dfx, 6)), h('td', { class: 'm' }, isFinite(fr.xn) ? fmt(fr.xn, 6) : '—'), h('td', { class: 'm' }, fr.stop || '')));
-    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 'x<sub>n</sub>', 'f(x<sub>n</sub>)', 'f\'(x<sub>n</sub>)', 'x<sub>n+1</sub>', ''].map(t => h('th', { html: t })))), h('tbody', null, rows)));
+    tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, h('th', { html: 'n' }), h('th', { html: 'x<sub>n</sub>' }), h('th', { html: 'f(x<sub>n</sub>)' }), h('th', { html: 'x<sub>n+1</sub>' }))), h('tbody', null, F.slice(0, S.k + 1).map(fr => h('tr', null, h('td', null, String(fr.n)), h('td', { class: 'm' }, fmt(fr.x, 6)), h('td', { class: 'm' }, fmt(fr.fx, 6)), h('td', { class: 'm' }, isFinite(fr.xn) ? fmt(fr.xn, 6) : '—'))))));
   }
-  const nb = $('#f1-note'); nb.innerHTML = '';
+  $('#f1-note').innerHTML = '';
   if (S.k === F.length - 1) {
     const last = F[F.length - 1];
-    let stopTxt = '';
-    if (last.stop === 'width') stopTxt = 'Arrêt atteint : largeur ' + fmt(last.w, 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
-    else if (last.stop === 'fm') stopTxt = 'Arrêt atteint : |f(m)| = ' + fmt(Math.abs(last.fm), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
-    else if (last.stop === 'fx') stopTxt = 'Arrêt atteint : |f(x)| = ' + fmt(Math.abs(last.fx), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
-    else if (last.stop === 'delta') stopTxt = 'Arrêt atteint : |x<sub>n+1</sub> − x<sub>n</sub>| = ' + fmt(Math.abs(last.xn - last.x), 10) + ' < ε = ' + tolLabel(F1.tol) + '. ';
-    else if (last.stop === 'dfx') stopTxt = 'Arrêt : f\'(x) ≈ 0, division impossible. ';
-    else if (last.stop === 'max') stopTxt = 'Arrêt : nombre maximum d\'itérations (' + F1.maxn + ') atteint sans satisfaire ε = ' + tolLabel(F1.tol) + '. ';
-    const baseTxt = F1.algo === 'dichotomie'
-      ? 'Bilan : après ' + last.n + ' itérations, largeur (b − a)/2<sup>n</sup> = ' + fmt((fun.b - fun.a) / Math.pow(2, last.n), 8) + ', erreur majorée par ' + fmt(Math.abs(last.m - fun.root), 8) + '.'
-      : 'Bilan : ' + last.n + ' itérations pour une erreur de ' + fmt(Math.abs(last.x - fun.root), 10) + '.';
-    nb.append(h('div', { class: 'verdict', html: stopTxt + baseTxt }));
+    $('#f1-note').append(h('div', { class: 'verdict' }, 'Arrêt. Erreur finale : ' + fmt(Math.abs((F1.algo === 'dichotomie' ? last.m : last.x) - fun.root), 10) + '.'));
   }
   $('#f1-prev').disabled = S.k === 0; $('#f1-next').disabled = S.k === F.length - 1;
 }
 
-/* ================= Atelier 2 : A·X = B ================= */
-const SYS = [
-  { id: 's1', label: 'Système 3×3', A: [[2, 1, -1], [-3, -1, 2], [-2, 1, 2]], B: [8, -11, -3], name: 'Système de l\'énoncé' },
-  { id: 's2', label: 'Système 2×2', A: [[2, 1], [1, 3]], B: [4, 6], name: 'Petit système' }
-];
+/* ============ Atelier 2 : A·X=B ============ */
+const SYS = [{ id: 's1', label: 'Système 3×3', A: [[2,1,-1],[-3,-1,2],[-2,1,2]], B: [8,-11,-3], name: 'Système 3×3' }, { id: 's2', label: 'Système 2×2', A: [[2,1],[1,3]], B: [4,6], name: 'Petit système' }];
 const F2 = { sys: 's1' };
 function gaussFrames(A, B) {
-  const n = A.length;
-  const M = A.map((row, i) => [...row, B[i]]);
-  const F = [];
+  const n = A.length, M = A.map((row, i) => [...row, B[i]]), F = [];
   F.push({ M: M.map(r => [...r]), pivot: -1, row: -1, mult: null, phase: 'start' });
   for (let k = 0; k < n; k++) {
     let p = k;
@@ -444,120 +336,92 @@ function gaussFrames(A, B) {
     }
   }
   const X = new Array(n).fill(0);
-  for (let i = n - 1; i >= 0; i--) {
-    let s = M[i][n];
-    for (let j = i + 1; j < n; j++) s -= M[i][j] * X[j];
-    X[i] = s / M[i][i];
-  }
+  for (let i = n - 1; i >= 0; i--) { let s = M[i][n]; for (let j = i + 1; j < n; j++) s -= M[i][j] * X[j]; X[i] = s / M[i][i]; }
   F.push({ M: M.map(r => [...r]), pivot: -1, row: -1, phase: 'solve', X: X.slice() });
   return F;
 }
 function mtxTable(M, pivot, row, phase) {
-  const n = M.length;
-  const tb = h('tbody');
-  M.forEach((r, i) => {
-    const tr = h('tr');
-    r.forEach((v, j) => {
-      let cls = '';
-      if (j === n) cls += 'sep ';
-      if (j === Math.min(phase === 'solve' ? n : Math.max(0, pivot), M[0].length - 1) && pivot >= 0 && i === pivot) cls += 'piv';
-      if (i === row && (phase === 'elim' || phase === 'swap')) cls += 'mod';
-      tr.append(h('td', { class: cls.trim() }, fmt(v, 3)));
-    });
-    tb.append(tr);
-  });
+  const n = M.length, tb = h('tbody');
+  M.forEach((r, i) => { const tr = h('tr'); r.forEach((v, j) => { let cls = ''; if (j === n) cls += 'sep '; if (j === Math.min(phase === 'solve' ? n : Math.max(0, pivot), M[0].length - 1) && pivot >= 0 && i === pivot) cls += 'piv'; if (i === row && (phase === 'elim' || phase === 'swap')) cls += 'mod'; tr.append(h('td', { class: cls.trim() }, fmt(v, 3))); }); tb.append(tr); });
   return h('div', { class: 'mtx-wrap' }, h('table', { class: 'mtx' }, tb));
 }
-const CODE_F2 = 'def gauss(A, B):\n    """Résolution de A·X = B par pivot de Gauss avec pivot partiel."""\n    n = len(A)\n    M = [list(row) + [B[i]] for i, row in enumerate(A)]\n    # descente (élimination)\n    for k in range(n):\n        p = max(range(k, n), key=lambda i: abs(M[i][k]))\n        M[k], M[p] = M[p], M[k]\n        for i in range(k + 1, n):\n            m = M[i][k] / M[k][k]\n            for j in range(k, n + 1):\n                M[i][j] -= m * M[k][j]\n    # remontée (substitution)\n    X = [0] * n\n    for i in range(n - 1, -1, -1):\n        s = M[i][n]\n        for j in range(i + 1, n):\n            s -= M[i][j] * X[j]\n        X[i] = s / M[i][i]\n    return X';
+const CODE_F2 = 'def gauss(A, B):\n    n = len(A)\n    M = [list(row) + [B[i]] for i, row in enumerate(A)]\n    for k in range(n):\n        p = max(range(k, n), key=lambda i: abs(M[i][k]))\n        M[k], M[p] = M[p], M[k]\n        for i in range(k + 1, n):\n            m = M[i][k] / M[k][k]\n            for j in range(k, n + 1):\n                M[i][j] -= m * M[k][j]\n    X = [0] * n\n    for i in range(n - 1, -1, -1):\n        s = M[i][n]\n        for j in range(i + 1, n):\n            s -= M[i][j] * X[j]\n        X[i] = s / M[i][i]\n    return X';
 function mountF2(root) {
-  root.innerHTML = '<h2>Système linéaire A·X = B</h2><p>La <b>méthode du pivot de Gauss</b> transforme le système en un système triangulaire supérieur par des combinaisons de lignes, puis remonte par substitution. On travaille sur la matrice augmentée [A | B].</p>' +
-    '<div class="opts"><div class="fld"><span>Système</span><div id="f2-sys"></div></div><button class="btn" id="f2-reset" type="button" style="margin-bottom:9px">Recommencer</button></div>' +
-    '<div class="files" style="margin:8px 0"><button class="btn" id="f2-prev" type="button">◀ Précédent</button><button class="btn pri" id="f2-next" type="button">Suivant ▶</button><button class="btn" id="f2-all" type="button">Tout exécuter</button></div>' +
-    '<div id="f2-mtx"></div><div class="verdict" id="f2-msg" aria-live="polite"></div><div id="f2-sol"></div>' +
-    codeBlock(CODE_F2);
+  root.innerHTML = '<h2>Système linéaire A·X = B</h2><p>Pivot de Gauss avec pivot partiel sur la matrice augmentée [A | B].</p>' +
+    '<div class="opts"><div class="fld"><span>Système</span><div id="f2-sys"></div></div><button class="btn" id="f2-reset" style="margin-bottom:9px">Recommencer</button></div>' +
+    '<div class="files" style="margin:8px 0"><button class="btn" id="f2-prev">◀ Précédent</button><button class="btn pri" id="f2-next">Suivant ▶</button><button class="btn" id="f2-all">Tout exécuter</button></div>' +
+    '<div id="f2-mtx"></div><div class="verdict" id="f2-msg"></div><div id="f2-sol"></div>' + codeBlock(CODE_F2);
   $('#f2-reset').addEventListener('click', () => { getState('f2', { k: 0 }).k = 0; drawF2(); });
   $('#f2-prev').addEventListener('click', () => { const S = getState('f2', { k: 0 }); if (S.k > 0) { S.k--; drawF2(); } });
   $('#f2-next').addEventListener('click', () => { const S = getState('f2', { k: 0 }); const sys = SYS.find(s => s.id === F2.sys); const F = gaussFrames(sys.A, sys.B); if (S.k < F.length - 1) { S.k++; drawF2(); } });
-  $('#f2-all').addEventListener('click', () => { const S = getState('f2', { k: 0 }); S.k = 1e9; drawF2(); });
+  $('#f2-all').addEventListener('click', () => { getState('f2', { k: 0 }).k = 1e9; drawF2(); });
   drawF2();
 }
 function drawF2() {
   const S = getState('f2', { k: 0 });
-  const sb = $('#f2-sys'); if (sb) { sb.innerHTML = ''; sb.append(chipsRow(SYS.map(s => [s.id, s.label]), F2.sys, k => { F2.sys = k; S.k = 0; drawF2(); }, 'Système')); }
-  const sys = SYS.find(s => s.id === F2.sys);
-  const F = gaussFrames(sys.A, sys.B);
-  if (S.k >= F.length) S.k = F.length - 1;
-  if (S.k < 0) S.k = 0;
-  const fr = F[S.k];
-  const box = $('#f2-mtx'); box.innerHTML = '';
+  const sb = $('#f2-sys'); if (sb) { sb.innerHTML = ''; sb.append(chipsRow(SYS.map(s => [s.id, s.label]), F2.sys, k => { F2.sys = k; S.k = 0; drawF2(); })); }
+  const sys = SYS.find(s => s.id === F2.sys), F = gaussFrames(sys.A, sys.B);
+  if (S.k >= F.length) S.k = F.length - 1; if (S.k < 0) S.k = 0;
+  const fr = F[S.k], box = $('#f2-mtx'); box.innerHTML = '';
   box.append(mtxTable(fr.M, fr.pivot, fr.row, fr.phase));
-  box.append(h('div', { class: 'mtx-cap' }, 'Matrice augmentée [A | B] — étape ' + (S.k + 1) + ' / ' + F.length));
+  box.append(h('div', { class: 'mtx-cap' }, 'Matrice [A | B] — étape ' + (S.k + 1) + ' / ' + F.length));
   let msg = '';
-  if (fr.phase === 'start') msg = 'Matrice de départ. On choisit la colonne 1 comme pivot et on prend le plus grand coefficient en valeur absolue (pivot partiel).';
-  else if (fr.phase === 'swap') msg = 'Échange des lignes ' + (fr.pivot + 1) + ' et ' + (fr.row + 1) + ' pour amener le pivot ' + fmt(fr.M[fr.pivot][fr.pivot], 3) + ' sur la diagonale.';
-  else if (fr.phase === 'elim') msg = 'L' + (fr.row + 1) + ' ← L' + (fr.row + 1) + ' − (' + fmt(fr.mult, 3) + ')·L' + (fr.pivot + 1) + ' : on annule le coefficient en dessous du pivot.';
-  else msg = 'Matrice triangulaire supérieure : on remonte par substitution. Solution : ' + fr.X.map((v, i) => 'x' + (i + 1) + ' = ' + fmt(v, 4)).join(', ') + '.';
+  if (fr.phase === 'start') msg = 'Matrice de départ.';
+  else if (fr.phase === 'swap') msg = 'Échange des lignes ' + (fr.pivot + 1) + ' et ' + (fr.row + 1) + '.';
+  else if (fr.phase === 'elim') msg = 'L' + (fr.row + 1) + ' ← L' + (fr.row + 1) + ' − (' + fmt(fr.mult, 3) + ')·L' + (fr.pivot + 1) + '.';
+  else msg = 'Triangulaire supérieure. Solution : ' + fr.X.map((v, i) => 'x' + (i + 1) + ' = ' + fmt(v, 4)).join(', ');
   setMsg('#f2-msg', msg, fr.phase === 'solve' ? 'yes' : '');
   const sol = $('#f2-sol'); sol.innerHTML = '';
-  sol.append(stats([['Système', sys.name], ['Taille', sys.A.length + '×' + sys.A.length], ['Opérations (ordre)', '≈ 2n³/3 = ' + Math.round(2 * Math.pow(sys.A.length, 3) / 3)]]));
-  if (fr.phase === 'solve') {
-    sol.append(h('div', { class: 'verdict yes' }, 'Vérification : ' + sys.A.map((row, i) => row.map((a, j) => a + '·' + fmt(fr.X[j], 3)).join(' + ') + ' = ' + fmt(sys.B[i], 3)).join(' ; ') + '.'));
-  }
+  sol.append(stats([['Système', sys.name], ['Taille', sys.A.length + '×' + sys.A.length]]));
+  if (fr.phase === 'solve') sol.append(h('div', { class: 'verdict yes' }, 'Vérification OK.'));
   $('#f2-prev').disabled = S.k === 0; $('#f2-next').disabled = S.k === F.length - 1;
 }
 
-/* ================= Atelier 3 : Euler explicite ================= */
+/* ============ Atelier 3 : Euler ============ */
 const ODES = {
   'y': { label: 'y\' = y, y(0) = 1', f: (t, y) => y, exact: t => Math.exp(t), T: 2, y0: 1 },
-  'm2y': { label: 'y\' = −2y, y(0) = 1', f: (t, y) => -2 * y, exact: t => Math.exp(-2 * t), T: 1.5, y0: 1 },
-  'lin': { label: 'y\' = 1 + t − y, y(0) = 1', f: (t, y) => 1 + t - y, exact: t => t + Math.exp(-t), T: 3, y0: 1 }
+  'm2y': { label: 'y\' = −2y', f: (t, y) => -2 * y, exact: t => Math.exp(-2 * t), T: 1.5, y0: 1 },
+  'lin': { label: 'y\' = 1 + t − y', f: (t, y) => 1 + t - y, exact: t => t + Math.exp(-t), T: 3, y0: 1 }
 };
 const F3 = { ode: 'y', h: 0.25 };
 function eulerSolve() {
   const o = ODES[F3.ode];
-  const n = Math.max(1, Math.round(o.T / F3.h));
-  const h = o.T / n;
+  const n = Math.max(1, Math.round(o.T / F3.h)), h = o.T / n;
   let t = 0, y = o.y0;
   const T = [0], Y = [y];
   for (let i = 0; i < n; i++) { y = y + h * o.f(t, y); t = t + h; T.push(t); Y.push(y); }
-  return { T, Y, h, n, exact: o.exact, f: o.f, y0: o.y0, T_end: o.T };
+  return { T, Y, h, n, exact: o.exact, T_end: o.T };
 }
-const CODE_F3 = 'def euler(f, t0, y0, T, h):\n    """Schéma d\'Euler explicite pour y\' = f(t, y), y(t0) = y0."""\n    n = int(round((T - t0) / h))\n    t, y = t0, y0\n    T_list, Y_list = [t], [y]\n    for _ in range(n):\n        y = y + h * f(t, y)        # un seul appel à f par pas\n        t = t + h\n        T_list.append(t); Y_list.append(y)\n    return T_list, Y_list';
+const CODE_F3 = 'def euler(f, t0, y0, T, h):\n    n = int(round((T - t0) / h))\n    t, y = t0, y0\n    T_list, Y_list = [t], [y]\n    for _ in range(n):\n        y = y + h * f(t, y)\n        t = t + h\n        T_list.append(t); Y_list.append(y)\n    return T_list, Y_list';
 function mountF3(root) {
-  root.innerHTML = '<h2>Équation différentielle : Euler explicite</h2><p>On approche la solution de y\' = f(t, y), y(t₀) = y₀ par la récurrence <b>y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>)</b>. C\'est une méthode d\'ordre 1 : l\'erreur globale est proportionnelle à h.</p>' +
-    '<div class="opts"><div class="fld"><span>Équation</span><div id="f3-ode"></div></div><label class="fld"><span>Pas h = <b id="f3-hout"></b></span><input type="range" id="f3-h" min="0.02" max="0.5" step="0.01" aria-label="Pas h"></label></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>solution exacte</span><span><i style="background:#c0281f"></i>Euler explicite</span></div><div id="f3-plot"></div></div>' +
-    '<div id="f3-stats"></div><div id="f3-note"></div><div class="dwrap" id="f3-table"></div>' +
-    codeBlock(CODE_F3);
+  root.innerHTML = '<h2>Équation différentielle : Euler explicite</h2><p>Schéma y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>) — ordre 1.</p>' +
+    '<div class="opts"><div class="fld"><span>Équation</span><div id="f3-ode"></div></div><label class="fld"><span>Pas h = <b id="f3-hout"></b></span><input type="range" id="f3-h" min="0.02" max="0.5" step="0.01"></label></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>exacte</span><span><i style="background:#c0281f"></i>Euler</span></div><div id="f3-plot"></div></div>' +
+    '<div id="f3-stats"></div><div id="f3-note"></div>' + codeBlock(CODE_F3);
   $('#f3-h').value = F3.h;
   $('#f3-h').addEventListener('input', e => { F3.h = +e.target.value; drawF3(); });
   drawF3();
 }
 function drawF3() {
-  const ob = $('#f3-ode'); if (ob) { ob.innerHTML = ''; ob.append(chipsRow(Object.keys(ODES).map(k => [k, ODES[k].label]), F3.ode, k => { F3.ode = k; drawF3(); }, 'Équation')); }
-  const o = ODES[F3.ode];
-  const R = eulerSolve();
+  const ob = $('#f3-ode'); if (ob) { ob.innerHTML = ''; ob.append(chipsRow(Object.keys(ODES).map(k => [k, ODES[k].label]), F3.ode, k => { F3.ode = k; drawF3(); })); }
+  const o = ODES[F3.ode], R = eulerSolve();
   $('#f3-hout').textContent = fmt(R.h, 3);
   const ymax = Math.max(...R.Y, ...R.T.map(t => o.exact(t)), o.y0);
   const ymin = Math.min(...R.Y, ...R.T.map(t => o.exact(t)), 0);
   const pad = (ymax - ymin) * 0.12 + 0.1;
   const P = plot(640, 320, [0, o.T], [ymin - pad, ymax + pad]);
   P.curve(o.exact);
-  P.polyline(R.T.map((t, i) => [t, R.Y[i]]), '#c0281f', 2, '');
+  P.polyline(R.T.map((t, i) => [t, R.Y[i]]), '#c0281f', 2);
   for (let i = 0; i < R.T.length; i++) P.point(R.T[i], R.Y[i], '#c0281f', 3.5);
   $('#f3-plot').innerHTML = ''; $('#f3-plot').append(P.svg);
-  const yEnd = R.Y[R.Y.length - 1], yEx = o.exact(o.T);
-  const err = Math.abs(yEnd - yEx);
+  const yEnd = R.Y[R.Y.length - 1], yEx = o.exact(o.T), err = Math.abs(yEnd - yEx);
   $('#f3-stats').innerHTML = '';
-  $('#f3-stats').append(stats([['Pas h', fmt(R.h, 4)], ['Nombre de pas', String(R.n)], ['y(T) approché', fmt(yEnd, 6)], ['y(T) exact', fmt(yEx, 6)], ['Erreur |Δ|', fmt(err, 6)]]));
-  const nb = $('#f3-note'); nb.innerHTML = '';
-  nb.append(h('div', { class: 'verdict' }, 'Avec n = ' + R.n + ' pas, l\'erreur globale est de l\'ordre de ' + fmt(err, 4) + '. Diviser h par 2 (donc doubler n) divise typiquement l\'erreur par 2 : la méthode d\'Euler explicite est d\'<b>ordre 1</b>.'));
-  const tb = $('#f3-table'); tb.innerHTML = '';
-  const rows = R.T.map((t, i) => h('tr', null, h('td', null, String(i)), h('td', { class: 'm' }, fmt(t, 4)), h('td', { class: 'm' }, fmt(R.Y[i], 6)), h('td', { class: 'm' }, fmt(o.exact(t), 6)), h('td', { class: 'm' }, fmt(Math.abs(R.Y[i] - o.exact(t)), 6))));
-  tb.append(h('table', { class: 'dt' }, h('thead', null, h('tr', null, ['n', 't<sub>n</sub>', 'y<sub>n</sub> (Euler)', 'y(t<sub>n</sub>) exact', '|erreur|'].map(t => h('th', { html: t })))), h('tbody', null, rows)));
+  $('#f3-stats').append(stats([['Pas h', fmt(R.h, 4)], ['Nombre de pas', String(R.n)], ['y(T) approché', fmt(yEnd, 6)], ['y(T) exact', fmt(yEx, 6)], ['Erreur', fmt(err, 6)]]));
+  $('#f3-note').innerHTML = '';
+  $('#f3-note').append(h('div', { class: 'verdict' }, 'Erreur globale = ' + fmt(err, 4) + '. Diviser h par 2 divise l\'erreur par 2 : ordre 1.'));
 }
 
-/* ================= Atelier 4 : intégration et dérivation ================= */
+/* ============ Atelier 4 : Intégration/dérivation ============ */
 const INTS = {
   'x2': { label: 'f(x) = x² sur [0, 2]', f: x => x*x, a: 0, b: 2, exact: 8/3, fp: x => 2*x, dfx: 1 },
   'sin': { label: 'f(x) = sin x sur [0, π]', f: x => Math.sin(x), a: 0, b: Math.PI, exact: 2, fp: x => Math.cos(x), dfx: Math.PI / 3 },
@@ -577,243 +441,321 @@ function integrate(f, a, b, n, method) {
   }
   return { s, rects, h };
 }
-const CODE_F4 = 'def trapezes(f, a, b, n):\n    """Intégrale de f sur [a, b] par la méthode des trapèzes."""\n    h = (b - a) / n\n    s = 0\n    for i in range(n):\n        x0, x1 = a + i*h, a + (i+1)*h\n        s += (f(x0) + f(x1)) / 2 * h\n    return s\n\n\ndef rectangles_gauche(f, a, b, n):\n    h = (b - a) / n\n    return sum(f(a + i*h) for i in range(n)) * h\n\n\ndef derivee_avant(f, x, h):\n    return (f(x + h) - f(x)) / h\n\n\ndef derivee_arriere(f, x, h):\n    return (f(x) - f(x - h)) / h\n\n\ndef derivee_centree(f, x, h):\n    return (f(x + h) - f(x - h)) / (2 * h)';
+const CODE_F4 = 'def trapezes(f, a, b, n):\n    h = (b - a) / n\n    return h/2 * (f(a) + f(b) + 2*sum(f(a+i*h) for i in range(1, n)))\n\ndef derivee_centree(f, x, h):\n    return (f(x + h) - f(x - h)) / (2 * h)';
 function mountF4(root) {
-  root.innerHTML = '<h2>Intégration et dérivation numériques</h2><p>On approche une intégrale par des aires de rectangles ou de trapèzes, et une dérivée par un taux d\'accroissement fini (schémas avant / arrière / centré).</p>' +
+  root.innerHTML = '<h2>Intégration et dérivation numériques</h2><p>Rectangles (bleu), trapèzes (marron), schémas avant/arrière/centré.</p>' +
     '<div class="fld"><span>Onglet</span><div id="f4-tab"></div></div>' +
-    '<div id="f4-int" hidden><div class="opts"><div class="fld"><span>Fonction</span><div id="f4-fn"></div></div><label class="fld"><span>Nombre n = <b id="f4-nout"></b></span><input type="range" id="f4-n" min="1" max="40" step="1" aria-label="n"></label></div><div class="fld"><span>Méthode</span><div id="f4-method"></div></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:rgba(46,109,164,0.5)"></i>rectangles (bleu)</span><span><i style="background:rgba(154,91,0,0.6)"></i>trapèzes (marron)</span></div><div id="f4-iplot"></div></div><div id="f4-istats"></div><div id="f4-inote"></div></div>' +
-    '<div id="f4-diff" hidden><div class="opts"><div class="fld"><span>Fonction</span><div id="f4-fn2"></div></div><label class="fld"><span>Point x₀ = <b id="f4-xout"></b></span><input type="range" id="f4-x0" min="0" max="100" step="1" aria-label="x₀"></label><label class="fld"><span>Pas h = <b id="f4-hout"></b></span><input type="range" id="f4-h" min="0.01" max="1" step="0.01" aria-label="h"></label></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>tangente exacte</span><span><i style="background:#7b4fc2"></i>sécante avant</span><span><i style="background:#1e7a2e"></i>sécante arrière</span></div><div id="f4-dplot"></div></div><div id="f4-dstats"></div><div id="f4-dnote"></div></div>' +
-    codeBlock(CODE_F4);
-  $('#f4-tab').append(chipsRow([['int', 'Intégration'], ['diff', 'Dérivation']], F4.tab, k => { F4.tab = k; drawF4(); }, 'Onglet'));
-  $('#f4-n').value = F4.n;
+    '<div id="f4-int"><div class="opts"><div class="fld"><span>Fonction</span><div id="f4-fn"></div></div><label class="fld"><span>n = <b id="f4-nout"></b></span><input type="range" id="f4-n" min="1" max="40" step="1"></label></div><div class="fld"><span>Méthode</span><div id="f4-method"></div></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:rgba(46,109,164,0.5)"></i>rectangles</span><span><i style="background:rgba(154,91,0,0.6)"></i>trapèzes</span></div><div id="f4-iplot"></div></div><div id="f4-istats"></div></div>' +
+    '<div id="f4-diff" hidden><div class="opts"><div class="fld"><span>Fonction</span><div id="f4-fn2"></div></div><label class="fld"><span>h = <b id="f4-hout"></b></span><input type="range" id="f4-h" min="0.01" max="1" step="0.01"></label></div>' +
+    '<div class="plot-wrap"><div id="f4-dplot"></div></div><div id="f4-dstats"></div></div>' + codeBlock(CODE_F4);
+  $('#f4-tab').append(chipsRow([['int', 'Intégration'], ['diff', 'Dérivation']], F4.tab, k => { F4.tab = k; drawF4(); }));
+  $('#f4-n').value = F4.n; $('#f4-h').value = F4.h;
   $('#f4-n').addEventListener('input', e => { F4.n = +e.target.value; drawF4(); });
-  $('#f4-h').value = F4.h;
   $('#f4-h').addEventListener('input', e => { F4.h = +e.target.value; drawF4(); });
   drawF4();
 }
 function drawF4() {
-  $('#f4-int').hidden = F4.tab !== 'int';
-  $('#f4-diff').hidden = F4.tab !== 'diff';
+  $('#f4-int').hidden = F4.tab !== 'int'; $('#f4-diff').hidden = F4.tab !== 'diff';
   if (F4.tab === 'int') drawInt(); else drawDiff();
 }
 function drawInt() {
-  const fnb = $('#f4-fn'); fnb.innerHTML = ''; fnb.append(chipsRow(Object.keys(INTS).map(k => [k, INTS[k].label.split(' sur')[0]]), F4.fn, k => { F4.fn = k; drawF4(); }, 'Fonction'));
-  const mb = $('#f4-method'); mb.innerHTML = ''; mb.append(chipsRow([['left', 'Rectangles à gauche'], ['right', 'Rectangles à droite'], ['mid', 'Point milieu'], ['trap', 'Trapèzes']], F4.method, k => { F4.method = k; drawF4(); }, 'Méthode'));
+  const fnb = $('#f4-fn'); fnb.innerHTML = ''; fnb.append(chipsRow(Object.keys(INTS).map(k => [k, INTS[k].label.split(' sur')[0]]), F4.fn, k => { F4.fn = k; drawF4(); }));
+  const mb = $('#f4-method'); mb.innerHTML = ''; mb.append(chipsRow([['left', 'Gauche'], ['right', 'Droite'], ['mid', 'Milieu'], ['trap', 'Trapèzes']], F4.method, k => { F4.method = k; drawF4(); }));
   $('#f4-nout').textContent = F4.n; $('#f4-n').value = F4.n;
-  const o = INTS[F4.fn];
-  const R = integrate(o.f, o.a, o.b, F4.n, F4.method);
-  const samples = [];
-  for (let i = 0; i <= 100; i++) samples.push(o.f(o.a + (o.b - o.a) * i / 100));
+  const o = INTS[F4.fn], R = integrate(o.f, o.a, o.b, F4.n, F4.method);
+  const samples = []; for (let i = 0; i <= 100; i++) samples.push(o.f(o.a + (o.b - o.a) * i / 100));
   const ymax = Math.max(...samples, 0.1), ymin = Math.min(...samples, 0);
   const pad = (ymax - ymin) * 0.12 + 0.1;
   const P = plot(640, 300, [o.a - 0.1, o.b + 0.1], [ymin - pad, ymax + pad]);
   R.rects.forEach(r => {
     if (r.kind === 'rect') P.rect(r.x0, r.x1, 0, r.y1, 'rgba(46,109,164,0.18)');
-    else {
-      P.rect(r.x0, r.x1, 0, Math.max(r.y0, r.y1), 'rgba(154,91,0,0.12)');
-      P.seg(r.x0, 0, r.x0, r.y0, 'rgba(154,91,0,0.6)', 1.5);
-      P.seg(r.x1, 0, r.x1, r.y1, 'rgba(154,91,0,0.6)', 1.5);
-      P.seg(r.x0, r.y0, r.x1, r.y1, 'rgba(154,91,0,0.8)', 1.5);
-    }
+    else { P.rect(r.x0, r.x1, 0, Math.max(r.y0, r.y1), 'rgba(154,91,0,0.12)'); P.seg(r.x0, 0, r.x0, r.y0, 'rgba(154,91,0,0.6)', 1.5); P.seg(r.x1, 0, r.x1, r.y1, 'rgba(154,91,0,0.6)', 1.5); P.seg(r.x0, r.y0, r.x1, r.y1, 'rgba(154,91,0,0.8)', 1.5); }
   });
   P.curve(o.f);
   $('#f4-iplot').innerHTML = ''; $('#f4-iplot').append(P.svg);
-  const err = Math.abs(R.s - o.exact);
   $('#f4-istats').innerHTML = '';
-  $('#f4-istats').append(stats([['n', String(F4.n)], ['h', fmt(R.h, 4)], ['Approximation', fmt(R.s, 6)], ['Valeur exacte', fmt(o.exact, 6)], ['Erreur |Δ|', fmt(err, 6)]]));
-  const nb = $('#f4-inote'); nb.innerHTML = '';
-  const orders = { left: 'O(h)', right: 'O(h)', mid: 'O(h<sup>2</sup>)', trap: 'O(h<sup>2</sup>)' };
-  nb.innerHTML = '<div class="verdict">La méthode des ' + (F4.method === 'trap' ? 'trapèzes' : F4.method === 'mid' ? 'rectangles au point milieu' : 'rectangles') + ' est d\'ordre ' + orders[F4.method] + '. Doubler n (donc diviser h par 2) ' + (F4.method === 'trap' || F4.method === 'mid' ? 'divise l\'erreur par 4 environ.' : 'divise l\'erreur par 2 environ.') + ' Erreur actuelle : ' + fmt(err, 6) + '.</div>';
+  $('#f4-istats').append(stats([['n', String(F4.n)], ['h', fmt(R.h, 4)], ['Approximation', fmt(R.s, 6)], ['Exact', fmt(o.exact, 6)], ['Erreur', fmt(Math.abs(R.s - o.exact), 6)]]));
 }
 function drawDiff() {
-  const fnb = $('#f4-fn2'); fnb.innerHTML = ''; fnb.append(chipsRow(Object.keys(INTS).map(k => [k, INTS[k].label.split(' sur')[0]]), F4.fn, k => { F4.fn = k; drawF4(); }, 'Fonction'));
-  const o = INTS[F4.fn];
-  const x0 = o.dfx;
-  const h = F4.h;
-  const fp_exact = o.fp(x0);
-  const fp_av = (o.f(x0 + h) - o.f(x0)) / h;
-  const fp_ar = (o.f(x0) - o.f(x0 - h)) / h;
-  const fp_c = (o.f(x0 + h) - o.f(x0 - h)) / (2 * h);
-  $('#f4-xout').textContent = fmt(x0, 3); $('#f4-hout').textContent = fmt(h, 3);
+  const fnb = $('#f4-fn2'); fnb.innerHTML = ''; fnb.append(chipsRow(Object.keys(INTS).map(k => [k, INTS[k].label.split(' sur')[0]]), F4.fn, k => { F4.fn = k; drawF4(); }));
+  const o = INTS[F4.fn], x0 = o.dfx, h = F4.h;
+  const fp_exact = o.fp(x0), fp_av = (o.f(x0 + h) - o.f(x0)) / h, fp_ar = (o.f(x0) - o.f(x0 - h)) / h, fp_c = (o.f(x0 + h) - o.f(x0 - h)) / (2 * h);
+  $('#f4-hout').textContent = fmt(h, 3);
   const xr = [x0 - 2 * h, x0 + 2 * h];
-  const samples = [];
-  for (let i = 0; i <= 100; i++) samples.push(o.f(xr[0] + (xr[1] - xr[0]) * i / 100));
-  const ymin = Math.min(...samples), ymax = Math.max(...samples);
-  const pad = (ymax - ymin) * 0.25 + 0.1;
+  const samples = []; for (let i = 0; i <= 100; i++) samples.push(o.f(xr[0] + (xr[1] - xr[0]) * i / 100));
+  const ymin = Math.min(...samples), ymax = Math.max(...samples), pad = (ymax - ymin) * 0.25 + 0.1;
   const P = plot(640, 300, xr, [ymin - pad, ymax + pad]);
-  P.curve(o.f);
-  P.point(x0, o.f(x0), '#c0281f', 5);
-  P.hline(o.f(x0), '#9a5b00', '2 3');
-  P.vline(x0, '#5a6068', '2 3');
+  P.curve(o.f); P.point(x0, o.f(x0), '#c0281f', 5);
   P.seg(xr[0], o.f(x0) + fp_exact * (xr[0] - x0), xr[1], o.f(x0) + fp_exact * (xr[1] - x0), '#2e6da4', 1.5, '6 3');
   P.seg(x0, o.f(x0), x0 + h, o.f(x0 + h), '#7b4fc2', 2);
   P.seg(x0 - h, o.f(x0 - h), x0, o.f(x0), '#1e7a2e', 2);
-  P.point(x0 + h, o.f(x0 + h), '#7b4fc2', 3.5);
-  P.point(x0 - h, o.f(x0 - h), '#1e7a2e', 3.5);
   $('#f4-dplot').innerHTML = ''; $('#f4-dplot').append(P.svg);
   $('#f4-dstats').innerHTML = '';
-  $('#f4-dstats').append(stats([['f\'(x₀) exact', fmt(fp_exact, 6)], ['Schéma avant', fmt(fp_av, 6)], ['Schéma arrière', fmt(fp_ar, 6)], ['Schéma centré', fmt(fp_c, 6)]]));
-  const nb = $('#f4-dnote'); nb.innerHTML = '';
-  nb.innerHTML = '<div class="verdict">Les schémas avant et arrière sont d\'ordre 1 (erreur O(h)), le schéma centré est d\'ordre 2 (erreur O(h<sup>2</sup>)). Erreurs : avant ' + fmt(Math.abs(fp_av - fp_exact), 6) + ', arrière ' + fmt(Math.abs(fp_ar - fp_exact), 6) + ', centré ' + fmt(Math.abs(fp_c - fp_exact), 6) + '.</div>';
+  $('#f4-dstats').append(stats([["f'(x₀) exact", fmt(fp_exact, 6)], ['Avant', fmt(fp_av, 6)], ['Arrière', fmt(fp_ar, 6)], ['Centré', fmt(fp_c, 6)]]));
 }
 
-/* ---------- enregistrement des ateliers ---------- */
+/* ============ Atelier 5 : Régression (NOUVEAU) ============ */
+const F5 = { mode: 'mc', a: 4, b: 0, alpha: 0.5, niter: 5, deg: 1, pts: null };
+function genPts() { F5.pts = []; for (let i = 0; i < 11; i++) { const x = i * 0.1; F5.pts.push({ x, y: 4.257 * x - 0.299 + (Math.random() - 0.5) * 0.05 }); } }
+function linreg(pts) { const n = pts.length; const sx = pts.reduce((a, p) => a + p.x, 0), sy = pts.reduce((a, p) => a + p.y, 0), sxy = pts.reduce((a, p) => a + p.x * p.y, 0), sxx = pts.reduce((a, p) => a + p.x * p.x, 0); const a = (n * sxy - sx * sy) / (n * sxx - sx * sx); return { a, b: (sy - a * sx) / n }; }
+function gradDescent(pts, alpha, niter) { let a = 0, b = 0; const n = pts.length; const H = [{ a, b }]; for (let k = 0; k < niter; k++) { let da = 0, db = 0; for (const p of pts) { const r = a * p.x + b - p.y; da += 2 * p.x * r / n; db += 2 * r / n; } a -= alpha * da; b -= alpha * db; H.push({ a, b }); } return { a, b, H }; }
+function solveLinear(A, B) { const n = A.length; const M = A.map((r, i) => [...r, B[i]]); for (let k = 0; k < n; k++) { let p = k; for (let i = k + 1; i < n; i++) if (Math.abs(M[i][k]) > Math.abs(M[p][k])) p = i; [M[k], M[p]] = [M[p], M[k]]; for (let i = k + 1; i < n; i++) { const m = M[i][k] / M[k][k]; for (let j = k; j <= n; j++) M[i][j] -= m * M[k][j]; } } const X = new Array(n).fill(0); for (let i = n - 1; i >= 0; i--) { let s = M[i][n]; for (let j = i + 1; j < n; j++) s -= M[i][j] * X[j]; X[i] = s / M[i][i]; } return X; }
+function polyfit(pts, deg) { const n = deg + 1; const A = [], B = []; for (let i = 0; i < n; i++) { A.push([]); for (let j = 0; j < n; j++) A[i].push(pts.reduce((s, p) => s + Math.pow(p.x, i + j), 0)); B.push(pts.reduce((s, p) => s + Math.pow(p.x, i) * p.y, 0)); } return solveLinear(A, B).reverse(); }
+function polyval(c, x) { let y = 0; for (let i = 0; i < c.length; i++) y = y * x + c[i]; return y; }
+function rms(pts, f) { return Math.sqrt(pts.reduce((s, p) => s + Math.pow(f(p.x) - p.y, 2), 0) / pts.length); }
+const CODE_F5 = 'import numpy as np\n\n# --- Moindres carrés explicites ---\ndef reg_lin(X, Y):\n    n = len(X)\n    a = (n * np.sum(X*Y) - np.sum(X)*np.sum(Y)) / \\\n        (n * np.sum(X**2) - np.sum(X)**2)\n    b = (np.sum(Y) - a * np.sum(X)) / n\n    return a, b\n\n# --- Descente de gradient ---\ndef descente(X, Y, alpha=0.1, niter=1000):\n    a, b = 0.0, 0.0\n    n = len(X)\n    for _ in range(niter):\n        r = a*X + b - Y\n        a -= alpha * 2 * np.sum(X * r) / n\n        b -= alpha * 2 * np.sum(r) / n\n    return a, b\n\n# --- Ajustement polynomial (numpy) ---\ncoeffs = np.polyfit(X, Y, deg=2)   # [a2, a1, a0]\ny_mod = np.polyval(coeffs, X)';
+function mountF5(root) {
+  root.innerHTML = '<h2>Régression linéaire et polynomiale</h2>' +
+    '<p>On cherche à ajuster une droite θ<sub>g</sub> = a·λ + b (ou un polynôme) sur un nuage de points expérimentaux. Trois méthodes équivalentes : <b>moindres carrés</b> (résolution analytique), <b>descente de gradient</b> (itérative), <b>polynôme numpy</b> (degré quelconque).</p>' +
+    '<div class="fld"><span>Méthode</span><div id="f5-mode"></div></div>' +
+    '<div class="opts" id="f5-ctrl"></div>' +
+    '<div class="plot-wrap"><div id="f5-plot"></div></div>' +
+    '<div id="f5-stats"></div><div id="f5-note"></div>' +
+    codeBlock(CODE_F5);
+  if (!F5.pts) genPts();
+  $('#f5-mode').append(chipsRow([['mc', 'Moindres carrés'], ['grad', 'Descente de gradient'], ['poly', 'Polynôme']], F5.mode, k => { F5.mode = k; drawF5(); }));
+  drawF5();
+}
+function drawF5() {
+  const ctrl = $('#f5-ctrl'); ctrl.innerHTML = '';
+  let a, b, poly = null, subtitle = '';
+  if (F5.mode === 'mc') {
+    const opt = linreg(F5.pts);
+    a = F5.a; b = F5.b;
+    ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'a = <b>' + fmt(a, 2) + '</b>' }), h('input', { type: 'range', min: 0, max: 8, step: 0.1, value: String(a), oninput: e => { F5.a = +e.target.value; drawF5(); } })));
+    ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'b = <b>' + fmt(b, 2) + '</b>' }), h('input', { type: 'range', min: -2, max: 2, step: 0.1, value: String(b), oninput: e => { F5.b = +e.target.value; drawF5(); } })));
+    ctrl.append(h('button', { class: 'btn', type: 'button', onclick: () => { F5.a = opt.a; F5.b = opt.b; drawF5(); } }, 'Optimal : a=' + fmt(opt.a, 3) + ', b=' + fmt(opt.b, 3)));
+    subtitle = 'Ajustement manuel — optimal : a = ' + fmt(opt.a, 4) + ', b = ' + fmt(opt.b, 4);
+  } else if (F5.mode === 'grad') {
+    const R = gradDescent(F5.pts, F5.alpha, F5.niter);
+    a = R.a; b = R.b;
+    ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'α = <b>' + fmt(F5.alpha, 2) + '</b>' }), h('input', { type: 'range', min: 0.05, max: 2, step: 0.05, value: String(F5.alpha), oninput: e => { F5.alpha = +e.target.value; drawF5(); } })));
+    ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'Itérations = <b>' + F5.niter + '</b>' }), h('input', { type: 'range', min: 0, max: 100, step: 1, value: String(F5.niter), oninput: e => { F5.niter = +e.target.value; drawF5(); } })));
+    ctrl.append(h('button', { class: 'btn', type: 'button', onclick: () => { F5.a = 0; F5.b = 0; drawF5(); } }, 'Réinitialiser (0,0)'));
+    subtitle = 'Après ' + F5.niter + ' itérations : a = ' + fmt(a, 4) + ', b = ' + fmt(b, 4);
+  } else {
+    poly = polyfit(F5.pts, F5.deg);
+    ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'Degré = <b>' + F5.deg + '</b>' }), h('input', { type: 'range', min: 1, max: 4, step: 1, value: String(F5.deg), oninput: e => { F5.deg = +e.target.value; drawF5(); } })));
+    ctrl.append(h('div', { class: 'fld' }, h('span', null, 'Coefficients : '), h('code', null, poly.map(c => fmt(c, 3)).join(', '))));
+    subtitle = 'Degré ' + F5.deg + ' — coefficients (décroissants) : ' + poly.map(c => fmt(c, 3)).join(', ');
+  }
+  const pts = F5.pts;
+  const xmin = Math.min(...pts.map(p => p.x)), xmax = Math.max(...pts.map(p => p.x));
+  const ymin = Math.min(...pts.map(p => p.y)), ymax = Math.max(...pts.map(p => p.y));
+  const padY = (ymax - ymin) * 0.15 + 0.05;
+  const P = plot(640, 320, [xmin - 0.05, xmax + 0.05], [ymin - padY, ymax + padY]);
+  // nuage
+  pts.forEach(p => P.point(p.x, p.y, '#2e6da4', 4.5));
+  // ajustement
+  const fadj = poly ? (x => polyval(poly, x)) : (x => a * x + b);
+  P.polyline([[xmin, fadj(xmin)], [xmax, fadj(xmax)]], '#c0281f', 2.2);
+  $('#f5-plot').innerHTML = ''; $('#f5-plot').append(P.svg);
+  // stats
+  const opt = linreg(pts);
+  const err_adj = rms(pts, fadj);
+  $('#f5-stats').innerHTML = '';
+  $('#f5-stats').append(stats([
+    ['Mode', F5.mode === 'mc' ? 'Moindres carrés' : F5.mode === 'grad' ? 'Gradient' : 'Polynôme'],
+    ['a ajusté', fmt(poly ? poly[poly.length - 2] || 0 : a, 4)],
+    ['b ajusté', fmt(poly ? poly[poly.length - 1] : b, 4)],
+    ['RMS (erreur)', fmt(err_adj, 5)],
+    ['a optimal', fmt(opt.a, 4)],
+    ['b optimal', fmt(opt.b, 4)]
+  ]));
+  $('#f5-note').innerHTML = '';
+  if (F5.mode === 'mc') {
+    $('#f5-note').append(h('div', { class: 'verdict', html: 'Les <b>moindres carrés</b> donnent directement a = ' + fmt(opt.a, 4) + ', b = ' + fmt(opt.b, 4) + ' par formule explicite : <code>a = (n·Σxy − Σx·Σy)/(n·Σx² − (Σx)²)</code>.' }));
+  } else if (F5.mode === 'grad') {
+    const opt2 = linreg(pts);
+    const dist = Math.sqrt(Math.pow(a - opt2.a, 2) + Math.pow(b - opt2.b, 2));
+    $('#f5-note').append(h('div', { class: 'verdict', html: 'Après ' + F5.niter + ' itérations, (a, b) est à distance ' + fmt(dist, 4) + ' de l\'optimum. Augmentez α (sans dépasser) ou le nombre d\'itérations pour converger plus près.' }));
+  } else {
+    $('#f5-note').append(h('div', { class: 'verdict', html: 'Ajustement polynomial de degré ' + F5.deg + ' (via <code>np.polyfit</code>). Un degré plus élevé passe plus près des points mais risque de <b>sur-apprendre</b> (oscillations).' }));
+  }
+}
+
+/* ---- Enregistrement ---- */
 const LABS = [
-  { id: 'f1', title: 'f(x) = 0', hint: 'Dichotomie et Newton : réglez la tolérance ε et observez son effet sur le nombre d\'itérations.', mount: mountF1, leave: () => labStop('f1'), reset: () => { delete LAB_STATE.f1; } },
-  { id: 'f2', title: 'Système A·X = B', hint: 'Pivot de Gauss sur la matrice augmentée [A | B].', mount: mountF2, leave: () => {}, reset: () => { delete LAB_STATE.f2; } },
-  { id: 'f3', title: 'Équation différentielle', hint: 'Euler explicite : plus h est petit, plus l\'approximation est précise.', mount: mountF3, leave: () => {}, reset: () => {} },
-  { id: 'f4', title: 'Intégration et dérivation', hint: 'Rectangles (bleu), trapèzes (marron), schémas avant/arrière : comparez erreurs et ordres.', mount: mountF4, leave: () => {}, reset: () => {} }
+  { id: 'f0', title: 'Données (listes vs numpy)', hint: 'Comparer listes Python et tableaux numpy : lisibilité, performance, vectorisation.', mount: mountF0, leave: () => {}, reset: () => {} },
+  { id: 'f1', title: 'f(x) = 0', hint: 'Dichotomie et Newton ; réglez la tolérance ε pour observer son effet.', mount: mountF1, leave: () => labStop('f1'), reset: () => { delete LAB_STATE.f1; } },
+  { id: 'f2', title: 'Système A·X = B', hint: 'Pivot de Gauss avec pivot partiel.', mount: mountF2, leave: () => {}, reset: () => { delete LAB_STATE.f2; } },
+  { id: 'f3', title: 'Euler explicite', hint: 'Schéma d\'Euler, ordre 1, influence de h.', mount: mountF3, leave: () => {}, reset: () => {} },
+  { id: 'f4', title: 'Intégration et dérivation', hint: 'Rectangles, trapèzes, schémas avant/arrière.', mount: mountF4, leave: () => {}, reset: () => {} },
+  { id: 'f5', title: 'Régression (moindres carrés, gradient)', hint: 'Attelle genou / MaxPID : 3 méthodes d\'ajustement.', mount: mountF5, leave: () => {}, reset: () => { F5.pts = null; genPts(); } }
 ];
 LABS.forEach(lab => WORKSHOPS.push(lab));
 
-/* ---------- activités ---------- */
+/* ---- Activités ---- */
 const ACT = {
-  f1: {
-    title: 'Équation f(x) = 0', level: 'Niveau 1 · Découvrir', time: '30 min', course: 'equations',
-    goal: 'Comparer dichotomie et Newton : hypothèses, vitesse de convergence, rôle de la tolérance ε.',
+  f0: {
+    title: 'Données : listes vs numpy', level: 'Niveau 1 · Découvrir', time: '15 min', course: 'donnees',
+    goal: 'Choisir la bonne structure de données ; voir l\'avantage de la vectorisation numpy.',
     steps: [
-      'Avec f(x) = x² − 2 et la dichotomie sur [0 ; 2], avancez pas à pas. De combien la largeur de l\'intervalle diminue-t-elle à chaque itération ?',
-      'Réglez la tolérance ε = 10⁻⁶. À quelle itération l\'algorithme s\'arrête-t-il ? Relevez la largeur finale et l\'erreur. Essayez ε = 10⁻³ puis ε = 10⁻⁹ : comment évolue le nombre d\'itérations ?',
-      'Passez à la méthode de Newton avec x₀ = 2 et ε = 10⁻⁶. Combien d\'itérations pour atteindre la même précision ? Quel critère d\'arrêt est atteint ?',
-      'Changez de fonction (cos x − x, x³ − x − 1). La dichotomie s\'applique-t-elle toujours ? Que faut-il vérifier ?',
-      'Essayez Newton avec un mauvais point de départ (par exemple x₀ = 0 pour f(x) = x² − 2) : que se passe-t-il et pourquoi ?'
+      'Comparez le code listes et numpy pour l\'addition. Combien de lignes en moins avec numpy ?',
+      'Même question pour la racine carrée et le filtrage conditionnel.',
+      'Dans le tableau comparatif, quelle opération est impossible avec numpy ? Pourquoi ?',
+      'Quel est le type des éléments d\'un tableau numpy ? Et d\'une liste ?',
+      'En pratique : pour un nuage de 10 000 points avec moyenne et écart type, quelle structure choisir ?'
     ],
-    defi: { q: 'Sur [0 ; 2], combien d\'itérations de dichotomie faut-il pour garantir une largeur inférieure à 10⁻⁶ ? Et combien de Newton ?',
-      a: 'Dichotomie : la largeur vaut 2/2<sup>n</sup>. Il faut 2/2<sup>n</sup> ≤ 10⁻⁶, soit 2<sup>n</sup> ≥ 2·10⁶, donc n ≥ log₂(2·10⁶) ≈ 20,9 → <b>21 itérations</b> (à régler sur ε = 10⁻⁶ dans le paramètre de tolérance). Newton : à partir de x₀ = 2 sur x² − 2, l\'erreur est à peu près le carré de la précédente ; il suffit de <b>4 ou 5 itérations</b> pour atteindre 10⁻⁶ (convergence quadratique).' },
+    defi: { q: 'Vous avez 1 000 points et vous voulez calculer la moyenne, l\'écart type et le sinus de chaque point. Écrivez le code avec une liste, puis avec numpy. Combien de boucles dans chaque version ?',
+      a: 'Avec une <b>liste</b> : il faut 3 boucles explicites (moyenne, variance, sinus). Avec <b>numpy</b> : <code>np.mean(x)</code>, <code>np.std(x)</code>, <code>np.sin(x)</code> — aucune boucle, code 3× plus court et 10 à 100× plus rapide.' },
     qcm: [
-      { q: 'Quelle hypothèse est indispensable pour appliquer la dichotomie sur [a, b] ?', o: ['f est dérivable sur [a, b]', 'f(a) et f(b) sont de signes opposés', 'f est croissante sur [a, b]', 'f(a) = f(b)'], a: 1, w: 'Le théorème des valeurs intermédiaires garantit une racine dès que f change de signe : f(a)·f(b) &lt; 0.' },
-      { q: 'À chaque itération de la dichotomie, la largeur de l\'intervalle…', o: ['est divisée par 2', 'est divisée par 4', 'diminue de h', 'reste constante'], a: 0, w: 'On coupe l\'intervalle en deux et on garde la moitié qui contient le changement de signe : w<sub>n+1</sub> = w<sub>n</sub> / 2.' },
-      { q: 'L\'itération de Newton s\'écrit :', o: ['x<sub>n+1</sub> = x<sub>n</sub> + f(x<sub>n</sub>)/f\'(x<sub>n</sub>)', 'x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>)', 'x<sub>n+1</sub> = (a + b)/2', 'x<sub>n+1</sub> = f(x<sub>n</sub>)'], a: 1, w: 'C\'est l\'intersection de la tangente en (x<sub>n</sub>, f(x<sub>n</sub>)) avec l\'axe des abscisses : x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>).' },
-      { q: 'La convergence de la méthode de Newton est en général :', o: ['linéaire', 'quadratique (le nombre de chiffres exacts double à chaque pas)', 'constante', 'O(n²)'], a: 1, w: 'Au voisinage d\'une racine simple où f\' ne s\'annule pas, l\'erreur à l\'étape n+1 est de l\'ordre du carré de l\'erreur à l\'étape n.' },
-      { q: 'Le critère d\'arrêt |x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε signifie que :', o: ['on a atteint la racine exacte', 'les itérés ne bougent plus à ε près, ce qui est un bon indicateur de convergence', 'la fonction est nulle en x<sub>n+1</sub>', 'la méthode a échoué'], a: 1, w: 'On ne peut pas tester |x − x<sub>exact</sub>| (inconnu), donc on teste la stabilité des itérés. Pour Newton, |x<sub>n+1</sub> − x<sub>n</sub>| est aussi une estimation de l\'erreur.' }
+      { q: 'Quelle structure est la mieux adaptée au calcul numérique intensif ?', o: ['Liste Python', 'Tableau numpy', 'Tuple', 'Dictionnaire'], a: 1, w: 'Numpy est vectorisé (opérations C), typé, et optimisé mémoire.' },
+      { q: 'Que fait <code>u + 2</code> sur un <code>np.array</code> ?', o: ['Ajoute 2 au premier élément', 'Ajoute 2 à tous les éléments', 'Lève une erreur', 'Concatène'], a: 1, w: 'C\'est la vectorisation : l\'opération est appliquée à chaque élément.' },
+      { q: 'Peut-on faire <code>L.append(x)</code> sur un <code>np.array</code> ?', o: ['Oui, comme sur une liste', 'Non, la taille est fixe', 'Oui, mais c\'est lent', 'Seulement pour les entiers'], a: 1, w: 'Les tableaux numpy ont une taille fixe. On les crée avec la bonne taille, ou on utilise des fonctions spécifiques (concat, append) qui créent un nouveau tableau.' },
+      { q: 'Quelle opération est vectorisée en numpy ?', o: ['Filtrage conditionnel', 'Addition de deux tableaux', 'Sinus', 'Toutes les réponses ci-dessus'], a: 3, w: 'Toutes ces opérations existent en version vectorisée dans numpy.' }
     ]
   },
-  f2: {
-    title: 'Système A·X = B', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'systemes',
-    goal: 'Découvrir la méthode du pivot de Gauss sur la matrice augmentée [A | B].',
+  f1: { title: 'Équation f(x) = 0', level: 'Niveau 1 · Découvrir', time: '30 min', course: 'equations',
+    goal: 'Comparer dichotomie et Newton ; comprendre le rôle de la tolérance ε.',
     steps: [
-      'Avec le système 3×3 proposé, avancez pas à pas. Que fait-on lors de la première étape ?',
-      'Pourquoi choisit-on le plus grand coefficient en valeur absolue dans la colonne (pivot partiel) ?',
-      'Combien d\'éliminations faut-il pour obtenir une matrice triangulaire supérieure ?',
-      'À la fin, vérifiez la solution en la réinjectant dans le système d\'origine.',
-      'Sur le système 2×2, repérez les étapes : combien y a-t-il de pivots ?'
+      'Dichotomie sur x²−2, ε = 10⁻⁶. À quelle itération l\'algorithme s\'arrête-t-il ?',
+      'Essayez ε = 10⁻³ puis ε = 10⁻⁹ : comment évolue le nombre d\'itérations ?',
+      'Passez à Newton, x₀ = 2. Combien d\'itérations pour la même précision ?',
+      'Changez de fonction. La dichotomie s\'applique-t-elle toujours ?',
+      'Essayez Newton avec x₀ = 0 : que se passe-t-il ?'
     ],
-    defi: { q: 'Combien d\'opérations (multiplications et additions) fait l\'élimination de Gauss sur un système n×n ?',
-      a: 'Environ <b>2n³/3</b> opérations pour la descente et <b>n²</b> pour la remontée. C\'est le coût algorithmique standard ; pour n = 1000, cela fait de l\'ordre d\'un milliard d\'opérations — c\'est pourquoi on utilise des méthodes itératives pour les très grands systèmes.' },
+    defi: { q: 'Combien d\'itérations de dichotomie pour garantir une largeur < 10⁻⁶ sur [0, 2] ? Et de Newton ?',
+      a: 'Dichotomie : 2/2<sup>n</sup> ≤ 10⁻⁶ → n ≥ 21. Newton : environ <b>5 itérations</b> (convergence quadratique).' },
     qcm: [
-      { q: 'On résout A·X = B par Gauss. Que représente la matrice augmentée ?', o: ['La transposée de A', 'La matrice [A | B] : les colonnes de A, puis celle de B', 'L\'inverse de A', 'La matrice identité'], a: 1, w: 'On accole B à droite de A pour appliquer les mêmes combinaisons de lignes aux deux membres.' },
-      { q: 'Le pivot partiel consiste à :', o: ['diviser par le plus petit pivot', 'choisir le coefficient de plus grande valeur absolue dans la colonne', 'supprimer les lignes inutiles', 'trier la matrice'], a: 1, w: 'On échange la ligne courante avec celle qui a le plus grand |a<sub>ik</sub>| dans la colonne k : cela réduit les erreurs numériques (division par un nombre non minuscule).' },
-      { q: 'Le nombre d\'opérations pour un système n×n par Gauss est de l\'ordre de :', o: ['n', 'n²', 'n³', 'n log n'], a: 2, w: 'Chaque élimination sur une colonne coûte O(n²) et on en fait n, soit O(n³).' },
-      { q: 'Une fois la matrice triangulaire supérieure obtenue, on termine par :', o: ['une nouvelle élimination', 'la substitution remontante (back substitution)', 'un calcul de déterminant', 'rien, la solution est lue directement'], a: 1, w: 'On commence par la dernière ligne (x<sub>n</sub>), puis on remonte en utilisant les équations déjà résolues.' }
+      { q: 'Condition de la dichotomie sur [a, b] ?', o: ['f dérivable', 'f(a)·f(b) &lt; 0', 'f croissante', 'f(a) = f(b)'], a: 1, w: 'Changement de signe = existence d\'une racine (TV).' },
+      { q: 'À chaque itération de dichotomie, la largeur :', o: ['est divisée par 2', 'est divisée par 4', 'reste constante', 'double'], a: 0, w: 'w<sub>n+1</sub> = w<sub>n</sub>/2.' },
+      { q: 'Itération de Newton :', o: ['x + f/f\'', 'x − f/f\'', '(a+b)/2', 'f(x)'], a: 1, w: 'Intersection de la tangente avec l\'axe des abscisses.' },
+      { q: 'Convergence de Newton :', o: ['linéaire', 'quadratique', 'constante', 'O(n²)'], a: 1, w: 'Les chiffres exacts doublent à chaque pas (si on part près de la racine).' }
     ]
   },
-  f3: {
-    title: 'Équation différentielle', level: 'Niveau 2 · Comprendre', time: '25 min', course: 'euler',
-    goal: 'Comprendre le schéma d\'Euler explicite, son ordre 1 et l\'influence du pas h.',
-    steps: [
-      'Sur y\' = y, y(0) = 1, choisissez h = 0,5 puis h = 0,25. Comparez les courbes exacte et approchée.',
-      'Relevez l\'erreur en t = 2 pour h = 0,5, h = 0,25, h = 0,125. Que constatez-vous quand h est divisé par 2 ?',
-      'Avec y\' = −2y, recommencez. La décroissance est-elle bien reproduite avec un pas grossier ?',
-      'Essayez y\' = 1 + t − y, y(0) = 1 (solution t + e⁻ᵗ). L\'approximation est-elle au-dessus ou en dessous de la courbe exacte ?',
-      'Pourquoi Euler explicite est-il un schéma d\'ordre 1 ?'
-    ],
-    defi: { q: 'Sur y\' = y, y(0) = 1, on veut approcher y(2) à 10⁻³ près par Euler. Quel ordre de grandeur du pas h faut-il choisir ?',
-      a: 'L\'erreur globale est en O(h). Une estimation fine montre que l\'erreur en T = 2 est de l\'ordre de e²·h/2 ≈ 3,7·h. Pour avoir une erreur de 10⁻³, il faut h ≈ <b>2,7·10⁻⁴</b>, soit environ <b>7400 pas</b>. C\'est beaucoup : c\'est pourquoi on préfère des schémas d\'ordre supérieur (RK4) en pratique.' },
+  f2: { title: 'Système A·X = B', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'systemes',
+    goal: 'Découvrir le pivot de Gauss sur la matrice augmentée [A|B].',
+    steps: ['Que fait-on lors du premier tour ?', 'Pourquoi choisit-on le plus grand pivot ?', 'Combien d\'éliminations pour rendre triangulaire ?', 'Vérifiez la solution.', 'Sur le 2×2 : combien de pivots ?'],
+    defi: { q: 'Combien d\'opérations fait Gauss sur n×n ?', a: 'Environ <b>2n³/3</b> pour la descente, <b>n²</b> pour la remontée.' },
     qcm: [
-      { q: 'Le schéma d\'Euler explicite s\'écrit :', o: ['y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n+1</sub>)', 'y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>)', 'y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n+1</sub>, y<sub>n+1</sub>)', 'y<sub>n+1</sub> = f(t<sub>n</sub>, y<sub>n</sub>)'], a: 1, w: 'C\'est la méthode d\'Euler explicite : on utilise la pente au point courant (t<sub>n</sub>, y<sub>n</sub>) pour avancer d\'un pas h.' },
-      { q: 'L\'ordre de convergence globale d\'Euler explicite est :', o: ['1', '2', '3', '4'], a: 0, w: 'L\'erreur de troncature locale est O(h²) mais l\'erreur globale accumulée est O(h).' },
-      { q: 'Que se passe-t-il si h est trop grand ?', o: ['L\'approximation est meilleure', 'L\'approximation peut être très imprécise, voire instable', 'Rien ne change', 'La méthode devient exacte'], a: 1, w: 'Sur des équations raides (par exemple y\' = −100y), un h trop grand fait exploser la suite numérique.' },
-      { q: 'Quel avantage a le schéma d\'Euler explicite ?', o: ['Il est très précis', 'Il est très simple à implémenter (un seul appel à f par pas)', 'Il est toujours stable', 'Il est d\'ordre élevé'], a: 1, w: 'Euler explicite ne demande qu\'un appel à f par pas : c\'est le schéma le plus simple possible, mais d\'ordre 1 seulement.' }
+      { q: 'Matrice augmentée ?', o: ['Transposée', '[A | B]', 'A⁻¹', 'Identité'], a: 1, w: 'On accole B à droite.' },
+      { q: 'Pivot partiel ?', o: ['plus petit', 'plus grand en valeur absolue', 'premier', 'dernier'], a: 1, w: 'Réduit les erreurs numériques.' },
+      { q: 'Coût de Gauss ?', o: ['n', 'n²', 'n³', 'n log n'], a: 2, w: 'O(n³).' },
+      { q: 'Après triangulation :', o: ['éliminer encore', 'remonter', 'transposer', 'arrêter'], a: 1, w: 'Substitution remontante.' }
     ]
   },
-  f4: {
-    title: 'Intégration et dérivation', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'integration',
-    goal: 'Comparer les méthodes d\'intégration (rectangles, trapèzes) et de dérivation (avant / arrière / centrée), et estimer les ordres de convergence.',
-    steps: [
-      'En intégration, prenez f(x) = x² sur [0 ; 2], n = 4, méthode des trapèzes. Notez l\'erreur.',
-      'Doublez n (n = 8, puis 16). Comment évolue l\'erreur ? Quel est l\'ordre de la méthode ?',
-      'Passez aux rectangles à gauche. Comparez l\'erreur pour n = 4, 8, 16. L\'ordre est-il le même que pour les trapèzes ?',
-      'En dérivation, prenez f(x) = x² au point x₀ = 1. Comparez les schémas avant, arrière et centré pour h = 0,5 puis h = 0,1.',
-      'Pourquoi le schéma centré est-il plus précis que les schémas avant / arrière ?'
-    ],
-    defi: { q: 'Pour ∫₀^π sin x dx, combien de trapèzes (n) faut-il environ pour une erreur < 10⁻³ ?',
-      a: 'L\'erreur des trapèzes est majorée par (b − a)·h²·M/12, où M = max|f″|. Ici f″ = −sin x, donc M = 1. On a (π·(π/n)²)/12 ≈ 0,822/n². Pour avoir 0,822/n² < 10⁻³, il faut n² > 822, soit <b>n ≥ 29</b>. On atteint donc la précision demandée avec n = 30.' },
+  f3: { title: 'Euler explicite', level: 'Niveau 2 · Comprendre', time: '25 min', course: 'euler',
+    goal: 'Comprendre Euler, son ordre 1 et l\'influence de h.',
+    steps: ['y\' = y, h = 0,5 puis 0,25 : comparez les courbes.', 'Erreur en t = 2 ?', 'Diviser h par 2 : que fait l\'erreur ?', 'Essayez y\' = −2y avec h grossier.', 'Pourquoi Euler est d\'ordre 1 ?'],
+    defi: { q: 'Précision 10⁻³ sur y\'=y, y(0)=1, T=2 : quel h ?', a: 'Erreur ≈ e²·h/2. Pour 10⁻³ : h ≈ 2,7·10⁻⁴ (≈ 7400 pas).' },
     qcm: [
-      { q: 'La méthode des trapèzes est d\'ordre :', o: ['1', '2', '3', '4'], a: 1, w: 'L\'erreur globale est en O(h²) : diviser h par 2 divise l\'erreur par 4 environ.' },
-      { q: 'La méthode des rectangles (à gauche ou à droite) est d\'ordre :', o: ['1', '2', '3', '4'], a: 0, w: 'L\'erreur globale est O(h) : diviser h par 2 divise l\'erreur par 2 environ.' },
-      { q: 'Le schéma de dérivation centré s\'écrit :', o: ['(f(x+h) − f(x))/h', '(f(x) − f(x−h))/h', '(f(x+h) − f(x−h))/(2h)', '(f(x+h) + f(x))/h'], a: 2, w: 'C\'est le taux d\'accroissement symétrique : il est d\'ordre 2, contre 1 pour les schémas avant / arrière.' },
-      { q: 'Quand divise-t-on h par 2, l\'erreur du schéma centré est divisée par :', o: ['2', '4', '8', 'elle ne change pas'], a: 1, w: 'Schéma d\'ordre 2 : erreur O(h²), donc diviser h par 2 divise l\'erreur par 4.' }
+      { q: 'Euler explicite :', o: ['y_{n+1} = y_n + h·f(t_n, y_{n+1})', 'y_{n+1} = y_n + h·f(t_n, y_n)', 'y_{n+1} = f(t_n, y_n)', 'y_{n+1} = y_n + h'], a: 1, w: 'Pente au point courant.' },
+      { q: 'Ordre global ?', o: ['1', '2', '3', '4'], a: 0, w: 'O(h).' },
+      { q: 'Si h trop grand :', o: ['mieux', 'instable', 'rien', 'exact'], a: 1, w: 'Divergence possible sur systèmes raides.' },
+      { q: 'Avantage :', o: ['précis', 'simple (1 éval/pas)', 'stable', 'ordre élevé'], a: 1, w: 'Un appel à f par pas.' }
+    ]
+  },
+  f4: { title: 'Intégration et dérivation', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'integration',
+    goal: 'Comparer méthodes d\'intégration et de dérivation ; ordres de convergence.',
+    steps: ['Trapèzes, x², [0,2], n = 4 : erreur ?', 'n = 8, 16 : comment évolue ?', 'Rectangles à gauche : ordre ?', 'Dérivation centrée vs avant/arrière : erreur pour h = 0,5 ?', 'Pourquoi le centré est-il plus précis ?'],
+    defi: { q: 'Trapèzes pour ∫₀^π sin x dx avec erreur < 10⁻³ : combien de n ?', a: 'Erreur ≤ 0,822/n². Il faut n ≥ <b>29</b>.' },
+    qcm: [
+      { q: 'Trapèzes : ordre ?', o: ['1', '2', '3', '4'], a: 1, w: 'O(h²).' },
+      { q: 'Rectangles : ordre ?', o: ['1', '2', '3', '4'], a: 0, w: 'O(h).' },
+      { q: 'Dérivation centrée :', o: ['(f(x+h)−f(x))/h', '(f(x+h)−f(x−h))/(2h)', '(f(x)−f(x−h))/h', 'f(x+h)+f(x)'], a: 1, w: 'Symétrique, ordre 2.' },
+      { q: 'h/2 : erreur centrée divisée par ?', o: ['2', '4', '8', '1'], a: 1, w: 'Ordre 2 → facteur 4.' }
+    ]
+  },
+  f5: {
+    title: 'Régression linéaire et polynomiale', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'regression',
+    goal: 'Comprendre les 3 méthodes d\'ajustement et leur lien.',
+    steps: [
+      'Moindres carrés : faites varier a et b manuellement. Pouvez-vous égaler le RMS optimal ?',
+      'Cliquez "Optimal" : vérifiez que a ≈ 4,257 et b ≈ −0,299.',
+      'Passez à "Descente de gradient" : que se passe-t-il avec α = 0,05 ? avec α = 2 ?',
+      'Augmentez le nombre d\'itérations : le résultat converge-t-il vers l\'optimum ?',
+      'Passez à "Polynôme" degré 1 puis 2, 3. Le RMS baisse-t-il ? Est-ce toujours mieux ?'
+    ],
+    defi: { q: 'Pourquoi un polynôme de degré 4 peut-il avoir un RMS plus petit que degré 1, mais être un mauvais modèle ?',
+      a: 'Un degré élevé peut passer exactement par les points d\'entraînement (RMS → 0) mais <b>sur-apprend</b> : entre les points, il oscille fortement et généralise mal. En pratique on préfère un modèle simple qui capture la tendance (degré 1 en attelle, degré 2 en capteur non linéaire).' },
+    qcm: [
+      { q: 'Moindres carrés : quelle quantité minimise-t-on ?', o: ['Σ|y_i − (a x_i + b)|', 'Σ(y_i − (a x_i + b))²', 'max|y_i − (a x_i + b)|', 'Σ y_i'], a: 1, w: 'Somme des carrés des écarts (RMS × n).' },
+      { q: 'Descente de gradient : direction de mise à jour ?', o: ['celle du gradient', 'opposée au gradient', 'aléatoire', 'horizontale'], a: 1, w: 'On va dans le sens de la plus grande pente négative.' },
+      { q: 'Si α est trop grand, la descente de gradient :', o: ['converge plus vite', 'diverge ou oscille', 'ne change rien', 'devient exacte'], a: 1, w: 'Au-delà du seuil de stabilité, les itérés explosent.' },
+      { q: '<code>np.polyfit(x, y, deg=2)</code> renvoie :', o: ['les points ajustés', 'les coefficients [a2, a1, a0]', 'le RMS', 'la pente'], a: 1, w: 'Coefficients par degré décroissant.' }
     ]
   }
 };
 
-/* ---------- cours ---------- */
+/* ---- Cours ---- */
 const COURSE = [];
 COURSE.push({ id: 'notions', t: 'Notions générales', h: `
-<p>Résoudre <b>numériquement</b> un problème, c\'est en calculer une solution approchée à l\'aide d\'opérations élémentaires. On distingue les problèmes <b>directs</b> (intégration, dérivation) et les problèmes qui demandent une <b>itération</b> (équations, systèmes, équations différentielles).</p>
+<p>Résoudre <b>numériquement</b> un problème : en calculer une solution approchée par opérations élémentaires. Deux grands types : problèmes <b>directs</b> (intégration, dérivation) et problèmes <b>itératifs</b> (équations, systèmes, EDO).</p>
 <h3>Erreur</h3>
-<p>Soit x la valeur exacte et x̃ la valeur approchée. On définit :</p>
-<div class="formula">erreur absolue = |x̃ − x| &nbsp;&nbsp;·&nbsp;&nbsp; erreur relative = |x̃ − x| / |x| (si x ≠ 0)</div>
-<p>En pratique on ne connaît pas x : on majore l\'erreur par une quantité calculable (largeur d\'un intervalle, écart entre deux itérés, estimation théorique). C\'est exactement le rôle de la <b>tolérance ε</b> : on choisit un seuil que l\'on sait atteindre sans connaître la solution exacte.</p>
-<h3>Critère d\'arrêt</h3>
-<p>Un algorithme itératif s\'arrête quand l\'une des conditions suivantes est réalisée :</p>
+<div class="formula">erreur absolue = |x̃ − x| &nbsp;·&nbsp; erreur relative = |x̃ − x| / |x|</div>
+<h3>Critère d'arrêt</h3>
+<p>Un algorithme itératif s'arrête quand l'une de ces conditions est satisfaite :</p>
 <ul>
-<li>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε : les itérés ne bougent plus (indicateur de convergence) ;</li>
-<li>|f(x<sub>n</sub>)| &lt; ε : la valeur de f est presque nulle ;</li>
-<li>|b − a| &lt; ε : l\'intervalle d\'encadrement est plus petit que ε (dichotomie) ;</li>
-<li>n atteint N_max : garde-fou pour éviter une boucle infinie.</li>
+<li>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε (itérés stables) ;</li>
+<li>|f(x<sub>n</sub>)| &lt; ε (f presque nulle) ;</li>
+<li>|b − a| &lt; ε (intervalle d'encadrement) ;</li>
+<li>n atteint N_max (garde-fou).</li>
 </ul>
-<h3>Convergence et ordre</h3>
-<p>Une suite (x<sub>n</sub>) converge vers x avec un ordre p s\'il existe C &gt; 0 telle que |x<sub>n+1</sub> − x| ≤ C·|x<sub>n</sub> − x|<sup>p</sup> pour n assez grand.</p>
+<h3>Ordre de convergence</h3>
+<p>|x<sub>n+1</sub> − x| ≤ C·|x<sub>n</sub> − x|<sup>p</sup>. Ordre 1 = linéaire, ordre 2 = quadratique.</p>
+<div class="retain"><b>À retenir.</b> ε = critère d'arrêt. Plus ε est petite, plus le résultat est précis, plus le nombre d'itérations est grand.</div>` });
+
+COURSE.push({ id: 'donnees', t: 'Stockage des données : listes vs numpy', h: `
+<p>En SII, on manipule des séries de mesures. Le choix de la structure a un impact important.</p>
+<h3>Listes Python</h3>
 <ul>
-<li><b>Ordre 1</b> (linéaire) : le nombre de chiffres exacts augmente d\'un nombre constant à chaque pas. Exemple : dichotomie, méthode d\'Euler.</li>
-<li><b>Ordre 2</b> (quadratique) : le nombre de chiffres exacts double à chaque pas. Exemple : méthode de Newton.</li>
-<li><b>Ordre supérieur</b> : schémas de Runge-Kutta, Simpson.</li>
+<li>Dynamiques : on peut ajouter (<code>append</code>), supprimer (<code>pop</code>), insérer (<code>insert</code>).</li>
+<li>Hétérogènes : peuvent contenir des types différents.</li>
+<li>Lentes pour le calcul numérique (boucle obligatoire).</li>
 </ul>
-<div class="retain"><b>À retenir.</b> La tolérance ε est le critère d\'arrêt pratique d\'un algorithme itératif : plus ε est petite, plus le résultat est précis, mais plus le nombre d\'itérations est grand.</div>` });
+<pre class="code">L = [1.2, 3.4, 5.6]
+L.append(7.8)
+L[1]                 # accès
+L[1] = 9.9           # modification</pre>
+<h3>Tableaux numpy</h3>
+<ul>
+<li>Statiques : taille fixée à la création.</li>
+<li>Homogènes : tous les éléments du même type (<code>float64</code>).</li>
+<li>Vectorisés : <code>u + v</code>, <code>np.sin(u)</code>, <code>u[u &gt; 3]</code> sans boucle.</li>
+<li>Optimisés pour le calcul numérique.</li>
+</ul>
+<pre class="code">import numpy as np
+t = np.array([1.2, 3.4, 5.6])
+t + 2                # vectorisé
+np.sin(t)            # vectorisé
+t[t &gt; 3]            # filtrage</pre>
+<h3>Tableau comparatif</h3>
+<table class="ctable"><thead><tr><th>Opération</th><th>Liste</th><th>numpy</th></tr></thead><tbody>
+<tr><td>Accès</td><td>O(1)</td><td>O(1)</td></tr>
+<tr><td>Ajout en fin</td><td>O(1)</td><td>impossible</td></tr>
+<tr><td>Produit terme à terme</td><td>boucle</td><td><code>u * v</code></td></tr>
+<tr><td>Moyenne / sinus</td><td>boucle</td><td><code>np.mean</code>, <code>np.sin</code></td></tr>
+<tr><td>Filtrage</td><td>boucle + if</td><td><code>u[u &gt; 3]</code></td></tr>
+</tbody></table>
+<div class="retain"><b>À retenir.</b> Listes pour petites séries dynamiques ; numpy pour tout calcul numérique.</div>` });
 
 COURSE.push({ id: 'equations', t: 'Équation f(x) = 0', h: `
-<p>On cherche x tel que f(x) = 0. Deux méthodes classiques s\'appliquent sous des hypothèses différentes.</p>
 <h3>Dichotomie</h3>
-<p><b>Hypothèse :</b> f continue sur [a, b] et f(a)·f(b) &lt; 0.</p>
+<p><b>Hypothèse :</b> f continue, f(a)·f(b) &lt; 0.</p>
 <pre class="code">def dichotomie(f, a, b, eps):
     while b - a &gt; eps:
         m = (a + b) / 2
-        if f(a) * f(m) &lt;= 0:
-            b = m
-        else:
-            a = m
+        if f(a) * f(m) &lt;= 0: b = m
+        else: a = m
     return (a + b) / 2</pre>
-<ul>
-<li>La largeur de l\'intervalle est divisée par 2 à chaque itération : après n pas, w<sub>n</sub> = (b − a)/2<sup>n</sup>.</li>
-<li>Il faut donc environ <b>log₂((b − a)/ε)</b> itérations pour une précision ε. C\'est très lent mais infaillible.</li>
-<li>Critère d\'arrêt typique : <b>b − a &lt; ε</b>.</li>
-<li>Convergence <b>linéaire</b> (ordre 1).</li>
-</ul>
-<h3>Méthode de Newton</h3>
-<p><b>Hypothèse :</b> f dérivable et f\' ne s\'annule pas au voisinage de la racine, x₀ « assez proche ».</p>
+<ul><li>Largeur divisée par 2 à chaque pas.</li><li>Environ <b>log₂((b−a)/ε)</b> itérations.</li><li>Convergence <b>linéaire</b>.</li></ul>
+<h3>Newton</h3>
+<p><b>Hypothèse :</b> f dérivable, f\' ≠ 0 près de la racine, x₀ proche.</p>
 <pre class="code">def newton(f, fp, x0, eps, N=50):
     x = x0
     for _ in range(N):
-        if abs(f(x)) &lt; eps:
-            return x
+        if abs(f(x)) &lt; eps: return x
         x = x - f(x) / fp(x)
     return x</pre>
-<p>Interprétation géométrique : on remplace la courbe par sa tangente au point (x<sub>n</sub>, f(x<sub>n</sub>)), et on prend l\'abscisse de l\'intersection de cette tangente avec l\'axe des abscisses.</p>
 <div class="formula">x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>)</div>
-<ul>
-<li>Convergence <b>quadratique</b> quand on part près de la racine : les chiffres exacts doublent à chaque itération.</li>
-<li>Critères d\'arrêt typiques : <b>|f(x<sub>n</sub>)| &lt; ε</b> ou <b>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε</b>.</li>
-<li>Très rapide, mais fragile : si f\'(x<sub>n</sub>) ≈ 0 ou si x₀ est mal choisi, la méthode peut diverger ou osciller.</li>
-</ul>
-<div class="retain"><b>À retenir.</b> Dichotomie : robuste mais lente (log₂). Newton : rapide (quadratique) mais locale — il faut un bon point de départ et f\'. La tolérance ε règle la précision et le coût.</div>` });
+<ul><li>Convergence <b>quadratique</b> (chiffres exacts doublés à chaque pas).</li><li>Peut diverger si x₀ est mal choisi.</li></ul>
+<div class="retain"><b>À retenir.</b> Dichotomie : robuste, lente. Newton : rapide, locale.</div>` });
 
-COURSE.push({ id: 'systemes', t: 'Système linéaire A·X = B', h: `
-<p>On cherche un vecteur X tel que A·X = B, où A est une matrice n×n et B un vecteur colonne. Si A est inversible, la solution est unique.</p>
-<h3>Méthode du pivot de Gauss</h3>
-<p>On écrit la <b>matrice augmentée</b> [A | B] et on effectue des combinaisons de lignes pour la rendre triangulaire supérieure, puis on remonte par substitution.</p>
+COURSE.push({ id: 'systemes', t: 'Système A·X = B', h: `
+<h3>Pivot de Gauss</h3>
+<p>On écrit [A | B] et on effectue des combinaisons de lignes pour rendre A triangulaire supérieure, puis on remonte.</p>
 <pre class="code">def gauss(A, B):
     n = len(A)
     M = [row[:] + [B[i]] for i, row in enumerate(A)]
@@ -832,21 +774,15 @@ COURSE.push({ id: 'systemes', t: 'Système linéaire A·X = B', h: `
         X[i] = s / M[i][i]
     return X</pre>
 <h3>Pivot partiel</h3>
-<p>À l\'étape k, on choisit la ligne i dont le coefficient |a<sub>ik</sub>| est maximal, et on l\'échange avec la ligne k. Cela évite de diviser par un nombre très petit, ce qui amplifierait les erreurs d\'arrondi.</p>
+<p>Choisir le coefficient de plus grande valeur absolue dans la colonne. Évite les divisions par de petits nombres.</p>
 <h3>Coût</h3>
-<p>La descente coûte de l\'ordre de <b>2n³/3</b> opérations, la remontée n².</p>
-<h3>Cas pathologiques</h3>
-<ul>
-<li>Si A est <b>singulière</b> (déterminant nul), la méthode échoue (division par zéro).</li>
-<li>Si A est presque singulière, la solution est très sensible aux erreurs : on parle de <b>mauvais conditionnement</b>.</li>
-</ul>
-<div class="retain"><b>À retenir.</b> Gauss : O(n³), pivot partiel indispensable, remontée en O(n²). En Python, <code>numpy.linalg.solve</code> fait cela pour vous.</div>` });
+<p>≈ 2n³/3 pour la descente, n² pour la remontée.</p>
+<div class="retain"><b>À retenir.</b> Gauss = O(n³), pivot partiel indispensable.</div>` });
 
-COURSE.push({ id: 'euler', t: 'Équations différentielles : Euler', h: `
-<p>Un problème de Cauchy s\'écrit : trouver y(t) telle que</p>
-<div class="formula">y\'(t) = f(t, y(t)), &nbsp; y(t₀) = y₀</div>
-<p>Le schéma d\'<b>Euler explicite</b> discrétise le temps en pas h et calcule y<sub>n+1</sub> à partir de y<sub>n</sub> :</p>
-<div class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(t<sub>n</sub>, y<sub>n</sub>), &nbsp; t<sub>n</sub> = t₀ + n·h</div>
+COURSE.push({ id: 'euler', t: 'Équation différentielle : Euler', h: `
+<p>Problème de Cauchy : y\'(t) = f(t, y(t)), y(t₀) = y₀.</p>
+<h3>Schéma d'Euler explicite</h3>
+<div class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(t<sub>n</sub>, y<sub>n</sub>)</div>
 <pre class="code">def euler(f, t0, y0, T, h):
     n = int(round((T - t0) / h))
     t, y = t0, y0
@@ -856,29 +792,17 @@ COURSE.push({ id: 'euler', t: 'Équations différentielles : Euler', h: `
         t = t + h
         T_list.append(t); Y_list.append(y)
     return T_list, Y_list</pre>
-<h3>Interprétation</h3>
-<p>Sur chaque intervalle [t<sub>n</sub>, t<sub>n+1</sub>], on remplace la courbe solution par sa tangente au point (t<sub>n</sub>, y<sub>n</sub>).</p>
 <h3>Ordre et erreur</h3>
-<ul>
-<li>Erreur de troncature <b>locale</b> : O(h²).</li>
-<li>Erreur <b>globale</b> sur [t₀, T] : O(h) — la méthode est d\'ordre 1.</li>
-<li>Doubler le nombre de pas divise l\'erreur par 2 environ.</li>
-</ul>
+<ul><li>Erreur locale : O(h²).</li><li>Erreur globale : O(h) — ordre 1.</li></ul>
 <h3>Limites</h3>
-<ul>
-<li><b>Stabilité :</b> pour une équation raide (y\' = −100y par exemple), un h trop grand rend la suite instable.</li>
-<li><b>Précision :</b> pour une grande précision, il faut un h très petit, ce qui coûte cher.</li>
-<li>On préfère en pratique des méthodes d\'ordre supérieur (Runge-Kutta 4, ordre 4).</li>
-</ul>
-<div class="retain"><b>À retenir.</b> Euler explicite : une ligne de code, ordre 1, instable si h trop grand. C\'est le point de départ pour comprendre les schémas numériques.</div>` });
+<ul><li>Instable si h trop grand (équations raides).</li><li>Peu précis : préférer RK4 en pratique.</li></ul>
+<div class="retain"><b>À retenir.</b> Euler : simple, ordre 1, attention au choix de h.</div>` });
 
 COURSE.push({ id: 'integration', t: 'Intégration et dérivation numériques', h: `
 <h3>Intégration</h3>
-<p>On approche ∫ₐᵇ f(x) dx en découpant [a, b] en n sous-intervalles de largeur h = (b − a)/n et en approchant f sur chaque morceau.</p>
-<table class="ctable"><thead><tr><th>Méthode</th><th>Formule sur [x<sub>i</sub>, x<sub>i+1</sub>]</th><th>Erreur globale</th></tr></thead><tbody>
-<tr><td>Rectangle à gauche</td><td>h · f(x<sub>i</sub>)</td><td>O(h)</td></tr>
-<tr><td>Rectangle à droite</td><td>h · f(x<sub>i+1</sub>)</td><td>O(h)</td></tr>
-<tr><td>Point milieu</td><td>h · f((x<sub>i</sub> + x<sub>i+1</sub>)/2)</td><td>O(h²)</td></tr>
+<table class="ctable"><thead><tr><th>Méthode</th><th>Formule</th><th>Ordre</th></tr></thead><tbody>
+<tr><td>Rectangles (G/D)</td><td>h · f(x<sub>i</sub>)</td><td>O(h)</td></tr>
+<tr><td>Point milieu</td><td>h · f((x<sub>i</sub>+x<sub>i+1</sub>)/2)</td><td>O(h²)</td></tr>
 <tr><td>Trapèzes</td><td>h/2 · (f(x<sub>i</sub>) + f(x<sub>i+1</sub>))</td><td>O(h²)</td></tr>
 </tbody></table>
 <pre class="code">def trapezes(f, a, b, n):
@@ -887,104 +811,97 @@ COURSE.push({ id: 'integration', t: 'Intégration et dérivation numériques', h
     for i in range(n):
         s += (f(a + i*h) + f(a + (i+1)*h)) / 2 * h
     return s</pre>
-<h3>Dérivation numérique</h3>
-<table class="ctable"><thead><tr><th>Schéma</th><th>Formule</th><th>Erreur</th></tr></thead><tbody>
-<tr><td>Avant</td><td>(f(x + h) − f(x)) / h</td><td>O(h)</td></tr>
-<tr><td>Arrière</td><td>(f(x) − f(x − h)) / h</td><td>O(h)</td></tr>
-<tr><td>Centré</td><td>(f(x + h) − f(x − h)) / (2h)</td><td>O(h²)</td></tr>
+<h3>Dérivation</h3>
+<table class="ctable"><thead><tr><th>Schéma</th><th>Formule</th><th>Ordre</th></tr></thead><tbody>
+<tr><td>Avant</td><td>(f(x+h) − f(x))/h</td><td>O(h)</td></tr>
+<tr><td>Arrière</td><td>(f(x) − f(x−h))/h</td><td>O(h)</td></tr>
+<tr><td>Centré</td><td>(f(x+h) − f(x−h))/(2h)</td><td>O(h²)</td></tr>
 </tbody></table>
-<p>Attention : si h est trop petit, les erreurs d\'arrondi dominent et l\'erreur augmente. Il existe un <b>h optimal</b> (souvent autour de 10⁻⁸ en double précision).</p>
-<div class="retain"><b>À retenir.</b> Intégration : trapèzes et point milieu en O(h²), rectangles en O(h). Dérivation : centré O(h²), avant/arrière O(h).</div>` });
+<div class="retain"><b>À retenir.</b> Trapèzes et point milieu en O(h²) ; rectangles en O(h). Dérivation : centrée O(h²).</div>` });
 
-COURSE.push({ id: 'bilan', t: 'Bilan comparatif', h: `
-<table class="ctable"><thead><tr><th>Problème</th><th>Méthode</th><th>Ordre / coût</th><th>Critère d\'arrêt</th><th>Hypothèses</th></tr></thead><tbody>
-<tr><td rowspan="2">f(x) = 0</td><td>Dichotomie</td><td>Ordre 1, ≈ log₂((b−a)/ε) itérations</td><td>b − a &lt; ε</td><td>f continue, f(a)·f(b) &lt; 0</td></tr>
-<tr><td>Newton</td><td>Ordre 2, 1 éval. de f et f\' par pas</td><td>|f(x)| &lt; ε ou |Δx| &lt; ε</td><td>f dérivable, f\' ≠ 0, x₀ proche</td></tr>
-<tr><td>A·X = B</td><td>Gauss + pivot partiel</td><td>≈ 2n³/3 opérations</td><td>—</td><td>A inversible</td></tr>
-<tr><td>y\' = f(t, y)</td><td>Euler explicite</td><td>Ordre 1, 1 éval. de f par pas</td><td>h choisi a priori</td><td>f lipschitzienne, h assez petit</td></tr>
-<tr><td>∫ₐᵇ f</td><td>Trapèzes / point milieu</td><td>O(h²)</td><td>—</td><td>f régulière (C²)</td></tr>
-<tr><td>f\'(x)</td><td>Centré</td><td>O(h²)</td><td>—</td><td>f de classe C³</td></tr>
-</tbody></table>
-<h3>Que choisir ?</h3>
+COURSE.push({ id: 'regression', t: 'Régression linéaire et polynomiale', h: `
+<p>On cherche les paramètres (a, b) d'un modèle linéaire y = a·x + b qui minimisent l'écart aux mesures (x<sub>k</sub>, y<sub>k</sub>).</p>
+<h3>Moindres carrés</h3>
+<div class="formula">Q(a, b) = Σ<sub>k=1</sub><sup>n</sup> (y<sub>k</sub> − a·x<sub>k</sub> − b)²</div>
+<p>On annule les dérivées partielles ∂Q/∂a et ∂Q/∂b. On obtient :</p>
+<div class="formula">a = (n·Σx<sub>k</sub>y<sub>k</sub> − Σx<sub>k</sub>·Σy<sub>k</sub>) / (n·Σx<sub>k</sub>² − (Σx<sub>k</sub>)²)</div>
+<div class="formula">b = (Σy<sub>k</sub> − a·Σx<sub>k</sub>) / n</div>
+<pre class="code">def reg_lin(X, Y):
+    n = len(X)
+    a = (n * np.sum(X*Y) - np.sum(X)*np.sum(Y)) / \\
+        (n * np.sum(X**2) - np.sum(X)**2)
+    b = (np.sum(Y) - a * np.sum(X)) / n
+    return a, b</pre>
+<p>C'est la solution la plus rapide (formule explicite), utilisée pour l'attelle de genou : θ<sub>g</sub> = a·λ + b.</p>
+<h3>Descente de gradient</h3>
+<p>Méthode <b>itérative</b> qui ne nécessite pas de formule fermée. On part de (a₀, b₀) et on itère :</p>
+<div class="formula">a<sup>(k+1)</sup> = a<sup>(k)</sup> − α · (2/n) · Σ x<sub>i</sub>(a<sup>(k)</sup>x<sub>i</sub> + b<sup>(k)</sup> − y<sub>i</sub>)</div>
+<div class="formula">b<sup>(k+1)</sup> = b<sup>(k)</sup> − α · (2/n) · Σ (a<sup>(k)</sup>x<sub>i</sub> + b<sup>(k)</sup> − y<sub>i</sub>)</div>
+<pre class="code">def descente(X, Y, alpha=0.1, niter=1000):
+    a, b = 0.0, 0.0
+    n = len(X)
+    for _ in range(niter):
+        r = a*X + b - Y
+        a -= alpha * 2 * np.sum(X * r) / n
+        b -= alpha * 2 * np.sum(r) / n
+    return a, b</pre>
 <ul>
-<li><b>Racine d\'une équation</b> : dichotomie si on n\'a que f et un intervalle ; Newton si on a f\' et un bon point de départ.</li>
-<li><b>Système linéaire</b> : Gauss (ou <code>numpy.linalg.solve</code>) pour les systèmes denses de taille raisonnable.</li>
-<li><b>Équation différentielle</b> : Euler pour comprendre ; RK4 ou solveur adaptatif en pratique.</li>
-<li><b>Intégrale</b> : trapèzes ou Simpson selon la régularité et la précision voulue.</li>
+<li><b>α</b> est le <b>taux d'apprentissage</b> : trop petit → convergence lente ; trop grand → divergence ou oscillations.</li>
+<li>Cette méthode se généralise à des modèles non linéaires (réseaux de neurones, etc.).</li>
 </ul>
-<div class="retain"><b>À retenir.</b> Il n\'y a pas de méthode universelle : on choisit en fonction de la <b>régularité</b> de f, du <b>coût</b> acceptable et de la <b>précision</b> visée (tolérance ε).</div>` });
+<h3>Ajustement polynomial (numpy)</h3>
+<p>Pour un polynôme de degré m :</p>
+<pre class="code">coeffs = np.polyfit(X, Y, deg=2)   # [a2, a1, a0]
+y_mod = np.polyval(coeffs, X)</pre>
+<p>Attention au <b>sur-apprentissage</b> : un degré trop élevé passe par tous les points mais oscille entre.</p>
+<div class="retain"><b>À retenir.</b> Moindres carrés = formule explicite rapide. Descente de gradient = itérative, généralisable. Polynomial = <code>np.polyfit</code>. Toujours vérifier le RMS et le bon sens physique.</div>` });
 
 COURSE.push({ id: 'gloss', t: 'Vocabulaire', h: `
 <dl class="gloss">
-<dt>Méthode numérique</dt><dd>Algorithme qui calcule une solution approchée d\'un problème mathématique.</dd>
-<dt>Itération</dt><dd>Un pas d\'un calcul répété ; on note x<sub>n</sub> la valeur à l\'étape n.</dd>
-<dt>Tolérance ε</dt><dd>Seuil à partir duquel on considère que la solution est suffisamment précise ; sert de critère d\'arrêt.</dd>
-<dt>Convergence</dt><dd>Propriété d\'une suite (x<sub>n</sub>) qui tend vers la solution x.</dd>
-<dt>Ordre de convergence</dt><dd>Entier p tel que l\'erreur à l\'étape n+1 soit majorée par C·(erreur à l\'étape n)<sup>p</sup>.</dd>
-<dt>Critère d\'arrêt</dt><dd>Condition qui fait sortir d\'une boucle itérative (|f(x)| &lt; ε, |Δx| &lt; ε, etc.).</dd>
-<dt>Erreur de troncature</dt><dd>Erreur due à l\'approximation de la formule exacte.</dd>
-<dt>Erreur d\'arrondi</dt><dd>Erreur due à la représentation finie des nombres en machine.</dd>
-<dt>Dichotomie</dt><dd>Méthode de recherche de racine par division de l\'intervalle en deux.</dd>
-<dt>Méthode de Newton</dt><dd>Itération x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>), basée sur la tangente.</dd>
-<dt>Pivot de Gauss</dt><dd>Méthode d\'élimination pour résoudre un système linéaire.</dd>
-<dt>Pivot partiel</dt><dd>Choix du plus grand coefficient en valeur absolue dans la colonne pour limiter les erreurs.</dd>
-<dt>Matrice augmentée</dt><dd>Matrice [A | B] obtenue en accolant le second membre B à la matrice A.</dd>
-<dt>Substitution remontante</dt><dd>Résolution d\'un système triangulaire en partant de la dernière équation.</dd>
-<dt>Euler explicite</dt><dd>Schéma y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>) pour les équations différentielles.</dd>
-<dt>Pas (h)</dt><dd>Écart entre deux points successifs de la discrétisation.</dd>
-<dt>Schéma d\'ordre p</dt><dd>Schéma dont l\'erreur globale est en O(h<sup>p</sup>).</dd>
+<dt>Méthode numérique</dt><dd>Algorithme qui calcule une solution approchée.</dd>
+<dt>Tolérance ε</dt><dd>Seuil d'arrêt d'un algorithme itératif.</dd>
+<dt>Ordre p</dt><dd>Erreur en O(h<sup>p</sup>).</dd>
+<dt>Dichotomie</dt><dd>Recherche de racine par division par 2.</dd>
+<dt>Newton</dt><dd>Itération x<sub>n+1</sub> = x<sub>n</sub> − f/f\'.</dd>
+<dt>Gauss</dt><dd>Élimination pour systèmes linéaires.</dd>
+<dt>Euler explicite</dt><dd>y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>).</dd>
+<dt>Trapèzes</dt><dd>Intégration par aires trapézoïdales.</dd>
+<dt>Moindres carrés</dt><dd>Ajustement linéaire par formule explicite.</dd>
+<dt>Descente de gradient</dt><dd>Ajustement itératif par pas proportionnels au gradient.</dd>
+<dt>np.polyfit</dt><dd>Ajustement polynomial numpy.</dd>
+<dt>Vectorisation</dt><dd>Opérations numpy appliquées simultanément à tous les éléments.</dd>
 </dl>` });
 
-/* ---------- interface ---------- */
-const UI = { cur: 'f1' };
-const AS = { key: 'f1', tab: 'steps', open: false, st: lsGet(KEYS.act, {}), arm: null };
+/* ---- Interface ---- */
+const UI = { cur: 'f0' };
+const AS = { key: 'f0', tab: 'steps', open: false, st: lsGet(KEYS.act, {}), arm: null };
 const CS = { open: false, id: 'notions' };
 function actSave() { lsSet(KEYS.act, AS.st); }
 function actState() { return AS.st[AS.key] || (AS.st[AS.key] = { a: {}, checked: false, shown: false }); }
 function actScore(a) { const s = actState(); return a.qcm.filter((q, i) => s.a[i] === q.a).length; }
 function wsById(id) { return WORKSHOPS.find(w => w.id === id) || WORKSHOPS[0]; }
-function renderSeg() {
-  const seg = $('#wsSeg'); seg.innerHTML = '';
-  WORKSHOPS.forEach((w, i) => seg.append(h('button', { type: 'button', role: 'tab', 'aria-pressed': w.id === UI.cur ? 'true' : 'false', 'aria-selected': w.id === UI.cur ? 'true' : 'false', onclick: () => gotoWs(w.id) }, (i + 1) + '. ' + w.title)));
-}
-function mountWs() {
-  const w = wsById(UI.cur), root = $('#ws');
-  $('#hint').textContent = w.hint; root.innerHTML = '';
-  w.mount(root);
-  const sc = $('#scroller'); if (sc) sc.scrollTop = 0;
-}
-function gotoWs(id) {
-  const old = wsById(UI.cur); if (old.leave) old.leave();
-  if (CS.open) { CS.open = false; renderCourse(); }
-  UI.cur = id; AS.key = id; AS.tab = 'steps';
-  renderSeg(); mountWs(); renderAct();
-}
+function renderSeg() { const seg = $('#wsSeg'); seg.innerHTML = ''; WORKSHOPS.forEach((w, i) => seg.append(h('button', { type: 'button', role: 'tab', 'aria-pressed': w.id === UI.cur ? 'true' : 'false', onclick: () => gotoWs(w.id) }, (i + 1) + '. ' + w.title))); }
+function mountWs() { const w = wsById(UI.cur), root = $('#ws'); $('#hint').textContent = w.hint; root.innerHTML = ''; w.mount(root); $('#scroller').scrollTop = 0; }
+function gotoWs(id) { const old = wsById(UI.cur); if (old.leave) old.leave(); if (CS.open) { CS.open = false; renderCourse(); } UI.cur = id; AS.key = id; AS.tab = 'steps'; renderSeg(); mountWs(); renderAct(); }
 function renderAct() {
   const box = $('#act'), btn = $('#bAct');
   btn.setAttribute('aria-pressed', AS.open ? 'true' : 'false'); btn.classList.toggle('pri', AS.open);
-  box.hidden = !AS.open;
-  if (!AS.open) { box.innerHTML = ''; return; }
+  box.hidden = !AS.open; if (!AS.open) { box.innerHTML = ''; return; }
   const oldB = box.querySelector('.pbody'), tag = AS.key + '|' + AS.tab, keep = oldB && box.dataset.k === tag ? oldB.scrollTop : 0;
-  box.dataset.k = tag;
-  box.innerHTML = '';
+  box.dataset.k = tag; box.innerHTML = '';
   const a = ACT[AS.key];
-  const close = h('button', { class: 'btn sm', type: 'button', onclick: () => { AS.open = false; renderAct(); } }, 'Fermer');
-  box.append(h('div', { class: 'phead' }, h('b', null, 'Activité'), h('span', { class: 'sub' }, a.title), close));
+  box.append(h('div', { class: 'phead' }, h('b', null, 'Activité'), h('span', { class: 'sub' }, a.title), h('button', { class: 'btn sm', onclick: () => { AS.open = false; renderAct(); } }, 'Fermer')));
   const nq = a.qcm.length;
   box.append(h('div', { class: 'tabs', role: 'tablist' },
     h('button', { type: 'button', role: 'tab', 'aria-selected': AS.tab === 'steps' ? 'true' : 'false', onclick: () => { AS.tab = 'steps'; renderAct(); } }, 'Consignes'),
     h('button', { type: 'button', role: 'tab', 'aria-selected': AS.tab === 'qcm' ? 'true' : 'false', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Questions (' + nq + ')')));
   const body = h('div', { class: 'pbody' });
   if (AS.tab === 'steps') {
-    body.append(h('p', { class: 'small' }, a.level + ' · environ ' + a.time), h('div', { class: 'goal' }, h('b', null, 'Objectif. '), a.goal));
+    body.append(h('p', { class: 'small' }, a.level + ' · ' + a.time), h('div', { class: 'goal' }, h('b', null, 'Objectif. '), a.goal));
     body.append(h('ol', { class: 'steps' }, a.steps.map(s => h('li', { html: s }))));
     body.append(h('div', { class: 'defi' }, h('b', null, 'Défi'), h('p', { html: a.defi.q }), h('details', null, h('summary', null, 'Voir la réponse'), h('p', { html: a.defi.a }))));
-    if (a.course) body.append(h('p', null, h('button', { class: 'btn', type: 'button', onclick: () => openCourse(a.course) }, 'Voir le cours : ' + courseSection(a.course).t)));
-    body.append(h('p', null, h('button', { class: 'btn', type: 'button', onclick: ev => {
-      const b = ev.currentTarget;
-      if (!AS.arm) { b.textContent = 'Confirmer ? Votre travail sera effacé'; AS.arm = setTimeout(() => { b.textContent = 'Recommencer l\'atelier'; AS.arm = null; }, 3500); return; }
-      clearTimeout(AS.arm); AS.arm = null; wsById(UI.cur).reset(); mountWs(); renderAct(); } }, 'Recommencer l\'atelier')));
-    body.append(h('p', null, h('button', { class: 'btn pri', type: 'button', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Passer aux questions')));
+    if (a.course) body.append(h('p', null, h('button', { class: 'btn', onclick: () => openCourse(a.course) }, 'Voir le cours : ' + courseSection(a.course).t)));
+    body.append(h('p', null, h('button', { class: 'btn pri', onclick: () => { AS.tab = 'qcm'; renderAct(); } }, 'Passer aux questions')));
   } else {
     const s = actState(), show = s.checked || s.shown;
     a.qcm.forEach((q, i) => {
@@ -995,23 +912,20 @@ function renderAct() {
         inp.addEventListener('change', () => { s.a[i] = j; actSave(); renderAct(); });
         fs.append(h('label', { class: 'opt' + (good ? ' good' : '') + (bad ? ' bad' : '') }, inp, h('span', { html: o + (good ? '  ✓' : '') + (bad ? '  ✗' : '') })));
       });
-      if (show) { const miss = s.a[i] == null && !s.shown; fs.append(h('p', { class: 'why', html: (miss ? 'Sans réponse. ' : '') + q.w })); }
+      if (show) fs.append(h('p', { class: 'why', html: (s.a[i] == null && !s.shown ? 'Sans réponse. ' : '') + q.w }));
       body.append(fs);
     });
-    const done = Object.keys(s.a).length;
-    body.append(h('p', { class: 'small' }, s.shown ? 'Réponses affichées.' : s.checked ? '' : done + ' réponse(s) sur ' + nq + '.'));
     if (s.checked && !s.shown) body.append(h('p', { class: 'score' }, 'Score : ' + actScore(a) + ' / ' + nq));
     const row = h('div', { class: 'files' });
-    if (!show) row.append(h('button', { class: 'btn pri', type: 'button', onclick: () => { s.checked = true; actSave(); renderAct(); } }, 'Corriger'));
-    row.append(h('button', { class: 'btn', type: 'button', onclick: () => { s.shown = true; actSave(); renderAct(); } }, 'Afficher les réponses'));
-    if (show) row.append(h('button', { class: 'btn', type: 'button', onclick: () => { AS.st[AS.key] = { a: {}, checked: false, shown: false }; actSave(); renderAct(); } }, 'Recommencer'));
+    if (!show) row.append(h('button', { class: 'btn pri', onclick: () => { s.checked = true; actSave(); renderAct(); } }, 'Corriger'));
+    row.append(h('button', { class: 'btn', onclick: () => { s.shown = true; actSave(); renderAct(); } }, 'Afficher les réponses'));
+    if (show) row.append(h('button', { class: 'btn', onclick: () => { AS.st[AS.key] = { a: {}, checked: false, shown: false }; actSave(); renderAct(); } }, 'Recommencer'));
     body.append(row);
   }
   box.append(body); body.scrollTop = keep;
 }
 function actToggle() { if (CS.open) { CS.open = false; renderCourse(); } AS.open = !AS.open; renderAct(); }
 $('#bAct').addEventListener('click', actToggle);
-
 function courseSection(id) { return COURSE.find(s => s.id === id) || COURSE[0]; }
 function renderCourse() {
   const box = $('#course'), btn = $('#bCourse'), work = $('#work');
@@ -1021,31 +935,21 @@ function renderCourse() {
   box.innerHTML = '';
   const cur = courseSection(CS.id), idx = COURSE.indexOf(cur);
   const go = id => { CS.id = id; renderCourse(); };
-  const nav = h('nav', { class: 'ctoc', 'aria-label': 'Sommaire du cours' }, COURSE.map((s, i) => h('button', { type: 'button', class: s.id === cur.id ? 'on' : '', 'aria-current': s.id === cur.id ? 'true' : 'false', onclick: () => go(s.id) }, (i + 1) + '. ' + s.t)));
-  const sel = h('select', { class: 'ctoc-sel', 'aria-label': 'Choisir une section', onchange: e => go(e.target.value) }, COURSE.map((s, i) => h('option', { value: s.id, selected: s.id === cur.id }, (i + 1) + '. ' + s.t)));
+  const nav = h('nav', { class: 'ctoc', 'aria-label': 'Sommaire' }, COURSE.map((s, i) => h('button', { type: 'button', class: s.id === cur.id ? 'on' : '', onclick: () => go(s.id) }, (i + 1) + '. ' + s.t)));
+  const sel = h('select', { class: 'ctoc-sel', onchange: e => go(e.target.value) }, COURSE.map((s, i) => h('option', { value: s.id, selected: s.id === cur.id }, (i + 1) + '. ' + s.t)));
   const art = h('article', { class: 'cbody' });
-  art.append(h('p', { class: 'ckick' }, 'Cours · section ' + (idx + 1) + ' sur ' + COURSE.length), h('h2', null, cur.t), h('div', { html: cur.h }));
-  art.append(h('div', { class: 'cpn' },
-    idx > 0 ? h('button', { class: 'btn', type: 'button', onclick: () => go(COURSE[idx - 1].id) }, '← ' + COURSE[idx - 1].t) : h('span'),
-    idx < COURSE.length - 1 ? h('button', { class: 'btn pri', type: 'button', onclick: () => go(COURSE[idx + 1].id) }, COURSE[idx + 1].t + ' →') : h('span')));
-  const top = h('div', { class: 'ctop' }, h('b', null, 'Cours : méthodes numériques'), h('button', { class: 'btn pri sm', type: 'button', onclick: () => { CS.open = false; renderCourse(); } }, 'Retour à l\'atelier'));
-  box.append(top, sel, h('div', { class: 'cwrap' }, nav, art));
-  const sc = box.querySelector('.cwrap'); if (sc) sc.scrollTop = 0; box.scrollTop = 0;
+  art.append(h('p', { class: 'ckick' }, 'Cours · section ' + (idx + 1) + '/' + COURSE.length), h('h2', null, cur.t), h('div', { html: cur.h }));
+  art.append(h('div', { class: 'cpn' }, idx > 0 ? h('button', { class: 'btn', onclick: () => go(COURSE[idx - 1].id) }, '← ' + COURSE[idx - 1].t) : h('span'), idx < COURSE.length - 1 ? h('button', { class: 'btn pri', onclick: () => go(COURSE[idx + 1].id) }, COURSE[idx + 1].t + ' →') : h('span')));
+  box.append(h('div', { class: 'ctop' }, h('b', null, 'Cours'), h('button', { class: 'btn pri sm', onclick: () => { CS.open = false; renderCourse(); } }, 'Retour')), sel, h('div', { class: 'cwrap' }, nav, art));
+  box.scrollTop = 0;
 }
 function openCourse(id) { if (id) CS.id = id; CS.open = true; renderCourse(); }
 $('#bCourse').addEventListener('click', () => { CS.open = !CS.open; renderCourse(); });
-
 function closeDlg() { $('#dlg').hidden = true; $('#dlg').innerHTML = ''; }
-function openDlg(title, body) {
-  const d = $('#dlg'); d.innerHTML = ''; d.hidden = false;
-  d.append(h('div', { class: 'dlgbox', role: 'dialog', 'aria-label': title }, h('header', null, h('b', null, title), h('button', { class: 'btn sm', type: 'button', onclick: closeDlg }, 'Fermer')), h('div', { class: 'dbody' }, body)));
-  d.onclick = ev => { if (ev.target === d) closeDlg(); };
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#dlg').hidden) closeDlg(); });
 $('#bHelp').addEventListener('click', () => {
-  openDlg('Aide', h('div', { html: '<p>Quatre ateliers sur les méthodes numériques du programme SII de CPGE 1<sup>re</sup> année : équations f(x) = 0, systèmes linéaires A·X = B, équations différentielles par Euler explicite, intégration et dérivation numériques.</p>' +
-    '<h3>Utilisation</h3><ul><li>Choisissez un atelier dans la barre du haut, puis ajustez les paramètres et les méthodes.</li><li>Avancez pas à pas (boutons ◀ ▶), lancez la lecture automatique, ou exécutez tout.</li><li>Sur l\'atelier f(x) = 0, réglez la <b>tolérance ε</b> pour voir son effet sur le nombre d\'itérations.</li><li>Le bouton <b>Activité</b> affiche les consignes, un défi et un QCM avec correction.</li><li>Le bouton <b>Cours</b> détaille chaque méthode.</li></ul>' +
-    '<h3>Vos données</h3><p>Les réponses au QCM sont mémorisées dans ce navigateur uniquement.</p>' }));
+  $('#dlg').hidden = false;
+  $('#dlg').innerHTML = '<div class="dlgbox"><header><b>Aide</b><button class="btn sm" onclick="closeDlg()">Fermer</button></header><div class="dbody"><p>6 ateliers : données (listes vs numpy), f(x)=0, système A·X=B, Euler, intégration/dérivation, régression (moindres carrés + gradient).</p></div></div>';
+  $('#dlg').onclick = e => { if (e.target.id === 'dlg') closeDlg(); };
 });
 (function init() { AS.open = !isSmall(); renderSeg(); mountWs(); renderAct(); renderCourse(); })();
 </script>
