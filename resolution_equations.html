@@ -260,11 +260,70 @@ function f1Frames() {
   return { F };
 }
 const CODE_F1 = 'def dichotomie(f, a, b, eps):\n    while b - a > eps:\n        m = (a + b) / 2\n        if f(a) * f(m) <= 0: b = m\n        else: a = m\n    return (a + b) / 2\n\ndef newton(f, fp, x0, eps, N=50):\n    x = x0\n    for _ in range(N):\n        if abs(f(x)) < eps: return x\n        x = x - f(x) / fp(x)\n    return x';
+
+/* --- Encart "zoom" pour Newton : agrandit l'étape courante --- */
+function newtonInset(svg, f, fun) {
+  if (!isFinite(f.xn)) return;
+  const iw = 215, ih = 155;
+  const ix = 640 - iw - 16, iy = 16;
+  const x1 = f.x, x2 = f.xn, root = fun.root;
+  let xa = Math.min(x1, x2, root), xb = Math.max(x1, x2, root);
+  let xspan = xb - xa;
+  if (xspan < 1e-12) xspan = 1e-6;
+  xa -= xspan * 0.25; xb += xspan * 0.25;
+  const ya0 = Math.min(0, f.fx), yb0 = Math.max(0, f.fx);
+  let yspan = yb0 - ya0;
+  if (yspan < 1e-12) yspan = Math.max(1e-6, Math.abs(f.fx) * 0.5);
+  let ya = ya0 - yspan * 0.25, yb = yb0 + yspan * 0.25;
+
+  const nested = sv('svg', { x: ix, y: iy, width: iw, height: ih });
+  nested.append(sv('rect', { x: 0, y: 0, width: iw, height: ih, fill: '#ffffff', stroke: '#2e6da4', 'stroke-width': 1.5, rx: 4 }));
+
+  const ml = 14, mr = 14, mt = 24, mb = 14;
+  const plw = iw - ml - mr, plh = ih - mt - mb;
+  const toX = x => ml + (x - xa) / (xb - xa) * plw;
+  const toY = y => mt + (yb - y) / (yb - ya) * plh;
+
+  if (ya < 0 && yb > 0) nested.append(sv('line', { x1: ml, y1: toY(0), x2: ml + plw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
+
+  let d = '', started = false;
+  for (let i = 0; i <= 100; i++) {
+    const x = xa + (xb - xa) * i / 100;
+    let y = fun.f(x);
+    if (!isFinite(y)) { started = false; continue; }
+    if (y < ya) y = ya;
+    if (y > yb) y = yb;
+    d += (started ? 'L' : 'M') + toX(x).toFixed(2) + ' ' + toY(y).toFixed(2) + ' ';
+    started = true;
+  }
+  if (d) nested.append(sv('path', { d, fill: 'none', stroke: '#2e6da4', 'stroke-width': 1.6 }));
+
+  if (root >= xa && root <= xb) nested.append(sv('circle', { cx: toX(root), cy: toY(0), r: 3, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.2 }));
+
+  nested.append(sv('line', { x1: toX(x1), y1: toY(f.fx), x2: toX(x2), y2: toY(0), stroke: '#7b4fc2', 'stroke-width': 1.8 }));
+
+  nested.append(sv('circle', { cx: toX(x1), cy: toY(f.fx), r: 3.5, fill: '#c0281f', stroke: '#fff', 'stroke-width': 1.2 }));
+  nested.append(sv('circle', { cx: toX(x2), cy: toY(0), r: 3.5, fill: '#9a5b00', stroke: '#fff', 'stroke-width': 1.2 }));
+
+  nested.append(sv('text', { x: iw / 2, y: 15, 'text-anchor': 'middle', 'font-size': 11, fill: '#1b4a76', 'font-weight': 600, 'font-family': 'IBM Plex Sans, sans-serif' }, 'Zoom · étape n = ' + f.n));
+
+  const lx1 = toX(x1), ly1 = toY(f.fx);
+  const lx2 = toX(x2), ly2 = toY(0);
+  const ax1 = lx1 > iw / 2 ? 'end' : 'start';
+  const dx1 = lx1 > iw / 2 ? -5 : 5;
+  const ax2 = lx2 > iw / 2 ? 'end' : 'start';
+  const dx2 = lx2 > iw / 2 ? -5 : 5;
+  nested.append(sv('text', { x: lx1 + dx1, y: ly1 - 5, 'text-anchor': ax1, 'font-size': 10, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
+  nested.append(sv('text', { x: lx2 + dx2, y: ly2 + 12, 'text-anchor': ax2, 'font-size': 10, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
+
+  svg.append(nested);
+}
+
 function mountF1(root) {
   root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Dichotomie et Newton. La <b>tolérance ε</b> sert de critère d\'arrêt : modifiez-la pour observer son effet.</p>' +
     '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol">' + ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>10⁻' + Math.round(-Math.log10(+v)) + '</option>').join('') + '</select></label></div>' +
     '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev">◀ Précédent</button><button class="btn pri" id="f1-next">Suivant ▶</button><button class="btn" id="f1-play">Lecture</button><button class="btn" id="f1-all">Tout exécuter</button><button class="btn" id="f1-reset">Départ</button></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#7b4fc2"></i>tangente</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span></div><div id="f1-plot"></div></div>' +
+    '<div class="plot-wrap"><div class="plot-legend" id="f1-legend"></div><div id="f1-plot"></div></div>' +
     '<div class="verdict" id="f1-msg"></div><div id="f1-stats"></div><div id="f1-note"></div><div class="dwrap" id="f1-table"></div>' + codeBlock(CODE_F1);
   $('#f1-tol').addEventListener('change', e => { F1.tol = +e.target.value; getState('f1', { k: 0 }).k = 0; drawF1(); });
   $('#f1-prev').addEventListener('click', () => { labStop('f1'); const S = getState('f1', { k: 0 }); if (S.k > 0) { S.k--; drawF1(); } });
@@ -290,6 +349,15 @@ function drawF1() {
   if (r.error) { $('#f1-plot').innerHTML = ''; setMsg('#f1-msg', r.error, 'warn'); return; }
   const F = r.F; if (S.k >= F.length) S.k = F.length - 1; if (S.k < 0) S.k = 0;
   const f = F[S.k];
+
+  // Légende adaptative
+  const lg = document.getElementById('f1-legend');
+  if (lg) {
+    lg.innerHTML = F1.algo === 'dichotomie'
+      ? '<span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span><span><i style="background:#1e7a2e"></i>racine</span>'
+      : '<span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#7b4fc2"></i>tangente courante</span><span><i style="background:rgba(123,79,194,0.35)"></i>tangentes passées</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#9a5b00"></i>x<sub>n+1</sub></span>';
+  }
+
   const P = plot(640, 340, fun.xr, fun.yr);
   P.curve(fun.f); P.hline(0, '#5a6068', '');
   P.point(fun.root, 0, '#1e7a2e', 4); P.vline(fun.root, '#1e7a2e', '2 3');
@@ -297,8 +365,25 @@ function drawF1() {
     P.band(f.a, f.b, 'rgba(46,109,164,0.12)'); P.vline(f.a, '#2e6da4'); P.vline(f.b, '#2e6da4', '');
     P.point(f.m, f.fm, '#c0281f'); P.vline(f.m, '#c0281f', '4 3');
   } else {
-    P.point(f.x, f.fx, '#c0281f');
-    if (isFinite(f.xn)) { P.vline(f.xn, '#9a5b00', '3 3'); P.seg(f.x, f.fx, f.xn, 0, '#7b4fc2', 2, '6 3'); P.point(f.xn, 0, '#9a5b00', 3.5); }
+    // 1) Tracé de TOUTES les tangentes précédentes (trajectoire visible)
+    for (let i = 0; i < S.k; i++) {
+      const fr = F[i];
+      if (isFinite(fr.xn)) {
+        P.seg(fr.x, fr.fx, fr.xn, 0, 'rgba(123,79,194,0.35)', 1.2, '3 2');
+        P.point(fr.x, fr.fx, 'rgba(192,40,31,0.4)', 3);
+      }
+    }
+    // 2) Tangente courante en trait plein épais + points + étiquettes
+    P.point(f.x, f.fx, '#c0281f', 5.5);
+    if (isFinite(f.xn)) {
+      P.vline(f.xn, '#9a5b00', '3 3');
+      P.seg(f.x, f.fx, f.xn, 0, '#7b4fc2', 2.4, '');
+      P.point(f.xn, 0, '#9a5b00', 4.5);
+      P.g.append(sv('text', { x: P.toX(f.x) + 8, y: P.toY(f.fx) - 8, 'font-size': 12, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
+      P.g.append(sv('text', { x: P.toX(f.xn) + 8, y: P.toY(0) + 16, 'font-size': 12, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
+      // 3) Encart zoom sur l'étape courante
+      newtonInset(P.svg, f, fun);
+    }
   }
   $('#f1-plot').innerHTML = ''; $('#f1-plot').append(P.svg);
   if (F1.algo === 'dichotomie') setMsg('#f1-msg', 'n = ' + f.n + ' — largeur ' + fmt(f.w, 6) + '. m = ' + fmt(f.m, 6) + ', f(m) = ' + fmt(f.fm, 6) + '.' + (f.stop ? ' Arrêt.' : ''));
@@ -545,13 +630,10 @@ function drawF5() {
   const ymin = Math.min(...pts.map(p => p.y)), ymax = Math.max(...pts.map(p => p.y));
   const padY = (ymax - ymin) * 0.15 + 0.05;
   const P = plot(640, 320, [xmin - 0.05, xmax + 0.05], [ymin - padY, ymax + padY]);
-  // nuage
   pts.forEach(p => P.point(p.x, p.y, '#2e6da4', 4.5));
-  // ajustement
   const fadj = poly ? (x => polyval(poly, x)) : (x => a * x + b);
   P.polyline([[xmin, fadj(xmin)], [xmax, fadj(xmax)]], '#c0281f', 2.2);
   $('#f5-plot').innerHTML = ''; $('#f5-plot').append(P.svg);
-  // stats
   const opt = linreg(pts);
   const err_adj = rms(pts, fadj);
   $('#f5-stats').innerHTML = '';
