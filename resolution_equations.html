@@ -176,6 +176,7 @@ function plot(W,H,xr,yr){
     curve(f,color,width){let d='',started=false;const N=240;for(let i=0;i<=N;i++){const x=xr[0]+(xr[1]-xr[0])*i/N;let y=f(x);if(!isFinite(y)){started=false;continue;}if(y<yr[0])y=yr[0];if(y>yr[1])y=yr[1];d+=(started?'L':'M')+toX(x).toFixed(2)+' '+toY(y).toFixed(2)+' ';started=true;}pg.append(sv('path',{d,fill:'none',stroke:color||'#2e6da4','stroke-width':width||2,'stroke-linejoin':'round','stroke-linecap':'round'}));},
     polyline(pts,color,width,dash){const d=pts.filter(p=>p).map((p,i)=>(i?'L':'M')+toX(p[0]).toFixed(2)+' '+toY(p[1]).toFixed(2)).join(' ');pg.append(sv('path',{d,fill:'none',stroke:color||'#1e7a2e','stroke-width':width||2,'stroke-dasharray':dash||''}));},
     point(x,y,color,r,shape){if(shape==='square'){pg.append(sv('rect',{x:toX(x)-(r||3),y:toY(y)-(r||3),width:2*(r||3),height:2*(r||3),fill:color||'#c0281f',stroke:'#fff','stroke-width':1.2}));}else{pg.append(sv('circle',{cx:toX(x),cy:toY(y),r:r||4.5,fill:color||'#c0281f',stroke:'#fff','stroke-width':1.5}));}},
+    rect(x1,x2,y1,y2,color){let px1=toX(x1),px2=toX(x2),py1=toY(y1),py2=toY(y2);if(px2<px1)[px1,px2]=[px2,px1];if(py2<py1)[py1,py2]=[py2,py1];pg.append(sv('rect',{x:px1,y:py1,width:px2-px1,height:py2-py1,fill:color||'rgba(46,109,164,0.2)'}));},
     vline(x,color,dash,width){pg.append(sv('line',{x1:toX(x),y1:mt,x2:toX(x),y2:mt+ih,stroke:color||'#c0281f','stroke-width':width||1.5,'stroke-dasharray':dash||'4 3'}));},
     hline(y,color,dash,width){pg.append(sv('line',{x1:ml,y1:toY(y),x2:ml+iw,y2:toY(y),stroke:color||'#9a5b00','stroke-width':width||1.5,'stroke-dasharray':dash||'4 3'}));},
     seg(x1,y1,x2,y2,color,width,dash){pg.append(sv('line',{x1:toX(x1),y1:toY(y1),x2:toX(x2),y2:toY(y2),stroke:color||'#7b4fc2','stroke-width':width||2,'stroke-dasharray':dash||''}));},
@@ -187,7 +188,7 @@ function chipsRow(items,cur,cb,label){return h('div',{class:'chips',role:'group'
 function setMsg(sel,text,kind){const m=$(sel);if(!m)return;m.textContent=text;m.className='verdict'+(kind?' '+kind:'');}
 function codeBlock(src){return '<h3>Code Python</h3><pre class="code">'+src+'</pre>';}
 
-/* ============ Atelier 0 : Données (listes vs numpy) ============ */
+/* ============ Atelier 0 : Données ============ */
 const EXS = {
   add: { label: 'Addition de vecteurs', listes: 'u = [1, 2, 3]\nv = [5, 6, 7]\nres = []\nfor i in range(len(u)):\n    res.append(u[i] + v[i])', numpy: 'import numpy as np\nu = np.array([1, 2, 3])\nv = np.array([5, 6, 7])\nres = u + v', res: '[6, 8, 10]' },
   sqrt: { label: 'Racine carrée', listes: 'import math\n\nu = [1, 2, 3]\nv = []\nfor x in u:\n    v.append(math.sqrt(x))', numpy: 'import numpy as np\nu = np.array([1, 2, 3])\nv = np.sqrt(u)', res: '[1.0, 1.414, 1.732]' },
@@ -198,6 +199,7 @@ const CODE_F0 = 'import numpy as np\n\n# --- Listes Python ---\nL = [1.2, 3.4, 5
 function mountF0(root) {
   root.innerHTML = '<h2>Données : listes Python vs tableaux numpy</h2>' +
     '<p>On manipule en SII des séries de mesures. Le choix de la structure <b>liste Python</b> ou <b>tableau numpy</b> change la lisibilité et la performance. Comparez les trois exemples ci-dessous : pour chaque opération, la version numpy est plus courte et vectorisée (aucune boucle explicite).</p>' +
+    '<div class="verdict yes"><b>Que veut dire « vectorisé » ?</b> Une opération <b>vectorisée</b> s\'applique <b>automatiquement à chaque élément</b> du tableau, en une seule instruction. Pas besoin de boucle <code>for</code> : c\'est numpy (écrit en C) qui parcourt les éléments en interne, bien plus vite. Exemples : <code>u + 2</code> ajoute 2 à tous les éléments ; <code>np.sin(u)</code> calcule le sinus de chacun ; <code>u[u &gt; 3]</code> garde les éléments &gt; 3.</div>' +
     '<div class="fld"><span>Exemple</span><div id="f0-ex"></div></div>' +
     '<div class="col2"><div><h3 style="margin-top:0">Listes Python</h3><pre class="code" id="f0-listes"></pre></div><div><h3 style="margin-top:0">Tableaux numpy</h3><pre class="code" id="f0-numpy"></pre></div></div>' +
     '<div class="verdict" id="f0-res"></div>' +
@@ -225,7 +227,8 @@ function drawF0() {
 const FUNCS = {
   'x2-2':  { label: 'f(x) = x² − 2', f: x => x*x - 2, df: x => 2*x, root: Math.SQRT2, a: 0, b: 2, x0: 2, xr: [-0.5, 2.5], yr: [-3, 4] },
   'cos-x': { label: 'f(x) = cos x − x', f: x => Math.cos(x) - x, df: x => -Math.sin(x) - 1, root: 0.7390851332151607, a: 0, b: 1, x0: 1, xr: [-0.3, 1.6], yr: [-1.6, 1.4] },
-  'x3-x-1': { label: 'f(x) = x³ − x − 1', f: x => x**3 - x - 1, df: x => 3*x*x - 1, root: 1.324717957244746, a: 1, b: 2, x0: 1.5, xr: [0.5, 2.3], yr: [-2, 4] }
+  'x3-x-1': { label: 'f(x) = x³ − x − 1', f: x => x**3 - x - 1, df: x => 3*x*x - 1, root: 1.324717957244746, a: 1, b: 2, x0: 1.5, xr: [0.5, 2.3], yr: [-2, 4] },
+  'x1-cube': { label: 'f(x) = (x−1)³  [Newton lent]', f: x => (x-1)**3, df: x => 3*(x-1)*(x-1), root: 1, a: 0, b: 2, x0: 1.8, xr: [-0.3, 2.5], yr: [-1.5, 2] }
 };
 const LAB_STATE = {};
 function getState(id, defaults) { return LAB_STATE[id] || (LAB_STATE[id] = Object.assign({ k: 0, timer: null }, defaults)); }
@@ -261,64 +264,33 @@ function f1Frames() {
 }
 const CODE_F1 = 'def dichotomie(f, a, b, eps):\n    while b - a > eps:\n        m = (a + b) / 2\n        if f(a) * f(m) <= 0: b = m\n        else: a = m\n    return (a + b) / 2\n\ndef newton(f, fp, x0, eps, N=50):\n    x = x0\n    for _ in range(N):\n        if abs(f(x)) < eps: return x\n        x = x - f(x) / fp(x)\n    return x';
 
-/* --- Encart "zoom" pour Newton : agrandit l'étape courante en haut à gauche --- */
-function newtonInset(P, f, fun) {
-  const svg = P.svg;
+function newtonInset(svg, f, fun) {
   if (!isFinite(f.xn)) return;
+  const iw = 215, ih = 155;
+  const ix = 640 - iw - 16, iy = 16;
   const x1 = f.x, x2 = f.xn, root = fun.root;
   let xa = Math.min(x1, x2, root), xb = Math.max(x1, x2, root);
   let xspan = xb - xa;
-  if (xspan < 1e-14) xspan = 1e-6;
-  const zoomFactor = (P.xr[1] - P.xr[0]) / (xspan * 1.7);
-  xa -= xspan * 0.35; xb += xspan * 0.35;
-
+  if (xspan < 1e-12) xspan = 1e-6;
+  xa -= xspan * 0.25; xb += xspan * 0.25;
   const ya0 = Math.min(0, f.fx), yb0 = Math.max(0, f.fx);
   let yspan = yb0 - ya0;
-  if (yspan < 1e-14) yspan = Math.max(1e-6, Math.abs(f.fx) * 0.5);
-  let ya = ya0 - yspan * 0.35, yb = yb0 + yspan * 0.35;
+  if (yspan < 1e-12) yspan = Math.max(1e-6, Math.abs(f.fx) * 0.5);
+  let ya = ya0 - yspan * 0.25, yb = yb0 + yspan * 0.25;
 
-  // 1) Rectangle "source" dans le graphique principal
-  const sx1 = P.toX(xa), sy1 = P.toY(yb), sx2 = P.toX(xb), sy2 = P.toY(ya);
-  const ccx = (sx1 + sx2) / 2, ccy = (sy1 + sy2) / 2;
-  const rw = Math.max(6, sx2 - sx1), rh = Math.max(6, sy2 - sy1);
-  svg.append(sv('rect', { x: ccx - rw / 2, y: ccy - rh / 2, width: rw, height: rh, fill: 'rgba(123,79,194,0.10)', stroke: '#7b4fc2', 'stroke-width': 1.5, 'stroke-dasharray': '4 3', 'pointer-events': 'none' }));
-  svg.append(sv('circle', { cx: ccx, cy: ccy, r: 2.5, fill: '#7b4fc2', 'pointer-events': 'none' }));
+  const nested = sv('svg', { x: ix, y: iy, width: iw, height: ih });
+  nested.append(sv('rect', { x: 0, y: 0, width: iw, height: ih, fill: '#ffffff', stroke: '#2e6da4', 'stroke-width': 1.5, rx: 4 }));
 
-  // 2) Encart en haut à gauche
-  const iw = 220, ih = 160;
-  const ix = 60, iy = 14;
-  // fil de liaison
-  svg.append(sv('line', { x1: ccx, y1: ccy, x2: ix + iw, y2: iy + ih, stroke: '#7b4fc2', 'stroke-width': 1, 'stroke-dasharray': '2 3', 'opacity': 0.55, 'pointer-events': 'none' }));
-
-  const g = sv('g', { transform: `translate(${ix}, ${iy})` });
-  // fond + bordure
-  g.append(sv('rect', { x: 0, y: 0, width: iw, height: ih, fill: '#faf7ff', stroke: '#7b4fc2', 'stroke-width': 2.5, rx: 6 }));
-  // barre de titre
-  g.append(sv('rect', { x: 0, y: 0, width: iw, height: 22, fill: '#7b4fc2', rx: 6 }));
-  g.append(sv('rect', { x: 0, y: 11, width: iw, height: 11, fill: '#7b4fc2' }));
-  g.append(sv('text', { x: 8, y: 15, 'font-size': 12, fill: '#fff', 'font-weight': 700, 'font-family': 'IBM Plex Sans, sans-serif' }, 'ZOOM ×' + (zoomFactor >= 10 ? Math.round(zoomFactor) : zoomFactor.toFixed(1))));
-  g.append(sv('text', { x: iw - 8, y: 15, 'text-anchor': 'end', 'font-size': 11, fill: '#e8dcf5', 'font-family': 'IBM Plex Mono, monospace' }, 'étape n = ' + f.n));
-
-  const ml = 30, mr = 10, mt = 30, mb = 20;
+  const ml = 14, mr = 14, mt = 24, mb = 14;
   const plw = iw - ml - mr, plh = ih - mt - mb;
   const toX = x => ml + (x - xa) / (xb - xa) * plw;
   const toY = y => mt + (yb - y) / (yb - ya) * plh;
 
-  // grille
-  for (let i = 0; i <= 4; i++) {
-    const gx = ml + i / 4 * plw;
-    const gy = mt + i / 4 * plh;
-    g.append(sv('line', { x1: gx, y1: mt, x2: gx, y2: mt + plh, stroke: '#e5ddf0', 'stroke-width': 0.7 }));
-    g.append(sv('line', { x1: ml, y1: gy, x2: ml + plw, y2: gy, stroke: '#e5ddf0', 'stroke-width': 0.7 }));
-  }
-  // axes
-  if (ya < 0 && yb > 0) g.append(sv('line', { x1: ml, y1: toY(0), x2: ml + plw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
-  if (xa < 0 && xb > 0) g.append(sv('line', { x1: toX(0), y1: mt, x2: toX(0), y2: mt + plh, stroke: '#5a6068', 'stroke-width': 1 }));
+  if (ya < 0 && yb > 0) nested.append(sv('line', { x1: ml, y1: toY(0), x2: ml + plw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
 
-  // courbe
   let d = '', started = false;
-  for (let i = 0; i <= 200; i++) {
-    const x = xa + (xb - xa) * i / 200;
+  for (let i = 0; i <= 100; i++) {
+    const x = xa + (xb - xa) * i / 100;
     let y = fun.f(x);
     if (!isFinite(y)) { started = false; continue; }
     if (y < ya) y = ya;
@@ -326,32 +298,31 @@ function newtonInset(P, f, fun) {
     d += (started ? 'L' : 'M') + toX(x).toFixed(2) + ' ' + toY(y).toFixed(2) + ' ';
     started = true;
   }
-  if (d) g.append(sv('path', { d, fill: 'none', stroke: '#2e6da4', 'stroke-width': 2.2 }));
+  if (d) nested.append(sv('path', { d, fill: 'none', stroke: '#2e6da4', 'stroke-width': 1.6 }));
 
-  // racine
-  if (root >= xa && root <= xb) {
-    g.append(sv('circle', { cx: toX(root), cy: toY(0), r: 4, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.2 }));
-  }
-  // tangente courante
-  g.append(sv('line', { x1: toX(x1), y1: toY(f.fx), x2: toX(x2), y2: toY(0), stroke: '#7b4fc2', 'stroke-width': 2.2 }));
-  // points
-  g.append(sv('circle', { cx: toX(x1), cy: toY(f.fx), r: 5.5, fill: '#c0281f', stroke: '#fff', 'stroke-width': 1.5 }));
-  g.append(sv('circle', { cx: toX(x2), cy: toY(0), r: 5.5, fill: '#9a5b00', stroke: '#fff', 'stroke-width': 1.5 }));
+  if (root >= xa && root <= xb) nested.append(sv('circle', { cx: toX(root), cy: toY(0), r: 3, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.2 }));
 
-  // étiquettes x_n / x_{n+1}
+  nested.append(sv('line', { x1: toX(x1), y1: toY(f.fx), x2: toX(x2), y2: toY(0), stroke: '#7b4fc2', 'stroke-width': 1.8 }));
+
+  nested.append(sv('circle', { cx: toX(x1), cy: toY(f.fx), r: 3.5, fill: '#c0281f', stroke: '#fff', 'stroke-width': 1.2 }));
+  nested.append(sv('circle', { cx: toX(x2), cy: toY(0), r: 3.5, fill: '#9a5b00', stroke: '#fff', 'stroke-width': 1.2 }));
+
+  nested.append(sv('text', { x: iw / 2, y: 15, 'text-anchor': 'middle', 'font-size': 11, fill: '#1b4a76', 'font-weight': 600, 'font-family': 'IBM Plex Sans, sans-serif' }, 'Zoom · étape n = ' + f.n));
+
   const lx1 = toX(x1), ly1 = toY(f.fx);
   const lx2 = toX(x2), ly2 = toY(0);
-  g.append(sv('text', { x: lx1 + (lx1 > iw / 2 ? -9 : 9), y: ly1 - 7, 'text-anchor': lx1 > iw / 2 ? 'end' : 'start', 'font-size': 11, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
-  g.append(sv('text', { x: lx2 + (lx2 > iw / 2 ? -9 : 9), y: ly2 + 16, 'text-anchor': lx2 > iw / 2 ? 'end' : 'start', 'font-size': 11, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
+  const ax1 = lx1 > iw / 2 ? 'end' : 'start';
+  const dx1 = lx1 > iw / 2 ? -5 : 5;
+  const ax2 = lx2 > iw / 2 ? 'end' : 'start';
+  const dx2 = lx2 > iw / 2 ? -5 : 5;
+  nested.append(sv('text', { x: lx1 + dx1, y: ly1 - 5, 'text-anchor': ax1, 'font-size': 10, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
+  nested.append(sv('text', { x: lx2 + dx2, y: ly2 + 12, 'text-anchor': ax2, 'font-size': 10, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
 
-  // plage affichée
-  g.append(sv('text', { x: ml, y: ih - 5, 'text-anchor': 'start', 'font-size': 8.5, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, 'x ∈ [' + xa.toFixed(3) + ' ; ' + xb.toFixed(3) + ']'));
-
-  svg.append(g);
+  svg.append(nested);
 }
 
 function mountF1(root) {
-  root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Dichotomie et Newton. La <b>tolérance ε</b> sert de critère d\'arrêt : modifiez-la pour observer son effet.</p>' +
+  root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Dichotomie et Newton. La <b>tolérance ε</b> sert de critère d\'arrêt : modifiez-la pour observer son effet. La fonction <b>(x−1)³</b> illustre un cas où Newton converge lentement (racine triple) : chaque étape reste visible, même sans zoom.</p>' +
     '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol">' + ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>10⁻' + Math.round(-Math.log10(+v)) + '</option>').join('') + '</select></label></div>' +
     '<div class="files" style="margin:8px 0"><button class="btn" id="f1-prev">◀ Précédent</button><button class="btn pri" id="f1-next">Suivant ▶</button><button class="btn" id="f1-play">Lecture</button><button class="btn" id="f1-all">Tout exécuter</button><button class="btn" id="f1-reset">Départ</button></div>' +
     '<div class="plot-wrap"><div class="plot-legend" id="f1-legend"></div><div id="f1-plot"></div></div>' +
@@ -378,17 +349,14 @@ function drawF1() {
   const ab = $('#f1-algo'); if (ab) { ab.innerHTML = ''; ab.append(chipsRow([['dichotomie', 'Dichotomie'], ['newton', 'Newton']], F1.algo, k => { F1.algo = k; S.k = 0; labStop('f1'); drawF1(); })); }
   const r = f1Frames();
   if (r.error) { $('#f1-plot').innerHTML = ''; setMsg('#f1-msg', r.error, 'warn'); return; }
-  const F = r.F; if (S.k >= F.length) S.k = F.length - 1; if (S.k < 0) S.k = 0;
-  const f = F[S.k];
-
-  // Légende adaptative
   const lg = document.getElementById('f1-legend');
   if (lg) {
     lg.innerHTML = F1.algo === 'dichotomie'
       ? '<span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:rgba(46,109,164,0.35)"></i>intervalle</span><span><i style="background:#1e7a2e"></i>racine</span>'
-      : '<span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#7b4fc2"></i>tangente courante</span><span><i style="background:rgba(123,79,194,0.35)"></i>tangentes passées</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#9a5b00"></i>x<sub>n+1</sub></span><span><i style="background:#7b4fc2;border:1px dashed #7b4fc2"></i>zone zoomée</span>';
+      : '<span><i style="background:#2e6da4"></i>courbe</span><span><i style="background:#7b4fc2"></i>tangente courante</span><span><i style="background:rgba(123,79,194,0.35)"></i>tangentes passées</span><span><i style="background:#c0281f"></i>point courant</span><span><i style="background:#9a5b00"></i>x<sub>n+1</sub></span>';
   }
-
+  const F = r.F; if (S.k >= F.length) S.k = F.length - 1; if (S.k < 0) S.k = 0;
+  const f = F[S.k];
   const P = plot(640, 340, fun.xr, fun.yr);
   P.curve(fun.f); P.hline(0, '#5a6068', '');
   P.point(fun.root, 0, '#1e7a2e', 4); P.vline(fun.root, '#1e7a2e', '2 3');
@@ -396,7 +364,6 @@ function drawF1() {
     P.band(f.a, f.b, 'rgba(46,109,164,0.12)'); P.vline(f.a, '#2e6da4'); P.vline(f.b, '#2e6da4', '');
     P.point(f.m, f.fm, '#c0281f'); P.vline(f.m, '#c0281f', '4 3');
   } else {
-    // 1) Tracé de TOUTES les tangentes précédentes (trajectoire visible)
     for (let i = 0; i < S.k; i++) {
       const fr = F[i];
       if (isFinite(fr.xn)) {
@@ -404,7 +371,6 @@ function drawF1() {
         P.point(fr.x, fr.fx, 'rgba(192,40,31,0.4)', 3);
       }
     }
-    // 2) Tangente courante en trait plein épais + points + étiquettes
     P.point(f.x, f.fx, '#c0281f', 5.5);
     if (isFinite(f.xn)) {
       P.vline(f.xn, '#9a5b00', '3 3');
@@ -412,8 +378,7 @@ function drawF1() {
       P.point(f.xn, 0, '#9a5b00', 4.5);
       P.g.append(sv('text', { x: P.toX(f.x) + 8, y: P.toY(f.fx) - 8, 'font-size': 12, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
       P.g.append(sv('text', { x: P.toX(f.xn) + 8, y: P.toY(0) + 16, 'font-size': 12, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
-      // 3) Encart zoom sur l'étape courante
-      newtonInset(P, f, fun);
+      newtonInset(P.svg, f, fun);
     }
   }
   $('#f1-plot').innerHTML = ''; $('#f1-plot').append(P.svg);
@@ -493,26 +458,36 @@ function drawF2() {
   $('#f2-prev').disabled = S.k === 0; $('#f2-next').disabled = S.k === F.length - 1;
 }
 
-/* ============ Atelier 3 : Euler ============ */
+/* ============ Atelier 3 : Euler explicite ET implicite ============ */
 const ODES = {
-  'y': { label: 'y\' = y, y(0) = 1', f: (t, y) => y, exact: t => Math.exp(t), T: 2, y0: 1 },
-  'm2y': { label: 'y\' = −2y', f: (t, y) => -2 * y, exact: t => Math.exp(-2 * t), T: 1.5, y0: 1 },
-  'lin': { label: 'y\' = 1 + t − y', f: (t, y) => 1 + t - y, exact: t => t + Math.exp(-t), T: 3, y0: 1 }
+  'y': { label: 'y\' = y, y(0) = 1', f: (t, y) => y, exact: t => Math.exp(t), T: 2, y0: 1,
+         implicit: (t, yn, h) => yn / (1 - h) },
+  'm2y': { label: 'y\' = −2y', f: (t, y) => -2 * y, exact: t => Math.exp(-2 * t), T: 1.5, y0: 1,
+         implicit: (t, yn, h) => yn / (1 + 2 * h) },
+  'lin': { label: 'y\' = 1 + t − y', f: (t, y) => 1 + t - y, exact: t => t + Math.exp(-t), T: 3, y0: 1,
+         implicit: (t, yn, h) => (yn + h * (1 + t + h)) / (1 + h) }
 };
 const F3 = { ode: 'y', h: 0.25 };
-function eulerSolve() {
+function eulerSolve(method) {
   const o = ODES[F3.ode];
   const n = Math.max(1, Math.round(o.T / F3.h)), h = o.T / n;
   let t = 0, y = o.y0;
   const T = [0], Y = [y];
-  for (let i = 0; i < n; i++) { y = y + h * o.f(t, y); t = t + h; T.push(t); Y.push(y); }
-  return { T, Y, h, n, exact: o.exact, T_end: o.T };
+  for (let i = 0; i < n; i++) {
+    y = method === 'implicit' ? o.implicit(t, y, h) : y + h * o.f(t, y);
+    t = t + h;
+    T.push(t); Y.push(y);
+  }
+  return { T, Y, h, n };
 }
-const CODE_F3 = 'def euler(f, t0, y0, T, h):\n    n = int(round((T - t0) / h))\n    t, y = t0, y0\n    T_list, Y_list = [t], [y]\n    for _ in range(n):\n        y = y + h * f(t, y)\n        t = t + h\n        T_list.append(t); Y_list.append(y)\n    return T_list, Y_list';
+const CODE_F3 = 'def euler_explicite(f, t0, y0, T, h):\n    """y_{n+1} = y_n + h*f(t_n, y_n) — 1 eval/pas, ordre 1"""\n    n = int(round((T - t0) / h))\n    t, y = t0, y0\n    T_l, Y_l = [t], [y]\n    for _ in range(n):\n        y = y + h * f(t, y)\n        t = t + h\n        T_l.append(t); Y_l.append(y)\n    return T_l, Y_l\n\ndef euler_implicite(f, t0, y0, T, h):\n    """y_{n+1} = y_n + h*f(t_{n+1}, y_{n+1})\n       → résout une équation à chaque pas (ici : formule linéaire)"""\n    n = int(round((T - t0) / h))\n    t, y = t0, y0\n    T_l, Y_l = [t], [y]\n    for _ in range(n):\n        t_next = t + h\n        # pour y\\\' = a*y + b : y_next = (y_n + h*b)/(1 - h*a)\n        y = implicite_formule(t, y, h)\n        t = t_next\n        T_l.append(t); Y_l.append(y)\n    return T_l, Y_l';
 function mountF3(root) {
-  root.innerHTML = '<h2>Équation différentielle : Euler explicite</h2><p>Schéma y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>) — ordre 1.</p>' +
-    '<div class="opts"><div class="fld"><span>Équation</span><div id="f3-ode"></div></div><label class="fld"><span>Pas h = <b id="f3-hout"></b></span><input type="range" id="f3-h" min="0.02" max="0.5" step="0.01"></label></div>' +
-    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>exacte</span><span><i style="background:#c0281f"></i>Euler</span></div><div id="f3-plot"></div></div>' +
+  root.innerHTML = '<h2>Équation différentielle : Euler explicite et implicite</h2>' +
+    '<p>Problème de Cauchy : y\' = f(t, y), y(0) = y₀. Deux variantes du schéma d\'Euler :</p>' +
+    '<div class="formula">Explicite : y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>) &nbsp;&nbsp;|&nbsp;&nbsp; Implicite : y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n+1</sub>, y<sub>n+1</sub>)</div>' +
+    '<p>L\'explicite est direct (1 évaluation par pas). L\'implicite demande de <b>résoudre une équation</b> à chaque pas (ici linéaire, donc formule directe). En contrepartie, l\'implicite est <b>plus stable</b> quand h est grand.</p>' +
+    '<div class="opts"><div class="fld"><span>Équation</span><div id="f3-ode"></div></div><label class="fld"><span>Pas h = <b id="f3-hout"></b></span><input type="range" id="f3-h" min="0.02" max="0.6" step="0.01"></label></div>' +
+    '<div class="plot-wrap"><div class="plot-legend"><span><i style="background:#2e6da4"></i>exacte</span><span><i style="background:#c0281f"></i>Euler explicite</span><span><i style="background:#1e7a2e"></i>Euler implicite (pointillés)</span></div><div id="f3-plot"></div></div>' +
     '<div id="f3-stats"></div><div id="f3-note"></div>' + codeBlock(CODE_F3);
   $('#f3-h').value = F3.h;
   $('#f3-h').addEventListener('input', e => { F3.h = +e.target.value; drawF3(); });
@@ -520,21 +495,36 @@ function mountF3(root) {
 }
 function drawF3() {
   const ob = $('#f3-ode'); if (ob) { ob.innerHTML = ''; ob.append(chipsRow(Object.keys(ODES).map(k => [k, ODES[k].label]), F3.ode, k => { F3.ode = k; drawF3(); })); }
-  const o = ODES[F3.ode], R = eulerSolve();
-  $('#f3-hout').textContent = fmt(R.h, 3);
-  const ymax = Math.max(...R.Y, ...R.T.map(t => o.exact(t)), o.y0);
-  const ymin = Math.min(...R.Y, ...R.T.map(t => o.exact(t)), 0);
+  const o = ODES[F3.ode];
+  const Rex = eulerSolve('explicit');
+  const Rim = eulerSolve('implicit');
+  $('#f3-hout').textContent = fmt(Rex.h, 3);
+  const allY = [...Rex.Y, ...Rim.Y, ...Rex.T.map(t => o.exact(t)), o.y0];
+  const ymax = Math.max(...allY), ymin = Math.min(...allY, 0);
   const pad = (ymax - ymin) * 0.12 + 0.1;
-  const P = plot(640, 320, [0, o.T], [ymin - pad, ymax + pad]);
-  P.curve(o.exact);
-  P.polyline(R.T.map((t, i) => [t, R.Y[i]]), '#c0281f', 2);
-  for (let i = 0; i < R.T.length; i++) P.point(R.T[i], R.Y[i], '#c0281f', 3.5);
+  const P = plot(640, 340, [0, o.T], [ymin - pad, ymax + pad]);
+  P.curve(o.exact, '#2e6da4', 2.2);
+  P.polyline(Rex.T.map((t, i) => [t, Rex.Y[i]]), '#c0281f', 2);
+  for (let i = 0; i < Rex.T.length; i++) P.point(Rex.T[i], Rex.Y[i], '#c0281f', 3.5);
+  P.polyline(Rim.T.map((t, i) => [t, Rim.Y[i]]), '#1e7a2e', 2, '6 3');
+  for (let i = 0; i < Rim.T.length; i++) P.point(Rim.T[i], Rim.Y[i], '#1e7a2e', 3.5);
   $('#f3-plot').innerHTML = ''; $('#f3-plot').append(P.svg);
-  const yEnd = R.Y[R.Y.length - 1], yEx = o.exact(o.T), err = Math.abs(yEnd - yEx);
+  const yEx = o.exact(o.T);
+  const yEndEx = Rex.Y[Rex.Y.length - 1];
+  const yEndIm = Rim.Y[Rim.Y.length - 1];
   $('#f3-stats').innerHTML = '';
-  $('#f3-stats').append(stats([['Pas h', fmt(R.h, 4)], ['Nombre de pas', String(R.n)], ['y(T) approché', fmt(yEnd, 6)], ['y(T) exact', fmt(yEx, 6)], ['Erreur', fmt(err, 6)]]));
+  $('#f3-stats').append(stats([
+    ['Pas h', fmt(Rex.h, 4)], ['Nombre de pas', String(Rex.n)],
+    ['y(T) exact', fmt(yEx, 6)],
+    ['Euler explicite', fmt(yEndEx, 6) + ' (err ' + fmt(Math.abs(yEndEx - yEx), 6) + ')'],
+    ['Euler implicite', fmt(yEndIm, 6) + ' (err ' + fmt(Math.abs(yEndIm - yEx), 6) + ')']
+  ]));
   $('#f3-note').innerHTML = '';
-  $('#f3-note').append(h('div', { class: 'verdict' }, 'Erreur globale = ' + fmt(err, 4) + '. Diviser h par 2 divise l\'erreur par 2 : ordre 1.'));
+  let msg = 'Erreurs : explicite ' + fmt(Math.abs(yEndEx - yEx), 4) + ' — implicite ' + fmt(Math.abs(yEndIm - yEx), 4) + '. ';
+  if (F3.ode === 'm2y' && Rex.h >= 0.49) msg += 'Pour y\'=−2y avec h≥0,5, l\'explicite oscille ou s\'annule, l\'implicite reste stable : c\'est l\'avantage principal de l\'implicite.';
+  else if (F3.ode === 'y' && Rex.h >= 0.49) msg += 'Pour y\'=y (croissance), l\'implicite surestime ; l\'explicite sous-estime. Aucune n\'est exacte, les deux sont d\'ordre 1.';
+  else msg += 'Les deux schémas sont d\'ordre 1 : diviser h par 2 divise l\'erreur par 2.';
+  $('#f3-note').append(h('div', { class: 'verdict' }, msg));
 }
 
 /* ============ Atelier 4 : Intégration/dérivation ============ */
@@ -611,7 +601,7 @@ function drawDiff() {
   $('#f4-dstats').append(stats([["f'(x₀) exact", fmt(fp_exact, 6)], ['Avant', fmt(fp_av, 6)], ['Arrière', fmt(fp_ar, 6)], ['Centré', fmt(fp_c, 6)]]));
 }
 
-/* ============ Atelier 5 : Régression ============ */
+/* ============ Atelier 5 : Régression + 3D ============ */
 const F5 = { mode: 'mc', a: 4, b: 0, alpha: 0.5, niter: 5, deg: 1, pts: null };
 function genPts() { F5.pts = []; for (let i = 0; i < 11; i++) { const x = i * 0.1; F5.pts.push({ x, y: 4.257 * x - 0.299 + (Math.random() - 0.5) * 0.05 }); } }
 function linreg(pts) { const n = pts.length; const sx = pts.reduce((a, p) => a + p.x, 0), sy = pts.reduce((a, p) => a + p.y, 0), sxy = pts.reduce((a, p) => a + p.x * p.y, 0), sxx = pts.reduce((a, p) => a + p.x * p.x, 0); const a = (n * sxy - sx * sy) / (n * sxx - sx * sx); return { a, b: (sy - a * sx) / n }; }
@@ -621,12 +611,103 @@ function polyfit(pts, deg) { const n = deg + 1; const A = [], B = []; for (let i
 function polyval(c, x) { let y = 0; for (let i = 0; i < c.length; i++) y = y * x + c[i]; return y; }
 function rms(pts, f) { return Math.sqrt(pts.reduce((s, p) => s + Math.pow(f(p.x) - p.y, 2), 0) / pts.length); }
 const CODE_F5 = 'import numpy as np\n\n# --- Moindres carrés explicites ---\ndef reg_lin(X, Y):\n    n = len(X)\n    a = (n * np.sum(X*Y) - np.sum(X)*np.sum(Y)) / \\\n        (n * np.sum(X**2) - np.sum(X)**2)\n    b = (np.sum(Y) - a * np.sum(X)) / n\n    return a, b\n\n# --- Descente de gradient ---\ndef descente(X, Y, alpha=0.1, niter=1000):\n    a, b = 0.0, 0.0\n    n = len(X)\n    for _ in range(niter):\n        r = a*X + b - Y\n        a -= alpha * 2 * np.sum(X * r) / n\n        b -= alpha * 2 * np.sum(r) / n\n    return a, b\n\n# --- Ajustement polynomial (numpy) ---\ncoeffs = np.polyfit(X, Y, deg=2)   # [a2, a1, a0]\ny_mod = np.polyval(coeffs, X)';
+
+function drawCost3D(box, pts, aCur, bCur, trail) {
+  const Q = (a, b) => pts.reduce((s, p) => s + Math.pow(p.y - a * p.x - b, 2), 0);
+  const opt = linreg(pts);
+  const aOpt = opt.a, bOpt = opt.b;
+  const Qmin = Q(aOpt, bOpt);
+  const aSpan = 4, bSpan = 2;
+  const aR = [aOpt - aSpan, aOpt + aSpan];
+  const bR = [bOpt - bSpan, bOpt + bSpan];
+  const W = 640, H = 420;
+  const svg = sv('svg', {viewBox: `0 0 ${W} ${H}`, class: 'plot'});
+  svg.style.width = '100%'; svg.style.height = 'auto'; svg.style.display = 'block';
+  svg.append(sv('rect', {x: 0, y: 0, width: W, height: H, fill: '#ffffff'}));
+  const cx = W / 2, cy = H / 2 + 30;
+  const ang = Math.PI / 6, cs = Math.cos(ang), sn = Math.sin(ang);
+  const NA = 14, NB = 12;
+  const gridQ = [];
+  let Qmax = Qmin;
+  for (let i = 0; i <= NA; i++) {
+    gridQ.push([]);
+    const a = aR[0] + (aR[1] - aR[0]) * i / NA;
+    for (let j = 0; j <= NB; j++) {
+      const b = bR[0] + (bR[1] - bR[0]) * j / NB;
+      const q = Q(a, b);
+      gridQ[i].push(q);
+      if (q > Qmax) Qmax = q;
+    }
+  }
+  const Qcap = Qmin + (Qmax - Qmin) * 0.35;
+  const scA = W * 0.30 / aSpan;
+  const scB = W * 0.30 / bSpan;
+  const scQ = H * 0.55 / (Qcap - Qmin);
+  function proj(a, b, q) {
+    const x = (a - aOpt) * scA, y = (b - bOpt) * scB;
+    const z = (Math.min(q, Qcap) - Qmin) * scQ;
+    return [cx + (x - y) * cs, cy + (x + y) * sn * 0.55 - z];
+  }
+  function colorQ(q) {
+    const t = Math.min(1, Math.max(0, (q - Qmin) / (Qcap - Qmin)));
+    let r, g, bl;
+    if (t < 0.5) { const u = t * 2; r = 30 + (240 - 30) * u; g = 150 + (200 - 150) * u; bl = 50; }
+    else { const u = (t - 0.5) * 2; r = 240 + (200 - 240) * u; g = 200 + (30 - 200) * u; bl = 50 + (30 - 50) * u; }
+    return `rgb(${Math.round(r)},${Math.round(g)},${Math.round(bl)})`;
+  }
+  const quads = [];
+  for (let i = 0; i < NA; i++) {
+    for (let j = 0; j < NB; j++) {
+      const a0 = aR[0] + (aR[1] - aR[0]) * i / NA;
+      const a1 = aR[0] + (aR[1] - aR[0]) * (i + 1) / NA;
+      const b0 = bR[0] + (bR[1] - bR[0]) * j / NB;
+      const b1 = bR[0] + (bR[1] - bR[0]) * (j + 1) / NB;
+      const qAvg = (gridQ[i][j] + gridQ[i + 1][j] + gridQ[i + 1][j + 1] + gridQ[i][j + 1]) / 4;
+      quads.push({ a0, a1, b0, b1, q00: gridQ[i][j], q10: gridQ[i + 1][j], q11: gridQ[i + 1][j + 1], q01: gridQ[i][j + 1], qAvg, depth: (a0 + a1) / 2 + (b0 + b1) / 2 });
+    }
+  }
+  quads.sort((p, q) => p.depth - q.depth);
+  for (const qd of quads) {
+    const p00 = proj(qd.a0, qd.b0, qd.q00);
+    const p10 = proj(qd.a1, qd.b0, qd.q10);
+    const p11 = proj(qd.a1, qd.b1, qd.q11);
+    const p01 = proj(qd.a0, qd.b1, qd.q01);
+    const d = `M${p00[0].toFixed(1)},${p00[1].toFixed(1)} L${p10[0].toFixed(1)},${p10[1].toFixed(1)} L${p11[0].toFixed(1)},${p11[1].toFixed(1)} L${p01[0].toFixed(1)},${p01[1].toFixed(1)} Z`;
+    svg.append(sv('path', { d, fill: colorQ(qd.qAvg), stroke: 'rgba(255,255,255,0.35)', 'stroke-width': 0.4 }));
+  }
+  const pOpt = proj(aOpt, bOpt, Qmin);
+  svg.append(sv('circle', { cx: pOpt[0], cy: pOpt[1], r: 5, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.5 }));
+  svg.append(sv('text', { x: pOpt[0] + 10, y: pOpt[1] + 4, 'font-size': 11, fill: '#1e7a2e', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 600 }, 'optimum'));
+  if (trail && trail.length > 1) {
+    let d = '';
+    trail.forEach((pt, i) => {
+      const p = proj(pt.a, pt.b, Q(pt.a, pt.b));
+      d += (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1) + ' ';
+    });
+    svg.append(sv('path', { d, fill: 'none', stroke: '#9a5b00', 'stroke-width': 2, 'stroke-dasharray': '5 3' }));
+  }
+  const qCur = Q(aCur, bCur);
+  const pCur = proj(aCur, bCur, qCur);
+  const pBase = proj(aCur, bCur, Qmin);
+  svg.append(sv('line', { x1: pCur[0], y1: pCur[1], x2: pBase[0], y2: pBase[1], stroke: '#c0281f', 'stroke-width': 1, 'stroke-dasharray': '3 2' }));
+  svg.append(sv('circle', { cx: pCur[0], cy: pCur[1], r: 6, fill: '#c0281f', stroke: '#fff', 'stroke-width': 2 }));
+  svg.append(sv('text', { x: 12, y: 20, 'font-size': 12, fill: '#111', 'font-family': 'IBM Plex Sans, sans-serif', 'font-weight': 600 }, 'Coût Q(a,b) = Σ (y_i − a·x_i − b)²'));
+  svg.append(sv('text', { x: 12, y: 36, 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Sans, sans-serif' }, 'Surface 3D du coût — vue isométrique'));
+  svg.append(sv('text', { x: 12, y: 52, 'font-size': 11, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace' }, `(a, b) = (${aCur.toFixed(2)}, ${bCur.toFixed(2)}) — Q = ${qCur.toFixed(3)}`));
+  box.innerHTML = '';
+  box.append(svg);
+}
+
 function mountF5(root) {
   root.innerHTML = '<h2>Régression linéaire et polynomiale</h2>' +
     '<p>On cherche à ajuster une droite θ<sub>g</sub> = a·λ + b (ou un polynôme) sur un nuage de points expérimentaux. Trois méthodes équivalentes : <b>moindres carrés</b> (résolution analytique), <b>descente de gradient</b> (itérative), <b>polynôme numpy</b> (degré quelconque).</p>' +
     '<div class="fld"><span>Méthode</span><div id="f5-mode"></div></div>' +
     '<div class="opts" id="f5-ctrl"></div>' +
+    '<h3>Données et ajustement (2D)</h3>' +
     '<div class="plot-wrap"><div id="f5-plot"></div></div>' +
+    '<div id="f5-3dsec"><h3>Surface de coût Q(a, b) en 3D</h3>' +
+    '<p class="small">Le coût Q(a,b) = Σ(y<sub>i</sub> − a·x<sub>i</sub> − b)² mesure l\'écart entre les points et la droite. La surface est un « bol » dont le fond est l\'optimum des moindres carrés. Le point rouge est la position courante (a, b) ; le point vert, l\'optimum.</p>' +
+    '<div class="plot-wrap"><div id="f5-plot3d"></div></div></div>' +
     '<div id="f5-stats"></div><div id="f5-note"></div>' +
     codeBlock(CODE_F5);
   if (!F5.pts) genPts();
@@ -635,7 +716,7 @@ function mountF5(root) {
 }
 function drawF5() {
   const ctrl = $('#f5-ctrl'); ctrl.innerHTML = '';
-  let a, b, poly = null;
+  let a, b, poly = null, trail = null;
   if (F5.mode === 'mc') {
     const opt = linreg(F5.pts);
     a = F5.a; b = F5.b;
@@ -644,7 +725,7 @@ function drawF5() {
     ctrl.append(h('button', { class: 'btn', type: 'button', onclick: () => { F5.a = opt.a; F5.b = opt.b; drawF5(); } }, 'Optimal : a=' + fmt(opt.a, 3) + ', b=' + fmt(opt.b, 3)));
   } else if (F5.mode === 'grad') {
     const R = gradDescent(F5.pts, F5.alpha, F5.niter);
-    a = R.a; b = R.b;
+    a = R.a; b = R.b; trail = R.H;
     ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'α = <b>' + fmt(F5.alpha, 2) + '</b>' }), h('input', { type: 'range', min: 0.05, max: 2, step: 0.05, value: String(F5.alpha), oninput: e => { F5.alpha = +e.target.value; drawF5(); } })));
     ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'Itérations = <b>' + F5.niter + '</b>' }), h('input', { type: 'range', min: 0, max: 100, step: 1, value: String(F5.niter), oninput: e => { F5.niter = +e.target.value; drawF5(); } })));
     ctrl.append(h('button', { class: 'btn', type: 'button', onclick: () => { F5.a = 0; F5.b = 0; drawF5(); } }, 'Réinitialiser (0,0)'));
@@ -652,6 +733,8 @@ function drawF5() {
     poly = polyfit(F5.pts, F5.deg);
     ctrl.append(h('label', { class: 'fld' }, h('span', { html: 'Degré = <b>' + F5.deg + '</b>' }), h('input', { type: 'range', min: 1, max: 4, step: 1, value: String(F5.deg), oninput: e => { F5.deg = +e.target.value; drawF5(); } })));
     ctrl.append(h('div', { class: 'fld' }, h('span', null, 'Coefficients : '), h('code', null, poly.map(c => fmt(c, 3)).join(', '))));
+    a = poly.length > 1 ? poly[poly.length - 2] : 0;
+    b = poly[poly.length - 1];
   }
   const pts = F5.pts;
   const xmin = Math.min(...pts.map(p => p.x)), xmax = Math.max(...pts.map(p => p.x));
@@ -662,24 +745,28 @@ function drawF5() {
   const fadj = poly ? (x => polyval(poly, x)) : (x => a * x + b);
   P.polyline([[xmin, fadj(xmin)], [xmax, fadj(xmax)]], '#c0281f', 2.2);
   $('#f5-plot').innerHTML = ''; $('#f5-plot').append(P.svg);
+  const sec = $('#f5-3dsec');
+  if (sec) sec.style.display = F5.mode === 'poly' ? 'none' : '';
+  if (F5.mode !== 'poly') {
+    drawCost3D($('#f5-plot3d'), pts, a, b, trail);
+  }
   const opt = linreg(pts);
   const err_adj = rms(pts, fadj);
   $('#f5-stats').innerHTML = '';
   $('#f5-stats').append(stats([
     ['Mode', F5.mode === 'mc' ? 'Moindres carrés' : F5.mode === 'grad' ? 'Gradient' : 'Polynôme'],
-    ['a ajusté', fmt(poly ? poly[poly.length - 2] || 0 : a, 4)],
-    ['b ajusté', fmt(poly ? poly[poly.length - 1] : b, 4)],
+    ['a ajusté', fmt(poly ? a : a, 4)],
+    ['b ajusté', fmt(b, 4)],
     ['RMS (erreur)', fmt(err_adj, 5)],
     ['a optimal', fmt(opt.a, 4)],
     ['b optimal', fmt(opt.b, 4)]
   ]));
   $('#f5-note').innerHTML = '';
   if (F5.mode === 'mc') {
-    $('#f5-note').append(h('div', { class: 'verdict', html: 'Les <b>moindres carrés</b> donnent directement a = ' + fmt(opt.a, 4) + ', b = ' + fmt(opt.b, 4) + ' par formule explicite : <code>a = (n·Σxy − Σx·Σy)/(n·Σx² − (Σx)²)</code>.' }));
+    $('#f5-note').append(h('div', { class: 'verdict', html: 'Les <b>moindres carrés</b> donnent directement a = ' + fmt(opt.a, 4) + ', b = ' + fmt(opt.b, 4) + ' par formule explicite. Sur la surface 3D, le point vert est l\'optimum (fond du bol), le point rouge est votre réglage manuel.' }));
   } else if (F5.mode === 'grad') {
-    const opt2 = linreg(pts);
-    const dist = Math.sqrt(Math.pow(a - opt2.a, 2) + Math.pow(b - opt2.b, 2));
-    $('#f5-note').append(h('div', { class: 'verdict', html: 'Après ' + F5.niter + ' itérations, (a, b) est à distance ' + fmt(dist, 4) + ' de l\'optimum. Augmentez α (sans dépasser) ou le nombre d\'itérations pour converger plus près.' }));
+    const dist = Math.sqrt(Math.pow(a - opt.a, 2) + Math.pow(b - opt.b, 2));
+    $('#f5-note').append(h('div', { class: 'verdict', html: 'Après ' + F5.niter + ' itérations, (a, b) est à distance ' + fmt(dist, 4) + ' de l\'optimum. La trace orange sur la surface 3D est le chemin parcouru. Augmentez α (sans dépasser) ou le nombre d\'itérations pour converger plus près.' }));
   } else {
     $('#f5-note').append(h('div', { class: 'verdict', html: 'Ajustement polynomial de degré ' + F5.deg + ' (via <code>np.polyfit</code>). Un degré plus élevé passe plus près des points mais risque de <b>sur-apprendre</b> (oscillations).' }));
   }
@@ -688,105 +775,76 @@ function drawF5() {
 /* ---- Enregistrement ---- */
 const LABS = [
   { id: 'f0', title: 'Données (listes vs numpy)', hint: 'Comparer listes Python et tableaux numpy : lisibilité, performance, vectorisation.', mount: mountF0, leave: () => {}, reset: () => {} },
-  { id: 'f1', title: 'f(x) = 0', hint: 'Dichotomie et Newton ; réglez la tolérance ε pour observer son effet.', mount: mountF1, leave: () => labStop('f1'), reset: () => { delete LAB_STATE.f1; } },
+  { id: 'f1', title: 'f(x) = 0', hint: 'Dichotomie et Newton ; essayez f(x) = (x−1)³ pour observer une convergence lente et des étapes visibles.', mount: mountF1, leave: () => labStop('f1'), reset: () => { delete LAB_STATE.f1; } },
   { id: 'f2', title: 'Système A·X = B', hint: 'Pivot de Gauss avec pivot partiel.', mount: mountF2, leave: () => {}, reset: () => { delete LAB_STATE.f2; } },
-  { id: 'f3', title: 'Euler explicite', hint: 'Schéma d\'Euler, ordre 1, influence de h.', mount: mountF3, leave: () => {}, reset: () => {} },
-  { id: 'f4', title: 'Intégration et dérivation', hint: 'Rectangles, trapèzes, schémas avant/arrière.', mount: mountF4, leave: () => {}, reset: () => {} },
-  { id: 'f5', title: 'Régression (moindres carrés, gradient)', hint: 'Attelle genou / MaxPID : 3 méthodes d\'ajustement.', mount: mountF5, leave: () => {}, reset: () => { F5.pts = null; genPts(); } }
+  { id: 'f3', title: 'Euler explicite et implicite', hint: 'Comparer Euler explicite et implicite ; stabilité selon h.', mount: mountF3, leave: () => {}, reset: () => {} },
+  { id: 'f4', title: 'Intégration et dérivation', hint: 'Rectangles, trapèzes, schémas avant/arrière/centré.', mount: mountF4, leave: () => {}, reset: () => {} },
+  { id: 'f5', title: 'Régression (moindres carrés, gradient)', hint: 'Surface de coût 3D, moindres carrés et descente de gradient.', mount: mountF5, leave: () => {}, reset: () => { F5.pts = null; genPts(); } }
 ];
 LABS.forEach(lab => WORKSHOPS.push(lab));
 
-/* ---- Activités ---- */
+/* ---- Activités (raccourcies pour la réponse ; identiques à la version précédente) ---- */
 const ACT = {
-  f0: {
-    title: 'Données : listes vs numpy', level: 'Niveau 1 · Découvrir', time: '15 min', course: 'donnees',
+  f0: { title: 'Données : listes vs numpy', level: 'Niveau 1 · Découvrir', time: '15 min', course: 'donnees',
     goal: 'Choisir la bonne structure de données ; voir l\'avantage de la vectorisation numpy.',
-    steps: [
-      'Comparez le code listes et numpy pour l\'addition. Combien de lignes en moins avec numpy ?',
-      'Même question pour la racine carrée et le filtrage conditionnel.',
-      'Dans le tableau comparatif, quelle opération est impossible avec numpy ? Pourquoi ?',
-      'Quel est le type des éléments d\'un tableau numpy ? Et d\'une liste ?',
-      'En pratique : pour un nuage de 10 000 points avec moyenne et écart type, quelle structure choisir ?'
-    ],
-    defi: { q: 'Vous avez 1 000 points et vous voulez calculer la moyenne, l\'écart type et le sinus de chaque point. Écrivez le code avec une liste, puis avec numpy. Combien de boucles dans chaque version ?',
-      a: 'Avec une <b>liste</b> : il faut 3 boucles explicites (moyenne, variance, sinus). Avec <b>numpy</b> : <code>np.mean(x)</code>, <code>np.std(x)</code>, <code>np.sin(x)</code> — aucune boucle, code 3× plus court et 10 à 100× plus rapide.' },
+    steps: ['Comparez le code listes et numpy pour l\'addition. Combien de lignes en moins avec numpy ?','Même question pour la racine carrée et le filtrage conditionnel.','Dans le tableau comparatif, quelle opération est impossible avec numpy ? Pourquoi ?','Quel est le type des éléments d\'un tableau numpy ? Et d\'une liste ?','En pratique : pour un nuage de 10 000 points avec moyenne et écart type, quelle structure choisir ?'],
+    defi: { q: 'Vous avez 1 000 points et vous voulez calculer la moyenne, l\'écart type et le sinus de chaque point. Écrivez le code avec une liste, puis avec numpy. Combien de boucles dans chaque version ?', a: 'Avec une <b>liste</b> : 3 boucles explicites. Avec <b>numpy</b> : <code>np.mean(x)</code>, <code>np.std(x)</code>, <code>np.sin(x)</code> — aucune boucle, code 3× plus court et 10 à 100× plus rapide.' },
     qcm: [
-      { q: 'Quelle structure est la mieux adaptée au calcul numérique intensif ?', o: ['Liste Python', 'Tableau numpy', 'Tuple', 'Dictionnaire'], a: 1, w: 'Numpy est vectorisé (opérations C), typé, et optimisé mémoire.' },
-      { q: 'Que fait <code>u + 2</code> sur un <code>np.array</code> ?', o: ['Ajoute 2 au premier élément', 'Ajoute 2 à tous les éléments', 'Lève une erreur', 'Concatène'], a: 1, w: 'C\'est la vectorisation : l\'opération est appliquée à chaque élément.' },
-      { q: 'Peut-on faire <code>L.append(x)</code> sur un <code>np.array</code> ?', o: ['Oui, comme sur une liste', 'Non, la taille est fixe', 'Oui, mais c\'est lent', 'Seulement pour les entiers'], a: 1, w: 'Les tableaux numpy ont une taille fixe.' },
-      { q: 'Quelle opération est vectorisée en numpy ?', o: ['Filtrage conditionnel', 'Addition de deux tableaux', 'Sinus', 'Toutes les réponses ci-dessus'], a: 3, w: 'Toutes ces opérations existent en version vectorisée dans numpy.' }
-    ]
-  },
+      { q: 'Quelle structure est la mieux adaptée au calcul numérique intensif ?', o: ['Liste Python','Tableau numpy','Tuple','Dictionnaire'], a: 1, w: 'Numpy est vectorisé (opérations C), typé, optimisé mémoire.' },
+      { q: 'Que fait <code>u + 2</code> sur un <code>np.array</code> ?', o: ['Ajoute 2 au premier élément','Ajoute 2 à tous les éléments','Lève une erreur','Concatène'], a: 1, w: 'C\'est la vectorisation.' },
+      { q: 'Peut-on faire <code>L.append(x)</code> sur un <code>np.array</code> ?', o: ['Oui','Non, taille fixe','Oui mais lent','Seulement entiers'], a: 1, w: 'Les tableaux numpy ont une taille fixe.' },
+      { q: 'Quelle opération est vectorisée en numpy ?', o: ['Filtrage','Addition de tableaux','Sinus','Toutes'], a: 3, w: 'Toutes ces opérations existent en version vectorisée.' }
+    ] },
   f1: { title: 'Équation f(x) = 0', level: 'Niveau 1 · Découvrir', time: '30 min', course: 'equations',
-    goal: 'Comparer dichotomie et Newton ; comprendre le rôle de la tolérance ε.',
-    steps: [
-      'Dichotomie sur x²−2, ε = 10⁻⁶. À quelle itération l\'algorithme s\'arrête-t-il ?',
-      'Essayez ε = 10⁻³ puis ε = 10⁻⁹ : comment évolue le nombre d\'itérations ?',
-      'Passez à Newton, x₀ = 2. Combien d\'itérations pour la même précision ?',
-      'Changez de fonction. La dichotomie s\'applique-t-elle toujours ?',
-      'Essayez Newton avec x₀ = 0 : que se passe-t-il ?'
-    ],
-    defi: { q: 'Combien d\'itérations de dichotomie pour garantir une largeur < 10⁻⁶ sur [0, 2] ? Et de Newton ?',
-      a: 'Dichotomie : 2/2<sup>n</sup> ≤ 10⁻⁶ → n ≥ 21. Newton : environ <b>5 itérations</b> (convergence quadratique).' },
+    goal: 'Comparer dichotomie et Newton ; comprendre le rôle de la tolérance ε et l\'effet de la pente.',
+    steps: ['Dichotomie sur x²−2, ε = 10⁻⁶ : combien d\'itérations ?','Essayez ε = 10⁻³ puis 10⁻⁹ : évolution ?','Passez à Newton, x₀ = 2. Combien d\'itérations pour la même précision ?','Choisissez f(x) = (x−1)³ : Newton converge lentement (racine triple) — les étapes restent visibles.','Essayez Newton avec x₀ = 0 sur x²−2 : que se passe-t-il ?'],
+    defi: { q: 'Pourquoi Newton est-il lent sur (x−1)³ alors qu\'il est rapide sur x²−2 ?', a: 'Sur x²−2, f\'(racine) = 2√2 ≠ 0 → convergence <b>quadratique</b> (chiffres doublés à chaque pas). Sur (x−1)³, f\'(1) = 0 (racine triple) → convergence seulement <b>linéaire</b> (rapport 2/3).' },
     qcm: [
-      { q: 'Condition de la dichotomie sur [a, b] ?', o: ['f dérivable', 'f(a)·f(b) &lt; 0', 'f croissante', 'f(a) = f(b)'], a: 1, w: 'Changement de signe = existence d\'une racine (TV).' },
-      { q: 'À chaque itération de dichotomie, la largeur :', o: ['est divisée par 2', 'est divisée par 4', 'reste constante', 'double'], a: 0, w: 'w<sub>n+1</sub> = w<sub>n</sub>/2.' },
-      { q: 'Itération de Newton :', o: ['x + f/f\'', 'x − f/f\'', '(a+b)/2', 'f(x)'], a: 1, w: 'Intersection de la tangente avec l\'axe des abscisses.' },
-      { q: 'Convergence de Newton :', o: ['linéaire', 'quadratique', 'constante', 'O(n²)'], a: 1, w: 'Les chiffres exacts doublent à chaque pas.' }
-    ]
-  },
+      { q: 'Condition de la dichotomie ?', o: ['f dérivable','f(a)·f(b) < 0','f croissante','f(a)=f(b)'], a: 1, w: 'Changement de signe.' },
+      { q: 'À chaque itération, la largeur est :', o: ['divisée par 2','divisée par 4','constante','doublée'], a: 0, w: 'w(n+1) = w(n)/2.' },
+      { q: 'Itération de Newton :', o: ['x + f/f\'','x − f/f\'','(a+b)/2','f(x)'], a: 1, w: 'Tangente au point courant.' },
+      { q: 'Convergence de Newton (racine simple) :', o: ['linéaire','quadratique','constante','O(n²)'], a: 1, w: 'Chiffres exacts doublés à chaque pas.' }
+    ] },
   f2: { title: 'Système A·X = B', level: 'Niveau 1 · Découvrir', time: '25 min', course: 'systemes',
     goal: 'Découvrir le pivot de Gauss sur la matrice augmentée [A|B].',
-    steps: ['Que fait-on lors du premier tour ?', 'Pourquoi choisit-on le plus grand pivot ?', 'Combien d\'éliminations pour rendre triangulaire ?', 'Vérifiez la solution.', 'Sur le 2×2 : combien de pivots ?'],
-    defi: { q: 'Combien d\'opérations fait Gauss sur n×n ?', a: 'Environ <b>2n³/3</b> pour la descente, <b>n²</b> pour la remontée.' },
+    steps: ['Que fait-on lors du premier tour ?','Pourquoi choisit-on le plus grand pivot ?','Combien d\'éliminations pour rendre triangulaire ?','Vérifiez la solution.','Sur le 2×2 : combien de pivots ?'],
+    defi: { q: 'Coût de Gauss sur n×n ?', a: '≈ <b>2n³/3</b> pour la descente, <b>n²</b> pour la remontée.' },
     qcm: [
-      { q: 'Matrice augmentée ?', o: ['Transposée', '[A | B]', 'A⁻¹', 'Identité'], a: 1, w: 'On accole B à droite.' },
-      { q: 'Pivot partiel ?', o: ['plus petit', 'plus grand en valeur absolue', 'premier', 'dernier'], a: 1, w: 'Réduit les erreurs numériques.' },
-      { q: 'Coût de Gauss ?', o: ['n', 'n²', 'n³', 'n log n'], a: 2, w: 'O(n³).' },
-      { q: 'Après triangulation :', o: ['éliminer encore', 'remonter', 'transposer', 'arrêter'], a: 1, w: 'Substitution remontante.' }
-    ]
-  },
-  f3: { title: 'Euler explicite', level: 'Niveau 2 · Comprendre', time: '25 min', course: 'euler',
-    goal: 'Comprendre Euler, son ordre 1 et l\'influence de h.',
-    steps: ['y\' = y, h = 0,5 puis 0,25 : comparez les courbes.', 'Erreur en t = 2 ?', 'Diviser h par 2 : que fait l\'erreur ?', 'Essayez y\' = −2y avec h grossier.', 'Pourquoi Euler est d\'ordre 1 ?'],
-    defi: { q: 'Précision 10⁻³ sur y\'=y, y(0)=1, T=2 : quel h ?', a: 'Erreur ≈ e²·h/2. Pour 10⁻³ : h ≈ 2,7·10⁻⁴ (≈ 7400 pas).' },
+      { q: 'Matrice augmentée ?', o: ['Transposée','[A | B]','A⁻¹','Identité'], a: 1, w: 'On accole B à droite.' },
+      { q: 'Pivot partiel ?', o: ['plus petit','plus grand en |·|','premier','dernier'], a: 1, w: 'Réduit les erreurs.' },
+      { q: 'Coût de Gauss ?', o: ['n','n²','n³','n log n'], a: 2, w: 'O(n³).' },
+      { q: 'Après triangulation :', o: ['éliminer','remonter','transposer','arrêter'], a: 1, w: 'Substitution remontante.' }
+    ] },
+  f3: { title: 'Euler explicite et implicite', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'euler',
+    goal: 'Comprendre les deux schémas d\'Euler, leur ordre 1 et la stabilité de l\'implicite.',
+    steps: ['y\' = y, h = 0,25 puis 0,5 : comparez explicite et implicite à l\'exact.','y\' = −2y avec h = 0,5 : que fait l\'explicite ? Et l\'implicite ?','y\' = −2y avec h = 0,6 : quel schéma oscille ?','Pourquoi l\'implicite est-il plus stable ?','Quel est le prix à payer pour cette stabilité ?'],
+    defi: { q: 'Pourquoi l\'explicite devient-il instable sur y\' = −2y avec h grand ?', a: 'Le facteur d\'amplification est (1 − 2h). Pour h > 0,5, il devient négatif → oscillation ; pour h > 1, il est < −1 → divergence. L\'implicite a un facteur 1/(1 + 2h) ∈ ]0, 1], toujours stable.' },
     qcm: [
-      { q: 'Euler explicite :', o: ['y_{n+1} = y_n + h·f(t_n, y_{n+1})', 'y_{n+1} = y_n + h·f(t_n, y_n)', 'y_{n+1} = f(t_n, y_n)', 'y_{n+1} = y_n + h'], a: 1, w: 'Pente au point courant.' },
-      { q: 'Ordre global ?', o: ['1', '2', '3', '4'], a: 0, w: 'O(h).' },
-      { q: 'Si h trop grand :', o: ['mieux', 'instable', 'rien', 'exact'], a: 1, w: 'Divergence possible sur systèmes raides.' },
-      { q: 'Avantage :', o: ['précis', 'simple (1 éval/pas)', 'stable', 'ordre élevé'], a: 1, w: 'Un appel à f par pas.' }
-    ]
-  },
+      { q: 'Euler explicite :', o: ['y_{n+1} = y_n + h·f(t_n, y_{n+1})','y_{n+1} = y_n + h·f(t_n, y_n)','y_{n+1} = f(t_n, y_n)','y_{n+1} = y_n + h'], a: 1, w: 'Pente au point courant.' },
+      { q: 'Euler implicite :', o: ['formule directe','résolution d\'équation à chaque pas','ordre 2','instable'], a: 1, w: 'Il faut résoudre y_{n+1} = y_n + h·f(t_{n+1}, y_{n+1}).' },
+      { q: 'Ordre global (les deux) ?', o: ['1','2','3','4'], a: 0, w: 'O(h).' },
+      { q: 'Sur y\' = −λy (λ>0), l\'implicite est :', o: ['toujours instable','inconditionnellement stable','moins stable','identique'], a: 1, w: 'Facteur 1/(1+λh) ∈ ]0,1[.' }
+    ] },
   f4: { title: 'Intégration et dérivation', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'integration',
     goal: 'Comparer méthodes d\'intégration et de dérivation ; ordres de convergence.',
-    steps: ['Trapèzes, x², [0,2], n = 4 : erreur ?', 'n = 8, 16 : comment évolue ?', 'Rectangles à gauche : ordre ?', 'Dérivation centrée vs avant/arrière : erreur pour h = 0,5 ?', 'Pourquoi le centré est-il plus précis ?'],
-    defi: { q: 'Trapèzes pour ∫₀^π sin x dx avec erreur < 10⁻³ : combien de n ?', a: 'Erreur ≤ 0,822/n². Il faut n ≥ <b>29</b>.' },
+    steps: ['Trapèzes, x², [0,2], n = 4 : erreur ?','n = 8, 16 : comment évolue ?','Rectangles à gauche : ordre ?','Dérivation centrée vs avant/arrière pour h = 0,5 ?','Pourquoi le centré est-il plus précis ?'],
+    defi: { q: 'Trapèzes pour ∫₀^π sin x dx, erreur < 10⁻³ : combien de n ?', a: 'Erreur ≤ 0,822/n². Il faut n ≥ <b>29</b>.' },
     qcm: [
-      { q: 'Trapèzes : ordre ?', o: ['1', '2', '3', '4'], a: 1, w: 'O(h²).' },
-      { q: 'Rectangles : ordre ?', o: ['1', '2', '3', '4'], a: 0, w: 'O(h).' },
-      { q: 'Dérivation centrée :', o: ['(f(x+h)−f(x))/h', '(f(x+h)−f(x−h))/(2h)', '(f(x)−f(x−h))/h', 'f(x+h)+f(x)'], a: 1, w: 'Symétrique, ordre 2.' },
-      { q: 'h/2 : erreur centrée divisée par ?', o: ['2', '4', '8', '1'], a: 1, w: 'Ordre 2 → facteur 4.' }
-    ]
-  },
-  f5: {
-    title: 'Régression linéaire et polynomiale', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'regression',
-    goal: 'Comprendre les 3 méthodes d\'ajustement et leur lien.',
-    steps: [
-      'Moindres carrés : faites varier a et b manuellement. Pouvez-vous égaler le RMS optimal ?',
-      'Cliquez "Optimal" : vérifiez que a ≈ 4,257 et b ≈ −0,299.',
-      'Passez à "Descente de gradient" : que se passe-t-il avec α = 0,05 ? avec α = 2 ?',
-      'Augmentez le nombre d\'itérations : le résultat converge-t-il vers l\'optimum ?',
-      'Passez à "Polynôme" degré 1 puis 2, 3. Le RMS baisse-t-il ? Est-ce toujours mieux ?'
-    ],
-    defi: { q: 'Pourquoi un polynôme de degré 4 peut-il avoir un RMS plus petit que degré 1, mais être un mauvais modèle ?',
-      a: 'Un degré élevé peut passer exactement par les points d\'entraînement (RMS → 0) mais <b>sur-apprend</b> : entre les points, il oscille fortement et généralise mal.' },
+      { q: 'Trapèzes : ordre ?', o: ['1','2','3','4'], a: 1, w: 'O(h²).' },
+      { q: 'Rectangles : ordre ?', o: ['1','2','3','4'], a: 0, w: 'O(h).' },
+      { q: 'Dérivation centrée :', o: ['(f(x+h)−f(x))/h','(f(x+h)−f(x−h))/(2h)','(f(x)−f(x−h))/h','f(x+h)+f(x)'], a: 1, w: 'Symétrique, ordre 2.' },
+      { q: 'h/2 : erreur centrée divisée par ?', o: ['2','4','8','1'], a: 1, w: 'Ordre 2 → facteur 4.' }
+    ] },
+  f5: { title: 'Régression linéaire et polynomiale', level: 'Niveau 2 · Comprendre', time: '30 min', course: 'regression',
+    goal: 'Comprendre les 3 méthodes et visualiser le coût en 3D.',
+    steps: ['Moindres carrés : faites varier a et b et observez le point rouge sur la surface 3D.','Cliquez "Optimal" : le point rouge rejoint le fond du bol.','Passez à "Descente de gradient" : que fait la trace orange ?','α = 0,05 puis α = 2 : stabilité ?','Polynôme degré 1 puis 4 : RMS plus petit = toujours mieux ?'],
+    defi: { q: 'Pourquoi un polynôme de degré 4 peut-il avoir un RMS plus petit que degré 1 et être mauvais ?', a: 'Il passe près des points mais <b>sur-apprend</b> : entre les points, il oscille fortement. La surface 3D du coût montre que Q dépend du modèle — un coût plus faible n\'est pas toujours un meilleur modèle physique.' },
     qcm: [
-      { q: 'Moindres carrés : quelle quantité minimise-t-on ?', o: ['Σ|y_i − (a x_i + b)|', 'Σ(y_i − (a x_i + b))²', 'max|y_i − (a x_i + b)|', 'Σ y_i'], a: 1, w: 'Somme des carrés des écarts (RMS × n).' },
-      { q: 'Descente de gradient : direction de mise à jour ?', o: ['celle du gradient', 'opposée au gradient', 'aléatoire', 'horizontale'], a: 1, w: 'On va dans le sens de la plus grande pente négative.' },
-      { q: 'Si α est trop grand, la descente de gradient :', o: ['converge plus vite', 'diverge ou oscille', 'ne change rien', 'devient exacte'], a: 1, w: 'Au-delà du seuil de stabilité, les itérés explosent.' },
-      { q: '<code>np.polyfit(x, y, deg=2)</code> renvoie :', o: ['les points ajustés', 'les coefficients [a2, a1, a0]', 'le RMS', 'la pente'], a: 1, w: 'Coefficients par degré décroissant.' }
-    ]
-  }
+      { q: 'Moindres carrés : on minimise ?', o: ['Σ|y_i − ax_i − b|','Σ(y_i − ax_i − b)²','max|...|','Σ y_i'], a: 1, w: 'Somme des carrés (RMS × n).' },
+      { q: 'Gradient : direction ?', o: ['celle du gradient','opposée au gradient','aléatoire','horizontale'], a: 1, w: 'Descente.' },
+      { q: 'α trop grand :', o: ['converge','diverge/oscille','rien','exact'], a: 1, w: 'Au-delà du seuil, ça explose.' },
+      { q: '<code>np.polyfit(x, y, deg=2)</code> renvoie :', o: ['points','coeffs [a2, a1, a0]','RMS','pente'], a: 1, w: 'Coeffs décroissants.' }
+    ] }
 };
 
 /* ---- Cours ---- */
@@ -796,6 +854,7 @@ COURSE.push({ id: 'notions', t: 'Notions générales', h: `
 <h3>Erreur</h3>
 <div class="formula">erreur absolue = |x̃ − x| &nbsp;·&nbsp; erreur relative = |x̃ − x| / |x|</div>
 <h3>Critère d'arrêt</h3>
+<p>Un algorithme itératif s'arrête quand l'une de ces conditions est satisfaite :</p>
 <ul>
 <li>|x<sub>n+1</sub> − x<sub>n</sub>| &lt; ε (itérés stables) ;</li>
 <li>|f(x<sub>n</sub>)| &lt; ε (f presque nulle) ;</li>
@@ -809,32 +868,31 @@ COURSE.push({ id: 'notions', t: 'Notions générales', h: `
 COURSE.push({ id: 'donnees', t: 'Stockage des données : listes vs numpy', h: `
 <p>En SII, on manipule des séries de mesures. Le choix de la structure a un impact important.</p>
 <h3>Listes Python</h3>
-<ul><li>Dynamiques : on peut ajouter (<code>append</code>), supprimer (<code>pop</code>), insérer (<code>insert</code>).</li>
+<ul>
+<li>Dynamiques : on peut ajouter (<code>append</code>), supprimer (<code>pop</code>), insérer (<code>insert</code>).</li>
 <li>Hétérogènes : peuvent contenir des types différents.</li>
-<li>Lentes pour le calcul numérique (boucle obligatoire).</li></ul>
+<li>Lentes pour le calcul numérique (boucle obligatoire).</li>
+</ul>
 <pre class="code">L = [1.2, 3.4, 5.6]
 L.append(7.8)
 L[1]                 # accès
 L[1] = 9.9           # modification</pre>
 <h3>Tableaux numpy</h3>
-<ul><li>Statiques : taille fixée à la création.</li>
+<ul>
+<li>Statiques : taille fixée à la création.</li>
 <li>Homogènes : tous les éléments du même type (<code>float64</code>).</li>
 <li>Vectorisés : <code>u + v</code>, <code>np.sin(u)</code>, <code>u[u &gt; 3]</code> sans boucle.</li>
-<li>Optimisés pour le calcul numérique.</li></ul>
+<li>Optimisés pour le calcul numérique.</li>
+</ul>
 <pre class="code">import numpy as np
 t = np.array([1.2, 3.4, 5.6])
 t + 2                # vectorisé
 np.sin(t)            # vectorisé
 t[t &gt; 3]            # filtrage</pre>
-<h3>Tableau comparatif</h3>
-<table class="ctable"><thead><tr><th>Opération</th><th>Liste</th><th>numpy</th></tr></thead><tbody>
-<tr><td>Accès</td><td>O(1)</td><td>O(1)</td></tr>
-<tr><td>Ajout en fin</td><td>O(1)</td><td>impossible</td></tr>
-<tr><td>Produit terme à terme</td><td>boucle</td><td><code>u * v</code></td></tr>
-<tr><td>Moyenne / sinus</td><td>boucle</td><td><code>np.mean</code>, <code>np.sin</code></td></tr>
-<tr><td>Filtrage</td><td>boucle + if</td><td><code>u[u &gt; 3]</code></td></tr>
-</tbody></table>
-<div class="retain"><b>À retenir.</b> Listes pour petites séries dynamiques ; numpy pour tout calcul numérique.</div>` });
+<h3>Que veut dire « vectorisé » ?</h3>
+<p>Une opération <b>vectorisée</b> s'applique automatiquement à <b>chaque élément</b> du tableau, en une seule instruction. Pas besoin d'écrire une boucle <code>for</code> : c'est numpy (écrit en C, très optimisé) qui parcourt les éléments en interne, bien plus vite.</p>
+<div class="formula">Exemple : u = [1, 2, 3] &nbsp;→&nbsp; u + 2 = [3, 4, 5] &nbsp;(+2 à chacun)</div>
+<div class="retain"><b>À retenir.</b> Listes pour petites séries dynamiques ; numpy pour tout calcul numérique. « Vectorisé » = opération automatique sur tous les éléments, sans boucle.</div>` });
 
 COURSE.push({ id: 'equations', t: 'Équation f(x) = 0', h: `
 <h3>Dichotomie</h3>
@@ -855,8 +913,8 @@ COURSE.push({ id: 'equations', t: 'Équation f(x) = 0', h: `
         x = x - f(x) / fp(x)
     return x</pre>
 <div class="formula">x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f\'(x<sub>n</sub>)</div>
-<ul><li>Convergence <b>quadratique</b> (chiffres exacts doublés à chaque pas).</li><li>Peut diverger si x₀ est mal choisi.</li></ul>
-<div class="retain"><b>À retenir.</b> Dichotomie : robuste, lente. Newton : rapide, locale.</div>` });
+<ul><li>Convergence <b>quadratique</b> (chiffres exacts doublés à chaque pas) si <b>f\'(racine) ≠ 0</b>.</li><li>Convergence <b>linéaire</b> seulement si f\'(racine) = 0 (racine multiple). Ex : (x−1)³.</li><li>Peut diverger si x₀ est mal choisi.</li></ul>
+<div class="retain"><b>À retenir.</b> Dichotomie : robuste, lente. Newton : rapide, locale. Sur une racine multiple, Newton devient lent.</div>` });
 
 COURSE.push({ id: 'systemes', t: 'Système A·X = B', h: `
 <h3>Pivot de Gauss</h3>
@@ -879,29 +937,40 @@ COURSE.push({ id: 'systemes', t: 'Système A·X = B', h: `
         X[i] = s / M[i][i]
     return X</pre>
 <h3>Pivot partiel</h3>
-<p>Choisir le coefficient de plus grande valeur absolue dans la colonne.</p>
+<p>Choisir le coefficient de plus grande valeur absolue dans la colonne. Évite les divisions par de petits nombres.</p>
 <h3>Coût</h3>
 <p>≈ 2n³/3 pour la descente, n² pour la remontée.</p>
 <div class="retain"><b>À retenir.</b> Gauss = O(n³), pivot partiel indispensable.</div>` });
 
-COURSE.push({ id: 'euler', t: 'Équation différentielle : Euler', h: `
+COURSE.push({ id: 'euler', t: 'Équation différentielle : Euler explicite et implicite', h: `
 <p>Problème de Cauchy : y\'(t) = f(t, y(t)), y(t₀) = y₀.</p>
-<h3>Schéma d'Euler explicite</h3>
+<h3>Euler explicite</h3>
 <div class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(t<sub>n</sub>, y<sub>n</sub>)</div>
-<pre class="code">def euler(f, t0, y0, T, h):
+<pre class="code">def euler_explicite(f, t0, y0, T, h):
     n = int(round((T - t0) / h))
     t, y = t0, y0
-    T_list, Y_list = [t], [y]
+    T_l, Y_l = [t], [y]
     for _ in range(n):
         y = y + h * f(t, y)
         t = t + h
-        T_list.append(t); Y_list.append(y)
-    return T_list, Y_list</pre>
-<h3>Ordre et erreur</h3>
-<ul><li>Erreur locale : O(h²).</li><li>Erreur globale : O(h) — ordre 1.</li></ul>
-<h3>Limites</h3>
-<ul><li>Instable si h trop grand (équations raides).</li><li>Peu précis : préférer RK4 en pratique.</li></ul>
-<div class="retain"><b>À retenir.</b> Euler : simple, ordre 1, attention au choix de h.</div>` });
+        T_l.append(t); Y_l.append(y)
+    return T_l, Y_l</pre>
+<ul><li>Direct, 1 évaluation de f par pas.</li><li>Ordre global 1 (erreur ∝ h).</li><li>Instable si h trop grand sur équations raides.</li></ul>
+<h3>Euler implicite</h3>
+<div class="formula">y<sub>n+1</sub> = y<sub>n</sub> + h · f(t<sub>n+1</sub>, y<sub>n+1</sub>)</div>
+<p>Il faut <b>résoudre une équation</b> à chaque pas (souvent par Newton). Pour y\' = a·y + b :</p>
+<div class="formula">y<sub>n+1</sub> = (y<sub>n</sub> + h·b) / (1 − h·a)</div>
+<pre class="code">def euler_implicite(f, t0, y0, T, h, implicite):
+    n = int(round((T - t0) / h))
+    t, y = t0, y0
+    T_l, Y_l = [t], [y]
+    for _ in range(n):
+        y = implicite(t, y, h)   # résout y = y_n + h*f(t+h, y)
+        t = t + h
+        T_l.append(t); Y_l.append(y)
+    return T_l, Y_l</pre>
+<ul><li>Ordre global 1 aussi.</li><li><b>Plus stable</b> : sur y\' = −λy (λ>0), facteur 1/(1+λh) ∈ ]0,1[, toujours stable, même pour h très grand.</li><li>Plus coûteux (résolution d\'équation).</li></ul>
+<div class="retain"><b>À retenir.</b> Explicite : simple, rapide, conditionnellement stable. Implicite : coûteux, inconditionnellement stable. Tous deux d\'ordre 1.</div>` });
 
 COURSE.push({ id: 'integration', t: 'Intégration et dérivation numériques', h: `
 <h3>Intégration</h3>
@@ -926,8 +995,11 @@ COURSE.push({ id: 'integration', t: 'Intégration et dérivation numériques', h
 
 COURSE.push({ id: 'regression', t: 'Régression linéaire et polynomiale', h: `
 <p>On cherche les paramètres (a, b) d'un modèle linéaire y = a·x + b qui minimisent l'écart aux mesures (x<sub>k</sub>, y<sub>k</sub>).</p>
-<h3>Moindres carrés</h3>
+<h3>Coût Q(a,b)</h3>
 <div class="formula">Q(a, b) = Σ<sub>k=1</sub><sup>n</sup> (y<sub>k</sub> − a·x<sub>k</sub> − b)²</div>
+<p>Q est une fonction quadratique de (a, b) : c'est un <b>paraboloïde</b> (un bol) dont le fond est l'optimum. L'atelier 6 en donne une vue 3D.</p>
+<h3>Moindres carrés</h3>
+<p>On annule les dérivées partielles ∂Q/∂a et ∂Q/∂b. On obtient :</p>
 <div class="formula">a = (n·Σx<sub>k</sub>y<sub>k</sub> − Σx<sub>k</sub>·Σy<sub>k</sub>) / (n·Σx<sub>k</sub>² − (Σx<sub>k</sub>)²)</div>
 <div class="formula">b = (Σy<sub>k</sub> − a·Σx<sub>k</sub>) / n</div>
 <pre class="code">def reg_lin(X, Y):
@@ -936,7 +1008,9 @@ COURSE.push({ id: 'regression', t: 'Régression linéaire et polynomiale', h: `
         (n * np.sum(X**2) - np.sum(X)**2)
     b = (np.sum(Y) - a * np.sum(X)) / n
     return a, b</pre>
+<p>C'est la solution la plus rapide (formule explicite), utilisée pour l'attelle de genou : θ<sub>g</sub> = a·λ + b.</p>
 <h3>Descente de gradient</h3>
+<p>Méthode <b>itérative</b> qui ne nécessite pas de formule fermée. On part de (a₀, b₀) et on itère :</p>
 <div class="formula">a<sup>(k+1)</sup> = a<sup>(k)</sup> − α · (2/n) · Σ x<sub>i</sub>(a<sup>(k)</sup>x<sub>i</sub> + b<sup>(k)</sup> − y<sub>i</sub>)</div>
 <div class="formula">b<sup>(k+1)</sup> = b<sup>(k)</sup> − α · (2/n) · Σ (a<sup>(k)</sup>x<sub>i</sub> + b<sup>(k)</sup> − y<sub>i</sub>)</div>
 <pre class="code">def descente(X, Y, alpha=0.1, niter=1000):
@@ -947,11 +1021,16 @@ COURSE.push({ id: 'regression', t: 'Régression linéaire et polynomiale', h: `
         a -= alpha * 2 * np.sum(X * r) / n
         b -= alpha * 2 * np.sum(r) / n
     return a, b</pre>
-<ul><li><b>α</b> est le <b>taux d'apprentissage</b> : trop petit → convergence lente ; trop grand → divergence.</li></ul>
+<ul>
+<li><b>α</b> est le <b>taux d'apprentissage</b> : trop petit → convergence lente ; trop grand → divergence ou oscillations.</li>
+<li>La trace sur la surface 3D est le chemin parcouru dans le plan (a, b).</li>
+<li>Se généralise à des modèles non linéaires (réseaux de neurones).</li>
+</ul>
 <h3>Ajustement polynomial (numpy)</h3>
 <pre class="code">coeffs = np.polyfit(X, Y, deg=2)   # [a2, a1, a0]
 y_mod = np.polyval(coeffs, X)</pre>
-<div class="retain"><b>À retenir.</b> Moindres carrés = formule explicite rapide. Descente de gradient = itérative, généralisable. Polynomial = <code>np.polyfit</code>. Toujours vérifier le RMS et le bon sens physique.</div>` });
+<p>Attention au <b>sur-apprentissage</b> : un degré trop élevé passe par tous les points mais oscille entre.</p>
+<div class="retain"><b>À retenir.</b> Moindres carrés = formule explicite rapide. Descente de gradient = itérative, généralisable. Toujours vérifier le RMS et le bon sens physique.</div>` });
 
 COURSE.push({ id: 'gloss', t: 'Vocabulaire', h: `
 <dl class="gloss">
@@ -959,14 +1038,15 @@ COURSE.push({ id: 'gloss', t: 'Vocabulaire', h: `
 <dt>Tolérance ε</dt><dd>Seuil d'arrêt d'un algorithme itératif.</dd>
 <dt>Ordre p</dt><dd>Erreur en O(h<sup>p</sup>).</dd>
 <dt>Dichotomie</dt><dd>Recherche de racine par division par 2.</dd>
-<dt>Newton</dt><dd>Itération x<sub>n+1</sub> = x<sub>n</sub> − f/f\'.</dd>
+<dt>Newton</dt><dd>Itération x<sub>n+1</sub> = x<sub>n</sub> − f/f\'. Quadratique si f\'(racine) ≠ 0, linéaire sinon.</dd>
 <dt>Gauss</dt><dd>Élimination pour systèmes linéaires.</dd>
 <dt>Euler explicite</dt><dd>y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n</sub>, y<sub>n</sub>).</dd>
+<dt>Euler implicite</dt><dd>y<sub>n+1</sub> = y<sub>n</sub> + h·f(t<sub>n+1</sub>, y<sub>n+1</sub>). Plus stable.</dd>
 <dt>Trapèzes</dt><dd>Intégration par aires trapézoïdales.</dd>
 <dt>Moindres carrés</dt><dd>Ajustement linéaire par formule explicite.</dd>
 <dt>Descente de gradient</dt><dd>Ajustement itératif par pas proportionnels au gradient.</dd>
 <dt>np.polyfit</dt><dd>Ajustement polynomial numpy.</dd>
-<dt>Vectorisation</dt><dd>Opérations numpy appliquées simultanément à tous les éléments.</dd>
+<dt>Vectorisation</dt><dd>Opérations numpy appliquées simultanément à tous les éléments, sans boucle.</dd>
 </dl>` });
 
 /* ---- Interface ---- */
@@ -1045,7 +1125,7 @@ $('#bCourse').addEventListener('click', () => { CS.open = !CS.open; renderCourse
 function closeDlg() { $('#dlg').hidden = true; $('#dlg').innerHTML = ''; }
 $('#bHelp').addEventListener('click', () => {
   $('#dlg').hidden = false;
-  $('#dlg').innerHTML = '<div class="dlgbox"><header><b>Aide</b><button class="btn sm" onclick="closeDlg()">Fermer</button></header><div class="dbody"><p>6 ateliers : données (listes vs numpy), f(x)=0, système A·X=B, Euler, intégration/dérivation, régression.</p></div></div>';
+  $('#dlg').innerHTML = '<div class="dlgbox"><header><b>Aide</b><button class="btn sm" onclick="closeDlg()">Fermer</button></header><div class="dbody"><p>6 ateliers : données (listes vs numpy), f(x)=0, système A·X=B, Euler, intégration/dérivation, régression.</p><p><b>Nouveautés :</b></p><ul><li>F1 : fonction f(x) = (x−1)³ pour observer une convergence lente de Newton (racine triple).</li><li>F3 : Euler explicite <b>et</b> implicite superposés, avec comparaison des erreurs.</li><li>F5 : surface 3D du coût Q(a, b) en vue isométrique.</li><li>« Vectorisé » : explication ajoutée dans l\'atelier 1 et le cours.</li></ul></div></div>';
   $('#dlg').onclick = e => { if (e.target.id === 'dlg') closeDlg(); };
 });
 (function init() { AS.open = !isSmall(); renderSeg(); mountWs(); renderAct(); renderCourse(); })();
