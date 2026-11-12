@@ -274,28 +274,36 @@ function rangeFmt(v) {
 
 function newtonInset(svg, f, fun) {
   if (!isFinite(f.xn)) return;
-  const iw = 215, ih = 165;
-  /* Encart placé en HAUT À GAUCHE (zone généralement vide) */
+  const iw = 230, ih = 185;
   const ix = 56, iy = 20;
   const x1 = f.x, x2 = f.xn, root = fun.root;
-  let xa = Math.min(x1, x2, root), xb = Math.max(x1, x2, root);
-  let xspan = xb - xa;
-  if (xspan < 1e-12) xspan = 1e-6;
-  xa -= xspan * 0.25; xb += xspan * 0.25;
-  const ya0 = Math.min(0, f.fx), yb0 = Math.max(0, f.fx);
-  let yspan = yb0 - ya0;
-  if (yspan < 1e-12) yspan = Math.max(1e-6, Math.abs(f.fx) * 0.5);
-  let ya = ya0 - yspan * 0.25, yb = yb0 + yspan * 0.25;
+
+  /* Fenêtre basée UNIQUEMENT sur l'étape (pas la racine) */
+  let span = Math.abs(x1 - x2);
+  if (span < 1e-14) span = 1e-14;
+  let xa = Math.min(x1, x2) - span * 0.35;
+  let xb = Math.max(x1, x2) + span * 0.35;
+
+  /* Y-range calculé par échantillonnage → pas de saturation */
+  const samples = [];
+  for (let i = 0; i <= 80; i++) samples.push(fun.f(xa + (xb - xa) * i / 80));
+  const fin = samples.filter(v => isFinite(v));
+  let ymin = Math.min(0, ...fin, f.fx);
+  let ymax = Math.max(0, ...fin, f.fx);
+  let yspan = ymax - ymin;
+  if (yspan < 1e-14) yspan = Math.max(1e-6, Math.abs(f.fx) * 0.5);
+  let ya = ymin - yspan * 0.15;
+  let yb = ymax + yspan * 0.15;
 
   const nested = sv('svg', { x: ix, y: iy, width: iw, height: ih });
   nested.append(sv('rect', { x: 0, y: 0, width: iw, height: ih, fill: '#ffffff', stroke: '#2e6da4', 'stroke-width': 1.5, rx: 4 }));
 
-  const ml = 14, mr = 14, mt = 24, mb = 22;
+  const ml = 50, mr = 10, mt = 22, mb = 24;
   const plw = iw - ml - mr, plh = ih - mt - mb;
   const toX = x => ml + (x - xa) / (xb - xa) * plw;
   const toY = y => mt + (yb - y) / (yb - ya) * plh;
 
-  /* --- GRILLE / ÉCHELLE --- */
+  /* Grille */
   for (let i = 1; i < 4; i++) {
     const gx = ml + plw * i / 4;
     nested.append(sv('line', { x1: gx, y1: mt, x2: gx, y2: mt + plh, stroke: '#e0e4e9', 'stroke-width': 1, 'stroke-dasharray': '2 2' }));
@@ -305,47 +313,62 @@ function newtonInset(svg, f, fun) {
     nested.append(sv('line', { x1: ml, y1: gy, x2: ml + plw, y2: gy, stroke: '#e0e4e9', 'stroke-width': 1, 'stroke-dasharray': '2 2' }));
   }
 
-  /* Axe x = 0 si visible */
-  if (ya < 0 && yb > 0) nested.append(sv('line', { x1: ml, y1: toY(0), x2: ml + plw, y2: toY(0), stroke: '#b9bfc7', 'stroke-width': 1 }));
+  /* Axe y=0 si visible */
+  if (ya <= 0 && yb >= 0) {
+    nested.append(sv('line', { x1: ml, y1: toY(0), x2: ml + plw, y2: toY(0), stroke: '#5a6068', 'stroke-width': 1 }));
+  }
 
-  /* --- COURBE --- */
+  /* Courbe */
   let d = '', started = false;
   for (let i = 0; i <= 100; i++) {
     const x = xa + (xb - xa) * i / 100;
-    let y = fun.f(x);
+    const y = fun.f(x);
     if (!isFinite(y)) { started = false; continue; }
-    if (y < ya) y = ya;
-    if (y > yb) y = yb;
     d += (started ? 'L' : 'M') + toX(x).toFixed(2) + ' ' + toY(y).toFixed(2) + ' ';
     started = true;
   }
   if (d) nested.append(sv('path', { d, fill: 'none', stroke: '#2e6da4', 'stroke-width': 1.6 }));
 
-  /* Racine */
-  if (root >= xa && root <= xb) nested.append(sv('circle', { cx: toX(root), cy: toY(0), r: 3, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.2 }));
+  /* Racine si visible */
+  if (root >= xa && root <= xb && ya <= 0 && yb >= 0) {
+    nested.append(sv('circle', { cx: toX(root), cy: toY(0), r: 3, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.2 }));
+  }
 
   /* Tangente */
   nested.append(sv('line', { x1: toX(x1), y1: toY(f.fx), x2: toX(x2), y2: toY(0), stroke: '#7b4fc2', 'stroke-width': 1.8 }));
 
-  /* Points + étiquettes */
+  /* Points */
   nested.append(sv('circle', { cx: toX(x1), cy: toY(f.fx), r: 3.5, fill: '#c0281f', stroke: '#fff', 'stroke-width': 1.2 }));
   nested.append(sv('circle', { cx: toX(x2), cy: toY(0), r: 3.5, fill: '#9a5b00', stroke: '#fff', 'stroke-width': 1.2 }));
+
+  /* Étiquettes xₙ / xₙ₊₁ */
+  const lx1 = toX(x1), ly1 = toY(f.fx);
+  const lx2 = toX(x2), ly2 = toY(0);
+  nested.append(sv('text', { x: lx1 + (lx1 > iw/2 ? -5 : 5), y: ly1 - 5, 'text-anchor': lx1 > iw/2 ? 'end' : 'start', 'font-size': 10, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
+  nested.append(sv('text', { x: lx2 + (lx2 > iw/2 ? -5 : 5), y: ly2 + 12, 'text-anchor': lx2 > iw/2 ? 'end' : 'start', 'font-size': 10, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
+
+  /* Format scientifique pour distinguer même à Δ ≈ 10⁻¹⁰ */
+  const tickFmt = v => (!isFinite(v) || v === 0) ? '0' : v.toExponential(2).replace('.', ',');
+
+  /* Graduations X */
+  [xa, (xa+xb)/2, xb].forEach((v, i) => {
+    const px = toX(v);
+    const anchor = i === 0 ? 'start' : i === 2 ? 'end' : 'middle';
+    nested.append(sv('text', { x: px, y: ih - 11, 'text-anchor': anchor, 'font-size': 8.5, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, tickFmt(v)));
+  });
+
+  /* Graduations Y */
+  [ya, (ya+yb)/2, yb].forEach((v, i) => {
+    const py = toY(v);
+    const dy = i === 0 ? 4 : i === 2 ? -2 : 3;
+    nested.append(sv('text', { x: ml - 4, y: py + dy, 'text-anchor': 'end', 'font-size': 8.5, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, tickFmt(v)));
+  });
 
   /* Titre */
   nested.append(sv('text', { x: iw / 2, y: 15, 'text-anchor': 'middle', 'font-size': 11, fill: '#1b4a76', 'font-weight': 600, 'font-family': 'IBM Plex Sans, sans-serif' }, 'Zoom · étape n = ' + f.n));
 
-  const lx1 = toX(x1), ly1 = toY(f.fx);
-  const lx2 = toX(x2), ly2 = toY(0);
-  nested.append(sv('text', { x: lx1 + (lx1 > iw / 2 ? -5 : 5), y: ly1 - 5, 'text-anchor': lx1 > iw / 2 ? 'end' : 'start', 'font-size': 10, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + f.n));
-  nested.append(sv('text', { x: lx2 + (lx2 > iw / 2 ? -5 : 5), y: ly2 + 12, 'text-anchor': lx2 > iw / 2 ? 'end' : 'start', 'font-size': 10, fill: '#9a5b00', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 700 }, 'x' + (f.n + 1)));
-
-  /* Libellé d'échelle : Δx, Δy */
-  const dx = xb - xa, dy = yb - ya;
-  nested.append(sv('text', { x: iw / 2, y: ih - 5, 'text-anchor': 'middle', 'font-size': 9.5, fill: '#5a6068', 'font-family': 'IBM Plex Mono, monospace' }, 'Δx = ' + rangeFmt(dx) + '   Δy = ' + rangeFmt(dy)));
-
   svg.append(nested);
 }
-
 function mountF1(root) {
   root.innerHTML = '<h2>Équation f(x) = 0</h2><p>Dichotomie et Newton. La <b>tolérance ε</b> sert de critère d\'arrêt. La fonction <b>(x−1)³</b> illustre une convergence lente de Newton (racine triple) : chaque étape reste visible.</p>' +
     '<div class="opts"><div class="fld"><span>Fonction</span><div id="f1-func"></div></div><div class="fld"><span>Méthode</span><div id="f1-algo"></div></div><label class="fld"><span>Tolérance ε</span><select id="f1-tol">' + ['0.01','0.001','0.0001','0.00001','0.000001','0.0000001','0.00000001','0.000000001','0.0000000001'].map(v => '<option value="' + v + '"' + (F1.tol == +v ? ' selected' : '') + '>10⁻' + Math.round(-Math.log10(+v)) + '</option>').join('') + '</select></label></div>' +
@@ -701,9 +724,9 @@ function renderCostScene(svg, data, aCur, bCur, trail) {
   const az = F5V.az, el = F5V.el;
   const cosAz = Math.cos(az), sinAz = Math.sin(az);
   const cosEl = Math.cos(el), sinEl = Math.sin(el);
-  const scA = W * 0.30 / aSpan;
-  const scB = W * 0.30 / bSpan;
-  const scQ = H * 0.55 / (Qcap - Qmin);
+  const scA = W * 0.28 / aSpan;
+  const scB = W * 0.28 / bSpan;
+  const scQ = H * 0.50 / (Qcap - Qmin);
   function proj(a, b, q) {
     const x = (a - aOpt) * scA;
     const y = (b - bOpt) * scB;
@@ -712,8 +735,11 @@ function renderCostScene(svg, data, aCur, bCur, trail) {
     const yr = x * sinAz + y * cosAz;
     return [cx + xr, cy + yr * sinEl - z * cosEl];
   }
+
   while (svg.firstChild) svg.removeChild(svg.firstChild);
   svg.append(sv('rect', { x: 0, y: 0, width: W, height: H, fill: '#ffffff' }));
+
+  /* --- Surface : quads triés par profondeur --- */
   const sorted = quads.map(qd => {
     const aC = (qd.a0 + qd.a1) / 2 - aOpt;
     const bC = (qd.b0 + qd.b1) / 2 - bOpt;
@@ -728,6 +754,8 @@ function renderCostScene(svg, data, aCur, bCur, trail) {
     const d = `M${p00[0].toFixed(1)},${p00[1].toFixed(1)} L${p10[0].toFixed(1)},${p10[1].toFixed(1)} L${p11[0].toFixed(1)},${p11[1].toFixed(1)} L${p01[0].toFixed(1)},${p01[1].toFixed(1)} Z`;
     svg.append(sv('path', { d, fill: colorQ(Qmin, Qcap, qd.qAvg), stroke: 'rgba(255,255,255,0.35)', 'stroke-width': 0.4 }));
   }
+
+  /* --- Optimum + trail + point courant --- */
   const pOpt = proj(aOpt, bOpt, Qmin);
   svg.append(sv('circle', { cx: pOpt[0], cy: pOpt[1], r: 5, fill: '#1e7a2e', stroke: '#fff', 'stroke-width': 1.5 }));
   svg.append(sv('text', { x: pOpt[0] + 10, y: pOpt[1] + 4, 'font-size': 11, fill: '#1e7a2e', 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 600 }, 'optimum'));
@@ -744,6 +772,48 @@ function renderCostScene(svg, data, aCur, bCur, trail) {
   const pBase = proj(aCur, bCur, Qmin);
   svg.append(sv('line', { x1: pCur[0], y1: pCur[1], x2: pBase[0], y2: pBase[1], stroke: '#c0281f', 'stroke-width': 1, 'stroke-dasharray': '3 2' }));
   svg.append(sv('circle', { cx: pCur[0], cy: pCur[1], r: 6, fill: '#c0281f', stroke: '#fff', 'stroke-width': 2 }));
+
+  /* --- AXES a, b, coût Q --- */
+  const aExt = aSpan * 1.15;
+  const bExt = bSpan * 1.15;
+  const fmtAx = v => rangeFmt(v);
+
+  /* Axe a (b=bOpt, q=Qmin) */
+  const pAL = proj(aOpt - aExt, bOpt, Qmin);
+  const pAR = proj(aOpt + aExt, bOpt, Qmin);
+  svg.append(sv('line', { x1: pAL[0], y1: pAL[1], x2: pAR[0], y2: pAR[1], stroke: '#333', 'stroke-width': 1.6 }));
+  [[pAL, aOpt - aExt, 'end', -4], [pAR, aOpt + aExt, 'start', 4]].forEach(([p, v, anchor, dx]) => {
+    svg.append(sv('circle', { cx: p[0], cy: p[1], r: 2.5, fill: '#333' }));
+    svg.append(sv('text', { x: p[0] + dx, y: p[1] + 14, 'text-anchor': anchor, 'font-size': 10, fill: '#333', 'font-family': 'IBM Plex Mono, monospace' }, fmtAx(v)));
+  });
+  svg.append(sv('text', { x: pAR[0] + 12, y: pAR[1] + 4, 'font-size': 13, fill: '#333', 'font-weight': 700, 'font-family': 'IBM Plex Sans, sans-serif', 'font-style': 'italic' }, 'a'));
+
+  /* Axe b (a=aOpt, q=Qmin) */
+  const pBL = proj(aOpt, bOpt - bExt, Qmin);
+  const pBR = proj(aOpt, bOpt + bExt, Qmin);
+  svg.append(sv('line', { x1: pBL[0], y1: pBL[1], x2: pBR[0], y2: pBR[1], stroke: '#333', 'stroke-width': 1.6 }));
+  const bFront = proj(aOpt, bOpt - bExt, Qmin);
+  const bBack = proj(aOpt, bOpt + bExt, Qmin);
+  const bFrontIsLeft = bFront[0] < bBack[0];
+  [[bFront, bOpt - bExt, bFrontIsLeft ? 'end' : 'start', bFrontIsLeft ? -4 : 4],
+   [bBack, bOpt + bExt, bFrontIsLeft ? 'start' : 'end', bFrontIsLeft ? 4 : -4]].forEach(([p, v, anchor, dx]) => {
+    svg.append(sv('circle', { cx: p[0], cy: p[1], r: 2.5, fill: '#333' }));
+    svg.append(sv('text', { x: p[0] + dx, y: p[1] + 14, 'text-anchor': anchor, 'font-size': 10, fill: '#333', 'font-family': 'IBM Plex Mono, monospace' }, fmtAx(v)));
+  });
+  const bLabelP = bFront;
+  svg.append(sv('text', { x: bLabelP[0] + (bFrontIsLeft ? -12 : 12), y: bLabelP[1] + 4, 'text-anchor': bFrontIsLeft ? 'end' : 'start', 'font-size': 13, fill: '#333', 'font-weight': 700, 'font-family': 'IBM Plex Sans, sans-serif', 'font-style': 'italic' }, 'b'));
+
+  /* Axe coût Q (a=aOpt, b=bOpt, vertical) */
+  const pQB = proj(aOpt, bOpt, Qmin);
+  const pQT = proj(aOpt, bOpt, Qcap);
+  svg.append(sv('line', { x1: pQB[0], y1: pQB[1], x2: pQT[0], y2: pQT[1], stroke: '#333', 'stroke-width': 1.6 }));
+  [[pQB, Qmin], [pQT, Qcap]].forEach(([p, v]) => {
+    svg.append(sv('circle', { cx: p[0], cy: p[1], r: 2.5, fill: '#333' }));
+    svg.append(sv('text', { x: p[0] + 8, y: p[1] + 4, 'text-anchor': 'start', 'font-size': 10, fill: '#333', 'font-family': 'IBM Plex Mono, monospace' }, fmtAx(v)));
+  });
+  svg.append(sv('text', { x: pQT[0] + 8, y: pQT[1] - 10, 'font-size': 13, fill: '#333', 'font-weight': 700, 'font-family': 'IBM Plex Sans, sans-serif', 'font-style': 'italic' }, 'coût Q'));
+
+  /* Titre + info */
   svg.append(sv('text', { x: 12, y: 20, 'font-size': 12, fill: '#111', 'font-family': 'IBM Plex Sans, sans-serif', 'font-weight': 600 }, 'Coût Q(a,b) = Σ (y_i − a·x_i − b)²'));
   svg.append(sv('text', { x: 12, y: 36, 'font-size': 11, fill: '#5a6068', 'font-family': 'IBM Plex Sans, sans-serif' }, 'Glisser (souris ou doigt) pour tourner la surface'));
   svg.append(sv('text', { x: 12, y: 52, 'font-size': 11, fill: '#c0281f', 'font-family': 'IBM Plex Mono, monospace' }, `(a, b) = (${aCur.toFixed(2)}, ${bCur.toFixed(2)}) — Q = ${qCur.toFixed(3)}`));
